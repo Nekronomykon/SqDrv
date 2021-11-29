@@ -1,0 +1,46 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/SqDrv.png</file>
+        <file>images/AboutKit.png</file>
+        <file>images/Clear.png</file>
+        <file>images/ClearAll.png</file>
+        <file>images/ClearOthers.png</file>
+        <file>images/Close.png</file>
+        <file>images/CloseAll.png</file>
+        <file>images/CloseOthers.png</file>
+        <file>images/Copy.png</file>
+        <file>images/Cut.png</file>
+        <file>images/Exit.png</file>
+        <file>images/FullScreen.png</file>
+        <file>images/Help.png</file>
+        <file>images/MolBalls.png</file>
+        <file>images/MolFast.png</file>
+        <file>images/MolStick.png</file>
+        <file>images/MolVDW.png</file>
+        <file>images/New.png</file>
+        <file>images/Open.png</file>
+        <file>images/Paste.png</file>
+        <file>images/PgSetup.png</file>
+        <file>images/Preview.png</file>
+        <file>images/Print.png</file>
+        <file>images/ProjOrtho.png</file>
+        <file>images/ProjPersp.png</file>
+        <file>images/Redo.png</file>
+        <file>images/Reload.png</file>
+        <file>images/Save.png</file>
+        <file>images/SaveAll.png</file>
+        <file>images/SaveAs.png</file>
+        <file>images/Undo.png</file>
+        <file>images/Export.png</file>
+        <file>images/Import.png</file>
+        <file>images/CastSrc.png</file>
+        <file>images/CloseFrame.png</file>
+        <file>images/Next.png</file>
+        <file>images/Options.png</file>
+        <file>images/Prev.png</file>
+        <file>images/SrcCast.png</file>
+        <file>images/OpenDir.png</file>
+        <file>images/SrcEdit.png</file>
+        <file>images/SaveCopy.png</file>
+    </qresource>
+</RCC>
