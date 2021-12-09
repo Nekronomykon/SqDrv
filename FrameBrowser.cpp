@@ -1,5 +1,7 @@
 #include "FrameBrowser.h"
 
+#include <vtkVersion.h>
+
 #include <QMessageBox>
 #include <QDockWidget>
 #include <QWidgetList>
@@ -412,12 +414,15 @@ void FrameBrowser::setupToolBars(void)
     tbView->addWidget(nameBgColor_);
     // connect(choose_color_, &ChooseColor::currentTextChanged, this,
     //        &FrameBrowser::setSceneBgColor);
-    editBgRed_->setMaximumWidth(100);
+    editBgRed_->setMaximumWidth(75);
     tbView->addWidget(editBgRed_);
-    editBgGreen_->setMaximumWidth(100);
+    connect(editBgRed_, &QLineEdit::returnPressed, this, &updateBackgroundRed);
+    editBgGreen_->setMaximumWidth(75);
     tbView->addWidget(editBgGreen_);
-    editBgBlue_->setMaximumWidth(100);
+    connect(editBgGreen_, &QLineEdit::returnPressed, this, &updateBackgroundGreen);
+    editBgBlue_->setMaximumWidth(75);
     tbView->addWidget(editBgBlue_);
+    connect(editBgBlue_, &QLineEdit::returnPressed, this, &updateBackgroundBlue);
     tbView->addSeparator();
     tbView->addAction(actionViewMoleculeFast_);
     tbView->addSeparator();
@@ -693,6 +698,27 @@ void FrameBrowser::contentModified(void)
 }
 //
 ///////////////////////////////////////////////////////////////////////
+/// \brief FrameBrowse::updateBackgroundRed
+///
+void FrameBrowser::updateBackgroundRed(void)
+{
+}
+//
+///////////////////////////////////////////////////////////////////////
+/// \brief FrameBrowse::updateBackgroundGreen
+///
+void FrameBrowser::updateBackgroundGreen(void)
+{
+}
+//
+///////////////////////////////////////////////////////////////////////
+/// \brief FrameBrowse::updateBackgroundBlue
+///
+void FrameBrowser::updateBackgroundBlue(void)
+{
+}
+//
+///////////////////////////////////////////////////////////////////////
 /// \brief FrameBrowser::on_menuFile__aboutToShow
 ///
 void FrameBrowser::on_menuFile__aboutToShow(void)
@@ -942,7 +968,7 @@ void FrameBrowser::on_actionRedo__triggered(void)
 ///
 void FrameBrowser::on_actionCut__triggered(void)
 {
-    EditSource* pSrc = frameDoc_->editSource()->editAtoms();
+    EditSource *pSrc = frameDoc_->editSource()->editAtoms();
     pSrc->cut();
 }
 //
@@ -951,7 +977,7 @@ void FrameBrowser::on_actionCut__triggered(void)
 ///
 void FrameBrowser::on_actionCopy__triggered(void)
 {
-    EditSource* pSrc = frameDoc_->getTextSource()->editAtoms();
+    EditSource *pSrc = frameDoc_->getTextSource()->editAtoms();
     pSrc->copy();
 }
 //
@@ -976,7 +1002,7 @@ void FrameBrowser::on_actionPaste__triggered(void)
 ///
 void FrameBrowser::on_actionClear__triggered(void)
 {
-    EditSource* pSrc = frameDoc_->editSource()->editAtoms();
+    EditSource *pSrc = frameDoc_->editSource()->editAtoms();
     pSrc->clear();
 }
 //

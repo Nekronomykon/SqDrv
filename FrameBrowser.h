@@ -92,6 +92,11 @@ private slots:
     void doPrintDocument(QPrinter* /*printer*/);
     void onChangedClipboardData(void);
 
+    /* background color update */
+    void updateBackgroundRed(void); 
+    void updateBackgroundGreen(void); 
+    void updateBackgroundBlue(void); 
+
 
     /* Auto assign */
     void on_menuFile__aboutToShow(void);
