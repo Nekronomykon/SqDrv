@@ -416,13 +416,13 @@ void FrameBrowser::setupToolBars(void)
     //        &FrameBrowser::setSceneBgColor);
     editBgRed_->setMaximumWidth(75);
     tbView->addWidget(editBgRed_);
-    connect(editBgRed_, &QLineEdit::returnPressed, this, &updateBackgroundRed);
+    connect(editBgRed_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundRed);
     editBgGreen_->setMaximumWidth(75);
     tbView->addWidget(editBgGreen_);
-    connect(editBgGreen_, &QLineEdit::returnPressed, this, &updateBackgroundGreen);
+    connect(editBgGreen_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundGreen);
     editBgBlue_->setMaximumWidth(75);
     tbView->addWidget(editBgBlue_);
-    connect(editBgBlue_, &QLineEdit::returnPressed, this, &updateBackgroundBlue);
+    connect(editBgBlue_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundBlue);
     tbView->addSeparator();
     tbView->addAction(actionViewMoleculeFast_);
     tbView->addSeparator();
