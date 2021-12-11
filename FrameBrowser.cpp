@@ -32,6 +32,9 @@
 #include <QRectF>
 #include <QSettings>
 
+#include "ViewMolecule.h"
+#include "ViewStructure.h"
+
 #include "TableElements.h"
 #include "DialogFileProperties.h"
 
@@ -190,6 +193,7 @@ FrameBrowser *FrameBrowser::provideFor(const QString &name)
 FrameBrowser::FrameBrowser(QWidget *parent)
     : QMainWindow(parent),
       nameBgColor_(new ChooseNamedColor(this)),
+      vldColorComp_(new QDoubleValidator),
       editBgRed_(new QLineEdit(this)),
       editBgGreen_(new QLineEdit(this)),
       editBgBlue_(new QLineEdit(this)),
@@ -201,6 +205,14 @@ FrameBrowser::FrameBrowser(QWidget *parent)
 {
     // Primarily
     this->setupUi(this);
+
+    // validator clamp
+    vldColorComp_->setNotation(QDoubleValidator::StandardNotation);
+    vldColorComp_->setRange(0.0, 1.0);
+    //
+    editBgRed_->setPlaceholderText(tr("[red]"));
+    editBgGreen_->setPlaceholderText(tr("[green]"));
+    editBgBlue_->setPlaceholderText(tr("[blue]"));
 
     // Setting it all up:
     this->readSettings();
@@ -235,6 +247,17 @@ void FrameBrowser::updateUi(void)
     actionSave_->setVisible(hasPath);
     actionReload_->setVisible(hasPath);
     actionClone_->setVisible(hasPath);
+
+    ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
+    vtkColor3d cbg;
+    if (pViewMol)
+        cbg = pViewMol->viewStructure()->getBgColor();
+    QString strVal(tr("%1"));
+    nameBgColor_->setEnabled(!pViewMol ? false : true);
+    editBgRed_->setEnabled(!pViewMol ? false : true);
+    editBgRed_->setText(!pViewMol ? QString() : strVal.arg(cbg.GetRed()));
+    editBgGreen_->setText(!pViewMol ? QString() : strVal.arg(cbg.GetGreen()));
+    editBgBlue_->setText(!pViewMol ? QString() : strVal.arg(cbg.GetBlue()));
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -414,15 +437,23 @@ void FrameBrowser::setupToolBars(void)
     tbView->addWidget(nameBgColor_);
     // connect(choose_color_, &ChooseColor::currentTextChanged, this,
     //        &FrameBrowser::setSceneBgColor);
-    editBgRed_->setMaximumWidth(75);
+
+    editBgRed_->setValidator(vldColorComp_);
+    editBgRed_->setClearButtonEnabled(true);
+    editBgGreen_->setValidator(vldColorComp_);
+    editBgGreen_->setClearButtonEnabled(true);
+    editBgBlue_->setValidator(vldColorComp_);
+    editBgBlue_->setClearButtonEnabled(true);
+
+    editBgRed_->setMaximumWidth(100);
     tbView->addWidget(editBgRed_);
-    connect(editBgRed_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundRed);
-    editBgGreen_->setMaximumWidth(75);
+    connect(editBgRed_, &QLineEdit::editingFinished, this, &FrameBrowser::updateBackgroundRed);
+    editBgGreen_->setMaximumWidth(100);
     tbView->addWidget(editBgGreen_);
-    connect(editBgGreen_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundGreen);
-    editBgBlue_->setMaximumWidth(75);
+    connect(editBgGreen_, &QLineEdit::editingFinished, this, &FrameBrowser::updateBackgroundGreen);
+    editBgBlue_->setMaximumWidth(100);
     tbView->addWidget(editBgBlue_);
-    connect(editBgBlue_, &QLineEdit::returnPressed, this, &FrameBrowser::updateBackgroundBlue);
+    connect(editBgBlue_, &QLineEdit::editingFinished, this, &FrameBrowser::updateBackgroundBlue);
     tbView->addSeparator();
     tbView->addAction(actionViewMoleculeFast_);
     tbView->addSeparator();
@@ -702,6 +733,14 @@ void FrameBrowser::contentModified(void)
 ///
 void FrameBrowser::updateBackgroundRed(void)
 {
+    ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
+    if (!pViewMol)
+        return;
+    ViewStructure *pVStr = pViewMol->viewStructure();
+    QVariant vText(editBgRed_->text());
+    pVStr->BgColor().SetRed(vText.toDouble());
+    frameDoc_->reviewMolecule();
+    this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -709,6 +748,14 @@ void FrameBrowser::updateBackgroundRed(void)
 ///
 void FrameBrowser::updateBackgroundGreen(void)
 {
+    ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
+    if (!pViewMol)
+        return;
+    ViewStructure *pVStr = pViewMol->viewStructure();
+    QVariant vText(editBgGreen_->text());
+    pVStr->BgColor().SetGreen(vText.toDouble());
+    frameDoc_->reviewMolecule();
+    this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -716,6 +763,14 @@ void FrameBrowser::updateBackgroundGreen(void)
 ///
 void FrameBrowser::updateBackgroundBlue(void)
 {
+    ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
+    if (!pViewMol)
+        return;
+    ViewStructure *pVStr = pViewMol->viewStructure();
+    QVariant vText(editBgBlue_->text());
+    pVStr->BgColor().SetBlue(vText.toDouble());
+    frameDoc_->reviewMolecule();
+    this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -1056,9 +1111,7 @@ void FrameBrowser::on_actionElements__triggered(void)
 ///
 void FrameBrowser::on_actionViewMolecule__triggered(void)
 {
-    ViewMolecule *pMol = frameDoc_->viewMolecule();
-    ViewStructure *pView = pMol->viewStructure();
-    pView->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1070,7 +1123,7 @@ void FrameBrowser::on_actionViewMoleculeFast__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     pMol->setMoleculeVisualStyle(StyleMapMolecule::styleFast);
-    pMol->viewStructure()->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1081,7 +1134,7 @@ void FrameBrowser::on_actionViewMoleculeSticks__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     pMol->setMoleculeVisualStyle(StyleMapMolecule::styleStyx);
-    pMol->viewStructure()->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1092,7 +1145,7 @@ void FrameBrowser::on_actionViewMoleculeSpheres__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     pMol->setMoleculeVisualStyle(StyleMapMolecule::styleCPK);
-    pMol->viewStructure()->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1104,7 +1157,7 @@ void FrameBrowser::on_actionViewMoleculeBalls__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     pMol->setMoleculeVisualStyle(StyleMapMolecule::styleBnS);
-    pMol->viewStructure()->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 ///////////////////////////////////////////////////////////////////////

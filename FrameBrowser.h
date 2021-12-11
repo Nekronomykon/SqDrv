@@ -13,6 +13,8 @@
 #include <QSessionManager>
 #include <QWidget>
 
+#include <QDoubleValidator>
+
 #include <QPainter>
 #include <QPointer>
 #include <QPrinter>
@@ -74,6 +76,7 @@ private:
     /* data */
     QString path_bound_ = QString();
     QPointer<ChooseNamedColor> nameBgColor_;
+    QPointer<QDoubleValidator> vldColorComp_;
     QPointer<QLineEdit> editBgRed_;
     QPointer<QLineEdit> editBgGreen_;
     QPointer<QLineEdit> editBgBlue_;

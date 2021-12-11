@@ -48,6 +48,9 @@ public:
 
     bool exportImageTo(vtkImageWriter * /*pIW*/, bool /*bAlpha*/ = true);
 
+    vtkColor3d getBgColor() const;
+    vtkColor3d& BgColor();
+
 private:
     NewRenderer renderBg_;
     vtkColor3d colorBg_;

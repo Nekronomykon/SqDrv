@@ -76,6 +76,10 @@ public:
 
     void insertAtomicText(const QString & /*src*/);
 
+    void reviewMolecule(void);
+
+    Molecule* molecule() const {return molecule_;}
+
 public slots:
     void doPrintContent(QPrinter * /*printer*/);
 

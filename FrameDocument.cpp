@@ -201,6 +201,15 @@ bool FrameDocument::saveSourceFile(const QString &fullpath, QString fmt)
 //
 //////////////////////////////////////////////////////////////////////////
 //
+void FrameDocument::reviewMolecule(void)
+{
+    ViewStructure* pVS = viewMol_->viewStructure();
+    pVS->initRendering(molecule_);
+    pVS->renderWindow()->Render();
+}
+//
+//////////////////////////////////////////////////////////////////////////
+//
 void FrameDocument::setLinearAngstrom()
 {
 }

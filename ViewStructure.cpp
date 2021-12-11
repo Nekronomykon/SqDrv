@@ -28,8 +28,25 @@ ViewStructure::ViewStructure(QWidget *parent)
     vtkRenderWindow *pRW = this->renderWindow();
     pRW->SetNumberOfLayers(2);
 
+    colorBg_.SetRed(1.0); // debug colors
+    colorBg_.SetGreen(1.0); // total up to yellow
+
     // general rendering setup
     this->initRendering();
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+vtkColor3d ViewStructure::getBgColor() const
+{
+    return colorBg_;
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+vtkColor3d &ViewStructure::BgColor()
+{
+    return colorBg_;
 }
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,6 +88,7 @@ bool ViewStructure::initRendering(Molecule *pMol)
     // rebuilding:
     renderMol_->SetLayer(1);
     renderMol_->AddActor(actorMol_);
+    // renderMol_->SetBackground(colorBg_.GetData());
     pRW->AddRenderer(renderMol_);
     return true;
 }
