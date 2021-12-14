@@ -199,8 +199,8 @@ FrameBrowser::FrameBrowser(QWidget *parent)
       editBgBlue_(new QLineEdit(this)),
       progress_(new QProgressBar(this)),
       workspace_(new ViewWorkspace(this)),
-      log_(new ViewLogActions(this)),
-      commandline_(new ViewCommandLine(this)),
+      // log_(new ViewLogActions(this)),
+      // commandline_(new ViewCommandLine(this)),
       printer_(QPrinter::HighResolution)
 {
     // Primarily
@@ -398,13 +398,13 @@ void FrameBrowser::setupDocking(void)
     pLeft->setWidget(workspace_);
     this->addDockWidget(Qt::LeftDockWidgetArea, pLeft);
 
-    QDockWidget *pLog = new QDockWidget(tr("Log actions"), this);
-    pLog->setWidget(log_);
-    this->addDockWidget(Qt::BottomDockWidgetArea, pLog);
+    // QDockWidget *pLog = new QDockWidget(tr("Log actions"), this);
+    // pLog->setWidget(log_);
+    // this->addDockWidget(Qt::BottomDockWidgetArea, pLog);
 
-    QDockWidget *pCmdLine = new QDockWidget(tr("Command line"), this);
-    pCmdLine->setWidget(commandline_);
-    this->tabifyDockWidget(pLog, pCmdLine);
+    // QDockWidget *pCmdLine = new QDockWidget(tr("Command line"), this);
+    // pCmdLine->setWidget(commandline_);
+    // this->tabifyDockWidget(pLog, pCmdLine);
 }
 //
 ///////////////////////////////////////////////////////////////////////

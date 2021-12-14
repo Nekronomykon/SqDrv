@@ -22,9 +22,9 @@
 #include "FrameDocument.h"
 
 #include "ViewWorkspace.h"
-#include "ViewLogActions.h"
+// #include "ViewLogActions.h"
 
-#include "ViewCommandLine.h"
+// #include "ViewCommandLine.h"
 
 #include "ChooseNamedColor.h"
 #include <QLineEdit>
@@ -82,8 +82,8 @@ private:
     QPointer<QLineEdit> editBgBlue_;
     QPointer<QProgressBar> progress_;
     QPointer<ViewWorkspace> workspace_;
-    QPointer<ViewLogActions> log_;
-    QPointer<ViewCommandLine> commandline_;
+    // QPointer<ViewLogActions> log_;
+    // QPointer<ViewCommandLine> commandline_;
 
     QPrinter printer_;
 
