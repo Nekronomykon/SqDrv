@@ -30,6 +30,7 @@ ViewStructure::ViewStructure(QWidget *parent)
 
     colorBg_.SetRed(1.0); // debug colors
     colorBg_.SetGreen(1.0); // total up to yellow
+    colorBg_.SetBlue(0.75); // light-yellow
 
     // general rendering setup
     this->initRendering();
