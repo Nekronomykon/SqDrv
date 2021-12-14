@@ -201,14 +201,16 @@ FrameBrowser::FrameBrowser(QWidget *parent)
       workspace_(new ViewWorkspace(this)),
       // log_(new ViewLogActions(this)),
       // commandline_(new ViewCommandLine(this)),
+      files_(new ViewFiles(this)) ,
+      // =========================================================== //
       printer_(QPrinter::HighResolution)
 {
     // Primarily
     this->setupUi(this);
 
     // validator clamp
-    vldColorComp_->setNotation(QDoubleValidator::StandardNotation);
-    vldColorComp_->setRange(0.0, 1.0);
+    // vldColorComp_->setNotation(QDoubleValidator::StandardNotation);
+    // vldColorComp_->setRange(0.0, 1.0);
     //
     editBgRed_->setPlaceholderText(tr("[red]"));
     editBgGreen_->setPlaceholderText(tr("[green]"));
@@ -398,6 +400,10 @@ void FrameBrowser::setupDocking(void)
     pLeft->setWidget(workspace_);
     this->addDockWidget(Qt::LeftDockWidgetArea, pLeft);
 
+    QDockWidget *pFiles = new QDockWidget(tr("File system"), this);
+    pFiles->setWidget(files_);
+    this->tabifyDockWidget(pLeft,pFiles);
+
     // QDockWidget *pLog = new QDockWidget(tr("Log actions"), this);
     // pLog->setWidget(log_);
     // this->addDockWidget(Qt::BottomDockWidgetArea, pLog);
@@ -438,11 +444,11 @@ void FrameBrowser::setupToolBars(void)
     // connect(choose_color_, &ChooseColor::currentTextChanged, this,
     //        &FrameBrowser::setSceneBgColor);
 
-    editBgRed_->setValidator(vldColorComp_);
+    // editBgRed_->setValidator(vldColorComp_);
     editBgRed_->setClearButtonEnabled(true);
-    editBgGreen_->setValidator(vldColorComp_);
+    // editBgGreen_->setValidator(vldColorComp_);
     editBgGreen_->setClearButtonEnabled(true);
-    editBgBlue_->setValidator(vldColorComp_);
+    // editBgBlue_->setValidator(vldColorComp_);
     editBgBlue_->setClearButtonEnabled(true);
 
     editBgRed_->setMaximumWidth(100);

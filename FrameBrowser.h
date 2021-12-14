@@ -26,6 +26,8 @@
 
 // #include "ViewCommandLine.h"
 
+#include "ViewFiles.h"
+
 #include "ChooseNamedColor.h"
 #include <QLineEdit>
 
@@ -84,6 +86,7 @@ private:
     QPointer<ViewWorkspace> workspace_;
     // QPointer<ViewLogActions> log_;
     // QPointer<ViewCommandLine> commandline_;
+    QPointer<ViewFiles> files_;
 
     QPrinter printer_;
 
