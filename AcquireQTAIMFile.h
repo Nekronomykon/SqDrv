@@ -17,13 +17,15 @@
 
 #include "AcquireFile.h"
 
+#include <complex>
+
 namespace vtk
 {
     class AcquireQTAIMFile
         : public AcquireFile
     {
     protected:
-        AcquireQTAIMFile();
+        explicit AcquireQTAIMFile();
 
     public:
         static AcquireQTAIMFile *New();
