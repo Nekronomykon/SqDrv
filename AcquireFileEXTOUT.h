@@ -28,7 +28,7 @@
  * @par Thanks:
  * Dr. Jean M. Favre who developed and contributed this class
  */
-#include "AcquireFile.h"
+#include "AcquireQTAIMFile.h"
 
 #include <istream> // for std::istream
 #include <vector>  // for std::vector

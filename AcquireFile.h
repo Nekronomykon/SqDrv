@@ -114,6 +114,7 @@ namespace vtk
         ~AcquireFile() override = default;
 
         vtkIdType& NumberOfAtoms(void) {return NumberOfAtoms_;}
+        vtkIdType GetNumberOfAtoms(void) const {return NumberOfAtoms_;}
         std::string& NameOfStructure(void) {return nameStructure_;}
 
     private:

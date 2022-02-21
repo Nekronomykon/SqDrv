@@ -24,6 +24,27 @@ namespace vtk
     {
     protected:
         AcquireQTAIMFile();
+
+    public:
+        static AcquireQTAIMFile *New();
+        vtkTypeMacro(AcquireQTAIMFile, AcquireFile);
+        void PrintSelf(ostream &os, vtkIndent indent) override;
+
+        vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
+        vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; }
+        vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }
+        vtkIdType GetNumberOfRCP(void) const { return NumberOfRCP_; }
+        vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
+
+    protected:
+        // vtkIdType &NumberOfAtoms(void) { return NumberOfAtoms_; }
+
+    private:
+        vtkIdType NumberOfNACP_ = 0;
+        vtkIdType NumberOfNNACP_ = 0;
+        vtkIdType NumberOfBCP_ = 0;
+        vtkIdType NumberOfRCP_ = 0;
+        vtkIdType NumberOfCCP_ = 0;
     };
 }; // namespace vtk
 
