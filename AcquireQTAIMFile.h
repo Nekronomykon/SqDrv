@@ -20,10 +20,10 @@
 namespace vtk
 {
     class AcquireQTAIMFile
-    : public AcquireFile
+        : public AcquireFile
     {
-        protected:
-        AcquireQTAIMFile()
+    protected:
+        AcquireQTAIMFile();
     };
 }; // namespace vtk
 
