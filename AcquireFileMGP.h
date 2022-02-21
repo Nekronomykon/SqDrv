@@ -39,11 +39,11 @@ namespace vtk
 {
 
     class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileMGP
-        : public AcquireFile
+        : public AcquireQTAIMFile
     {
     public:
         static AcquireFileMGP *New();
-        vtkTypeMacro(AcquireFileMGP, AcquireFile);
+        vtkTypeMacro(AcquireFileMGP, AcquireQTAIMFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
     protected:

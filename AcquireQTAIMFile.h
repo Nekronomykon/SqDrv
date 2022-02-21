@@ -32,6 +32,7 @@ namespace vtk
         vtkTypeMacro(AcquireQTAIMFile, AcquireFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
+        vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }
         vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
         vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; }
         vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }

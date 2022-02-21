@@ -39,11 +39,11 @@ namespace vtk
 {
 
     class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileEXTOUT
-        : public AcquireFile
+        : public AcquireQTAIMFile
     {
     public:
         static AcquireFileEXTOUT *New();
-        vtkTypeMacro(AcquireFileEXTOUT, AcquireFile);
+        vtkTypeMacro(AcquireFileEXTOUT, AcquireQTAIMFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
     protected:
