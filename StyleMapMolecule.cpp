@@ -45,17 +45,3 @@ const char *StyleMapMolecule::AtomRadiusModeName(short mode)
         return nullptr;
     }
 }
-
-void StyleMapMolecule::SetupMoleculeMapper(vtkMoleculeMapper *pmap) const
-{
-    // atoms
-    pmap->SetRenderAtoms(true);
-    pmap->SetAtomicRadiusType(styleAtomRadius_);
-    pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
-    // bonds
-    pmap->SetRenderBonds(bRenderBonds_);
-    pmap->SetBondColorMode(styleBondColor_);
-    pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
-    pmap->SetBondRadius(radBonds_);
-    pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
-}

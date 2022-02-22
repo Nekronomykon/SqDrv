@@ -65,8 +65,9 @@ namespace vtk
     short GetAtomicRadiusType() const { return styleAtomRadius_; }
     short ResetAtomicRadiusType(short rad_type)
     {
-      std::swap(rad_type, styleAtomRadius_);
-      return rad_type;
+      short int res = styleAtomRadius_;
+      styleAtomRadius_ = rad_type;
+      return res;
     }
     static const char *AtomRadiusModeName(short mode);
     const char *GetAtomicRadiusTypeAsString() const
@@ -81,8 +82,9 @@ namespace vtk
     }
     float ResetAtomicRadiusScale(float sc)
     {
-      std::swap(sc, radAtomsScale_);
-      return sc;
+      float res = radAtomsScale_;
+      radAtomsScale_ = sc;
+      return res;
     }
     //
     bool HasToRenderBonds() const { return bRenderBonds_; }
@@ -100,10 +102,11 @@ namespace vtk
     }
     //
     short GetTypeBondsColor() const { return styleBondColor_; }
-    short ResetTypeBondsColor(short col_type)
+    short ResetTypeBondsColor(short int col_type)
     {
-      std::swap(col_type, styleBondColor_);
-      return col_type;
+      short int res = styleBondColor_;
+      styleBondColor_ = col_type;
+      return res;
     }
 
     static const char *BondColorModeName(short mode)
@@ -127,8 +130,9 @@ namespace vtk
     float GetBondRadius() const { return radBonds_; }
     float ReserBondRadius(float rb)
     {
-      std::swap(rb, radBonds_);
-      return rb;
+      float res = radBonds_;
+      radBonds_ = rb;
+      return res;
     }
     //
     //////////////////////////////////////////////////////////////////////////
@@ -137,7 +141,20 @@ namespace vtk
     // Just in case the application of the external style upon the VTK class
     // vtkMoleculeMapper
     //
-    void SetupMoleculeMapper(vtkMoleculeMapper *pmap) const;
+    template <class MMapper>
+    void SetupMoleculeMapper(MMapper *pmap) const
+    {
+      // atoms
+      pmap->SetRenderAtoms(true);
+      pmap->SetAtomicRadiusType(styleAtomRadius_);
+      pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
+      // bonds
+      pmap->SetRenderBonds(bRenderBonds_);
+      pmap->SetBondColorMode(styleBondColor_);
+      pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
+      pmap->SetBondRadius(radBonds_);
+      pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
+    }
     //
     //////////////////////////////////////////////////////////////////////////
   };

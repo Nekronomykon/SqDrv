@@ -82,7 +82,7 @@ bool ViewStructure::initRendering(Molecule *pMol)
 
     if (pMol)
     { // if molecule is valid to render (nullptr is to clear most of parameters)
-        styleMol_.SetupMoleculeMapper(mapMol_);
+        styleMol_.SetupMoleculeMapper(mapMol_.Get());
     }
     mapMol_->SetInputData(pMol);
 
@@ -102,7 +102,7 @@ bool ViewStructure::resetMoleculeStyle(const StyleMapMolecule &style)
     if (bChanged)
     {
         styleMol_ = style;
-        styleMol_.SetupMoleculeMapper(mapMol_);
+        styleMol_.SetupMoleculeMapper(mapMol_.Get());
     }
     return bChanged;
 }
