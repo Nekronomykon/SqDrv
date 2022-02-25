@@ -16,11 +16,11 @@
 #include <vtksys/FStream.hxx>
 
 #include "AcquireFile.h"
-
-#include <complex>
+#include "CriticalPoint.h"
 
 namespace vtk
 {
+
     class AcquireQTAIMFile
         : public AcquireFile
     {
