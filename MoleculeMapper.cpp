@@ -1,9 +1,10 @@
 /*=========================================================================
 
   Program:   Visualization Toolkit
+  Namespace: vtk
   Module:    MoleculeMapper.cxx
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -50,16 +51,33 @@ using namespace vtk;
 // Note this class may have an accelerated subclass ala
 // vtkOpenGLMoleculeMapper. If you change this class please
 // also check that class for impacts.
+
+/*
+** Tasks (SDtB):
+** 1. Remove its lattice part;
+** 2. Adopt to use vtk::Elements instead of vtkPeriodicTable;
+** 3. Take care of the OpenGL descendent class mentioned above;
+** 4. Prepare for the realization and visualization 
+**    of 3D control spots for the bond in the structure (--> QTAIM View)
+*/
 vtkObjectFactoryNewMacro(MoleculeMapper);
 
 //------------------------------------------------------------------------------
-MoleculeMapper::MoleculeMapper()
-    : RenderAtoms(true), AtomicRadiusType(VDWRadius), AtomicRadiusScaleFactor(0.3), AtomicRadiusArrayName(nullptr), AtomColorMode(DiscreteByAtom), RenderBonds(true), BondColorMode(DiscreteByAtom), UseMultiCylindersForBonds(true), BondRadius(0.075), RenderLattice(true)
+MoleculeMapper::MoleculeMapper() : RenderAtoms(true) //
+    , AtomicRadiusType(VDWRadius)                    //
+    , AtomicRadiusScaleFactor(0.3)                   //
+    , AtomicRadiusArrayName(nullptr)                 //
+    , AtomColorMode(DiscreteByAtom)                  //
+    , RenderBonds(true)                              //
+    , BondColorMode(DiscreteByAtom)                  //
+    , UseMultiCylindersForBonds(true)                //
+    , BondRadius(0.075)                              //
+    // , RenderLattice(false)                            // was 'true' in original VTK
 {
     // Initialize ivars:
     this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 150;
-    this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 50;
-    this->LatticeColor[0] = this->LatticeColor[1] = this->LatticeColor[2] = 255;
+    this->BondColor[0] = 100; this->BondColor[1] = 50; this->BondColor[2] = 150;
+    // this->LatticeColor[0] = this->LatticeColor[1] = this->LatticeColor[2] = 255;
     this->SetAtomicRadiusArrayName("radii");
 
     // Setup glyph sources
@@ -118,8 +136,8 @@ MoleculeMapper::MoleculeMapper()
     this->BondGlyphPointOutput->SetOutput(this->BondGlyphPolyData);
     this->BondGlyphMapper->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 
-    this->LatticeMapper->SetInputData(this->LatticePolyData);
-    this->LatticeMapper->SetColorModeToDefault();
+    // this->LatticeMapper->SetInputData(this->LatticePolyData);
+    // this->LatticeMapper->SetColorModeToDefault();
 
     // Force the glyph data to be generated on the next render:
     this->GlyphDataInitialized = false;
@@ -315,10 +333,10 @@ void MoleculeMapper::GlyphRender(vtkRenderer *ren, vtkActor *act)
         this->BondGlyphMapper->Render(ren, act);
     }
 
-    if (this->RenderLattice)
-    {
-        this->LatticeMapper->Render(ren, act);
-    }
+    // if (this->RenderLattice)
+    // {
+    //    this->LatticeMapper->Render(ren, act);
+    // }
 }
 
 //------------------------------------------------------------------------------
@@ -344,6 +362,7 @@ void MoleculeMapper::UpdateGlyphPolyData()
         this->UpdateBondGlyphPolyData();
     }
 
+    /*
     if (!this->GlyphDataInitialized ||
         ((molecule->GetMTime() > this->LatticePolyData->GetMTime() ||
           this->GetMTime() > this->LatticePolyData->GetMTime()) &&
@@ -351,7 +370,8 @@ void MoleculeMapper::UpdateGlyphPolyData()
     {
         this->UpdateLatticePolyData();
     }
-
+    */
+   
     this->GlyphDataInitialized = true;
 }
 
@@ -811,6 +831,7 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     this->BondGlyphMapper->UseSelectionIdsOn();
 }
 
+/*
 //------------------------------------------------------------------------------
 void MoleculeMapper::UpdateLatticePolyData()
 {
@@ -892,6 +913,7 @@ void MoleculeMapper::UpdateLatticePolyData()
 
     this->LatticePolyData->SetLines(lines);
 }
+*/
 
 //------------------------------------------------------------------------------
 void MoleculeMapper::ReleaseGraphicsResources(vtkWindow *w)
@@ -942,6 +964,11 @@ void MoleculeMapper::PrintSelf(ostream &os, vtkIndent indent)
 
     os << indent << "BondGlyphMapper:\n";
     this->BondGlyphMapper->PrintSelf(os, indent.GetNextIndent());
+
+    /*
+    os << indent << "LatticeMapper:\n";
+    this->LatticeMapper->PrintSelf(os, indent.GetNextIndent());
+    */
 }
 
 //------------------------------------------------------------------------------

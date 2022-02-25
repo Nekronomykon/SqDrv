@@ -119,9 +119,9 @@ namespace vtk
          * Get/Set whether or not to render the unit cell lattice, if present.
          * Default: On.
          */
-        vtkGetMacro(RenderLattice, bool);
-        vtkSetMacro(RenderLattice, bool);
-        vtkBooleanMacro(RenderLattice, bool);
+        // vtkGetMacro(RenderLattice, bool);
+        // vtkSetMacro(RenderLattice, bool);
+        // vtkBooleanMacro(RenderLattice, bool);
         ///@}
 
         enum
@@ -236,8 +236,8 @@ namespace vtk
          * Get/Set the color of the bonds as an rgb tuple.
          * Default: {255, 255, 255} (white)
          */
-        vtkGetVector3Macro(LatticeColor, unsigned char);
-        vtkSetVector3Macro(LatticeColor, unsigned char);
+        // vtkGetVector3Macro(LatticeColor, unsigned char);
+        // vtkSetVector3Macro(LatticeColor, unsigned char);
         ///@}
 
         ///@{
@@ -316,7 +316,7 @@ namespace vtk
         unsigned char BondColor[3];
         ///@}
 
-        bool RenderLattice;
+        // bool RenderLattice;
 
         /**
          * Internal render methods
@@ -345,10 +345,10 @@ namespace vtk
         vtkNew<vtkGlyph3DMapper> BondGlyphMapper;
         ///@}
 
-        unsigned char LatticeColor[3];
-        vtkNew<vtkPolyData> LatticePolyData;
-        vtkNew<vtkPolyDataMapper> LatticeMapper;
-        virtual void UpdateLatticePolyData();
+        // unsigned char LatticeColor[3];
+        // vtkNew<vtkPolyData> LatticePolyData;
+        // vtkNew<vtkPolyDataMapper> LatticeMapper;
+        // virtual void UpdateLatticePolyData();
 
         /**
          * Periodic table for lookups
