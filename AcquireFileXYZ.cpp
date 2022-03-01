@@ -75,6 +75,12 @@ int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+    // ~?~ size_t nReadAtoms = this->ReadStructure(fileInput, nullptr, context);
+    //                                             ^ from ^    ^ to ^
+    // ~?~ or somewhat similar...
+    //
+
     GetLine(fileInput, this->NameOfStructure()); // second (title) line may be empty
 
     for (; na; --na)
@@ -83,6 +89,8 @@ int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
             break; // for each atom a line with symbol, x, y, z
     }
     fileInput.close();
+    //
+    /////////////////////////////////////////////////////////////////////////////////
 
     return (!na) ? 1 : 0;
 }
