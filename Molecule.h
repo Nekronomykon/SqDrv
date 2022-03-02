@@ -74,11 +74,10 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-
 // #include <vtkCommonDataModelModule.h> // For export macro
 #include <vtkUndirectedGraph.h>
 
-#include <vtkSmartPointer.h>          // For vtkSmartPointer
+#include <vtkSmartPointer.h> // For vtkSmartPointer
 
 #include "Atom.h" // Simple proxy class dependent on Molecule
 #include "Bond.h" // Simple proxy class dependent on Molecule

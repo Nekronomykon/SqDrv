@@ -19,6 +19,7 @@ using namespace vtk;
 #include "Molecule.h"
 
 #include <vtkDataObject.h>
+
 #include <vtkExecutive.h>
 #include <vtkFieldData.h>
 #include <vtkImageData.h>
@@ -32,6 +33,7 @@ using namespace vtk;
 #include <vtkSimpleBondPerceiver.h>
 #include <vtkStreamingDemandDrivenPipeline.h>
 #include <vtkTransform.h>
+
 #include <vtksys/FStream.hxx>
 
 #include <fstream>
