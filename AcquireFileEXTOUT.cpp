@@ -1,4 +1,5 @@
 #include "AcquireFileEXTOUT.h"
+using namespace vtk;
 
 /*=========================================================================
 
@@ -14,8 +15,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-using namespace vtk;
 
 #include "Molecule.h"
 #include "Elements.h"
@@ -35,10 +34,7 @@ using namespace vtk;
 vtkStandardNewMacro(AcquireFileEXTOUT);
 
 //------------------------------------------------------------------------------
-AcquireFileEXTOUT::AcquireFileEXTOUT()
-{
-    this->SetNumberOfOutputPorts(2);
-}
+AcquireFileEXTOUT::AcquireFileEXTOUT() {}
 
 //------------------------------------------------------------------------------
 int AcquireFileEXTOUT::RequestInformation(vtkInformation *vtkNotUsed(request),

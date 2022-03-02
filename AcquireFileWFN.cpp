@@ -34,10 +34,7 @@ using namespace vtk;
 vtkStandardNewMacro(AcquireFileWFN);
 
 //------------------------------------------------------------------------------
-AcquireFileWFN::AcquireFileWFN()
-{
-    this->SetNumberOfOutputPorts(1);
-}
+AcquireFileWFN::AcquireFileWFN() : AcquireMoleculeFile(0, 1) {}
 
 //------------------------------------------------------------------------------
 int AcquireFileWFN::RequestInformation(vtkInformation *vtkNotUsed(request),
@@ -109,8 +106,8 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    std::string one_line; // read this string from disk 
-    // and parse it using istringstream and state 
+    std::string one_line; // read this string from disk
+    // and parse it using istringstream and state
 
     GetLine(fileInput, one_line); // first line: Title
     if (!fileInput)
@@ -154,9 +151,9 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
         inp_na >> atomType >> nSkip // # == i + 1
             >> skip                 // (CENTRE
             >> nSkip                // # == i + 1
-            >> skip                // )
+            >> skip                 // )
             >> x >> y >> z >> skip  // CHARGE
-            >> skip                // '='
+            >> skip                 // '='
             >> q;                   // << now the EOL is here
         output->AppendAtom((unsigned short)q, x, y, z);
     }

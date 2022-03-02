@@ -1,4 +1,5 @@
 #include "AcquireFileSUM.h"
+using namespace vtk;
 
 /*=========================================================================
 
@@ -14,9 +15,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-using namespace vtk;
-
 #include "Molecule.h"
 #include "Elements.h"
 
@@ -35,10 +33,7 @@ using namespace vtk;
 vtkStandardNewMacro(AcquireFileSUM);
 
 //------------------------------------------------------------------------------
-AcquireFileSUM::AcquireFileSUM()
-{
-    this->SetNumberOfOutputPorts(2);
-}
+AcquireFileSUM::AcquireFileSUM() {}
 
 //------------------------------------------------------------------------------
 int AcquireFileSUM::RequestInformation(vtkInformation *vtkNotUsed(request),

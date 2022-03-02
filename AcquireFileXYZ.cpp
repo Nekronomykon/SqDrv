@@ -35,11 +35,7 @@ using namespace vtk;
 vtkStandardNewMacro(AcquireFileXYZ);
 
 //------------------------------------------------------------------------------
-AcquireFileXYZ::AcquireFileXYZ()
-: AcquireMoleculeFile(1,1)
-{
-    // this->SetNumberOfOutputPorts(1);
-}
+AcquireFileXYZ::AcquireFileXYZ() : AcquireMoleculeFile(0, 1) {}
 
 //------------------------------------------------------------------------------
 int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
@@ -144,7 +140,7 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
         vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while taking to atoms of " << this->GetFileName());
         return 0;
     }
-    
+
     // reconstruct Molecule
     output->Initialize();
     // output-SetNumberOfAtoms(this->GetNumberOfAtoms());

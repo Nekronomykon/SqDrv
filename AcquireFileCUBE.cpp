@@ -43,10 +43,9 @@ using namespace vtk;
 vtkStandardNewMacro(AcquireFileCUBE);
 
 //------------------------------------------------------------------------------
-AcquireFileCUBE::AcquireFileCUBE()
-: AcquireMoleculeFile(2,2)
+AcquireFileCUBE::AcquireFileCUBE() : AcquireMoleculeFile(1,2)
 {
-    // The second output for the grid data
+    // The second output for the grid data:
 
     vtkImageData *grid;
     grid = vtkImageData::New();
