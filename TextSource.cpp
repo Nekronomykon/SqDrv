@@ -78,7 +78,7 @@ bool TextSource::buildSource(QString &content)
 ///////////////////////////////////////////////////////////////////////
 /// \brief TextSource::showMolecule
 ///
-void TextSource::showMolecule(vtkMolecule *pMol, const QString &title)
+void TextSource::showMolecule(Molecule *pMol, const QString &title)
 {
     lineEditTitle_->setText(title);
     int nAtoms = pMol->GetNumberOfAtoms();
@@ -106,7 +106,7 @@ void TextSource::showMolecule(vtkMolecule *pMol, const QString &title)
     for (int i = 0; i < nAtoms; ++i)
     {
         ostringstream out_atom;
-        const vtkAtom ai = pMol->GetAtom(i);
+        const Atom ai = pMol->GetAtom(i);
 
         long idElem = ai.GetAtomicNumber();
         idTypeNum[i] = ++mapFormula[idElem];

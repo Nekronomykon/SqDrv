@@ -37,8 +37,8 @@ namespace vtk
         /**
          * Get/Set the input vtkMolecule.
          */
-        void SetInputData(vtkMolecule *in);
-        vtkMolecule *GetInput();
+        void SetInputData(Molecule *in);
+        Molecule *GetInput();
         ///@}
 
         /**

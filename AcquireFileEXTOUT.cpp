@@ -104,7 +104,7 @@ int AcquireFileEXTOUT::RequestData(vtkInformation *vtkNotUsed(request),
     }
     vtkIdType idAtom = 0;
 
-    // construct vtkMolecule
+    // (re)construct a Molecule
     output->Initialize();
 
     std::string atom_line;

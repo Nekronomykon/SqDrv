@@ -9,7 +9,6 @@
 #include <QDateTime>
 #include <QMessageBox>
 
-#include "AcquireFile.h"
 #include "AcquireFileCUBE.h"
 #include "AcquireFileEXTOUT.h"
 #include "AcquireFileMGP.h"

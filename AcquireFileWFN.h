@@ -28,22 +28,20 @@
  * @par Thanks:
  * Dr. Jean M. Favre who developed and contributed this class
  */
-#include "AcquireFile.h"
+#include "AcquireMoleculeFile.h"
 
 #include <istream> // for std::istream
 #include <vector>  // for std::vector
-
-class vtkMolecule;
 
 namespace vtk
 {
 
     class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileWFN 
-    : public AcquireFile
+    : public AcquireMoleculeFile
     {
     public:
         static AcquireFileWFN *New();
-        vtkTypeMacro(AcquireFileWFN, AcquireFile);
+        vtkTypeMacro(AcquireFileWFN, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
     protected:

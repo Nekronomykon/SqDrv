@@ -33,8 +33,6 @@
 #include <istream> // for std::istream
 #include <vector>  // for std::vector
 
-class vtkMolecule;
-
 namespace vtk
 {
 

@@ -21,7 +21,9 @@
 
 #include <QPointer>
 
-#include <vtkMolecule.h>
+#include "Molecule.h"
+using namespace vtk;
+
 #include <vtkIdTypeArray.h>
 
 #include <vtkNew.h>
@@ -48,7 +50,7 @@ public:
     void setModified(bool b);
     bool isModified() const;
 
-    void showMolecule(vtkMolecule * /* pMol */, const QString & /* title */);
+    void showMolecule(Molecule * /* pMol */, const QString & /* title */);
     bool buildSource(QString & /*content*/);
 
 protected:

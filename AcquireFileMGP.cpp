@@ -88,7 +88,7 @@ int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
 
     if (!output)
     {
-        vtkErrorMacro("AcquireFileMGP does not have a vtkMolecule as output.");
+        vtkErrorMacro("AcquireFileMGP does not have a Molecule as output.");
         return 1;
     }
 

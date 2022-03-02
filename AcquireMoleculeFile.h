@@ -1,24 +1,24 @@
-#ifndef Acquire_File_h__
-#define Acquire_File_h__
+#ifndef Acquire_Molecule_File_h__
+#define Acquire_Molecule_File_h__
 
 #ifdef _MSC_VER
 #pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
+#include "MoleculeBuild.h"
+using namespace vtk;
+
 #include <vtkObjectFactory.h>
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-#include <vtkMoleculeAlgorithm.h>
 #include <vtkStringArray.h>
 
 #include <vtksys/FStream.hxx>
 
 namespace vtk
 {
-    typedef vtkMoleculeAlgorithm AcquireFileRoot;
-
     template <class In, class String>
     In &GetLine(In &in, String &line)
     {
@@ -34,12 +34,12 @@ namespace vtk
         return in;
     }
 
-    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFile
-        : public AcquireFileRoot
+    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireMoleculeFile
+        : public MoleculeBuild
     {
     public:
-        static AcquireFile *New();
-        vtkTypeMacro(AcquireFile, AcquireFileRoot);
+        static AcquireMoleculeFile *New();
+        vtkTypeMacro(AcquireMoleculeFile, MoleculeBuild);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
         // ----------------------------------------------------------------------
@@ -66,8 +66,8 @@ namespace vtk
 
         ///@}
 
-        vtkMolecule *GetOutput();
-        void SetOutput(vtkMolecule *) override;
+        Molecule *GetOutput();
+        void SetOutput(Molecule *) override;
 
         ///@{
         /**
@@ -110,8 +110,8 @@ namespace vtk
         bool HasStructureName(void) const { return !nameStructure_.empty(); }
         ///@}
     protected:
-        explicit AcquireFile(int /* nInPorts */ = 0);
-        ~AcquireFile() override = default;
+        explicit AcquireMoleculeFile(int nInPorts = 1, int nOutPorts = 1);
+        ~AcquireMoleculeFile() override = default;
 
         vtkIdType& NumberOfAtoms(void) {return NumberOfAtoms_;}
         
@@ -123,9 +123,9 @@ namespace vtk
         std::string nameStructure_ = "";
         vtkNew<vtkStringArray> nameAtoms_;
     private:
-        AcquireFile(const AcquireFile &) = delete;
-        void operator=(const AcquireFile &) = delete;
+        AcquireMoleculeFile(const AcquireMoleculeFile &) = delete;
+        void operator=(const AcquireMoleculeFile &) = delete;
     };
 }; // namespace vtk
 
-#endif // !Acquire_File_h__
+#endif // !Acquire_Molecule_File_h__

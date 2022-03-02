@@ -1,4 +1,5 @@
 #include "AcquireFileWFN.h"
+using namespace vtk;
 
 /*=========================================================================
 
@@ -14,8 +15,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-using namespace vtk;
 
 #include "Molecule.h"
 #include "Elements.h"
@@ -98,7 +97,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
 
     if (!output)
     {
-        vtkErrorMacro("AcquireFileWFN does not have a vtkMolecule as output.");
+        vtkErrorMacro("AcquireFileWFN does not have a Molecule as output.");
         return 1;
     }
 
@@ -126,7 +125,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    // reconstruct vtkMolecule
+    // reconstruct Molecule
     output->Initialize();
 
     // by strings, and strings by atoms:

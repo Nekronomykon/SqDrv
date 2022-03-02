@@ -1,4 +1,5 @@
 #include "AcquireFileCUBE.h"
+using namespace vtk;
 
 /*=========================================================================
 
@@ -16,8 +17,6 @@
   =========================================================================*/
 
 #include "Molecule.h"
-
-using namespace vtk;
 
 #include <vtkDataObject.h>
 #include <vtkExecutive.h>
@@ -45,10 +44,9 @@ vtkStandardNewMacro(AcquireFileCUBE);
 
 //------------------------------------------------------------------------------
 AcquireFileCUBE::AcquireFileCUBE()
+: AcquireMoleculeFile(2,2)
 {
-    this->SetNumberOfOutputPorts(2);
-
-    // Add the second output for the grid data
+    // The second output for the grid data
 
     vtkImageData *grid;
     grid = vtkImageData::New();
@@ -143,15 +141,14 @@ int AcquireFileCUBE::RequestData(vtkInformation *vtkNotUsed(request),
     bool orbitalCubeFile = false;
     int numberOfOrbitals;
 
-    vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
 
     if (!output)
     {
-        vtkErrorMacro(<< "AcquireFileCUBE does not have a vtkMolecule "
-                         "as output.");
+        vtkErrorMacro(<< "AcquireFileCUBE does not have a Molecule as output.");
         return 1;
     }
-    // Output 0 (the default is the vtkMolecule)
+    // Output 0 (the default is the Molecule)
     // Output 1 will be the gridded Image data
 
     if (!this->HasFileName())
@@ -216,7 +213,7 @@ int AcquireFileCUBE::RequestData(vtkInformation *vtkNotUsed(request),
 
     Transform->SetMatrix(elements);
     Transform->Inverse();
-    // construct vtkMolecule
+    // construct Molecule
     int atomType;
     float xyz[3];
     float dummy;

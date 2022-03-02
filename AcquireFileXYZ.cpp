@@ -36,8 +36,9 @@ vtkStandardNewMacro(AcquireFileXYZ);
 
 //------------------------------------------------------------------------------
 AcquireFileXYZ::AcquireFileXYZ()
+: AcquireMoleculeFile(1,1)
 {
-    this->SetNumberOfOutputPorts(1);
+    // this->SetNumberOfOutputPorts(1);
 }
 
 //------------------------------------------------------------------------------
@@ -105,7 +106,7 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
 
     if (!output)
     {
-        vtkErrorMacro("AcquireFileXYZ does not have a vtkMolecule as output.");
+        vtkErrorMacro("AcquireFileXYZ does not have a Molecule as output.");
         return 1;
     }
 
@@ -144,7 +145,7 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
     
-    // reconstruct vtkMolecule
+    // reconstruct Molecule
     output->Initialize();
     // output-SetNumberOfAtoms(this->GetNumberOfAtoms());
 

@@ -1,35 +1,35 @@
-#include "AcquireFile.h"
+#include "AcquireMoleculeFile.h"
+using namespace vtk;
 
 #include "Molecule.h"
-
-using namespace vtk;
 
 #include <vtkExecutive.h>
 #include <vtkObjectFactory.h>
 
 //------------------------------------------------------------------------------
-vtkStandardNewMacro(AcquireFile);
+vtkStandardNewMacro(AcquireMoleculeFile);
 
 //------------------------------------------------------------------------------
-AcquireFile::AcquireFile(int nInPorts)
+AcquireMoleculeFile::AcquireMoleculeFile(int nInPorts, int nOutPorts)
+    : MoleculeBuild(nOutPorts)
 {
     this->SetNumberOfInputPorts(nInPorts);
 }
 
 //------------------------------------------------------------------------------
-vtkMolecule *AcquireFile::GetOutput()
+Molecule *AcquireMoleculeFile::GetOutput()
 {
     return Molecule::SafeDownCast(this->GetOutputDataObject(0));
 }
 
 //------------------------------------------------------------------------------
-void AcquireFile::SetOutput(vtkMolecule *output)
+void AcquireMoleculeFile::SetOutput(Molecule *output)
 {
     this->GetExecutive()->SetOutputData(0, output);
 }
 
 //------------------------------------------------------------------------------
-void AcquireFile::PrintSelf(ostream &os, vtkIndent indent)
+void AcquireMoleculeFile::PrintSelf(ostream &os, vtkIndent indent)
 {
     this->Superclass::PrintSelf(os, indent);
     os << indent << "[ FileName: " << this->GetFileName()
@@ -39,7 +39,7 @@ void AcquireFile::PrintSelf(ostream &os, vtkIndent indent)
 }
 
 //------------------------------------------------------------------------------
-int AcquireFile::ScrollStrings(std::istream &in, int ns)
+int AcquireMoleculeFile::ScrollStrings(std::istream &in, int ns)
 {
     if (ns <= 0)
         return 0;

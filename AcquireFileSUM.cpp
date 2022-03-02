@@ -86,7 +86,7 @@ int AcquireFileSUM::RequestData(vtkInformation *vtkNotUsed(request),
 
     if (!output)
     {
-        vtkErrorMacro("AcquireFileSUM does not have a vtkMolecule as output.");
+        vtkErrorMacro("AcquireFileSUM does not have a Molecule as output.");
         return 1;
     }
 
@@ -104,7 +104,7 @@ int AcquireFileSUM::RequestData(vtkInformation *vtkNotUsed(request),
     }
     vtkIdType idAtom = 0;
 
-    // construct vtkMolecule
+    // construct Molecule
     output->Initialize();
 
     std::string atom_line;

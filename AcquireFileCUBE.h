@@ -28,19 +28,21 @@
  * @par Thanks:
  * Dr. Jean M. Favre who developed and contributed this class. */
 
-#include "AcquireFile.h"
+#include "AcquireMoleculeFile.h"
+// #include "AcquireQTAIMFile.h" --> perspective...
 
-class vtkMolecule;
 class vtkImageData;
 
 namespace vtk
 {
+class Molecule;
+
     class /*VTKIOCHEMISTRY_EXPORT*/ AcquireFileCUBE
-        : public AcquireFile
+        : public AcquireMoleculeFile
     {
     public:
         static AcquireFileCUBE *New();
-        vtkTypeMacro(AcquireFileCUBE, AcquireFile);
+        vtkTypeMacro(AcquireFileCUBE, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
         ///@{

@@ -6,30 +6,31 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
+#include "AcquireMoleculeFile.h"
+using namespace vtk;
+
 #include <vtkObjectFactory.h>
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-#include <vtkMoleculeAlgorithm.h>
 #include <vtkStringArray.h>
 
 #include <vtksys/FStream.hxx>
 
-#include "AcquireFile.h"
 #include "CriticalPoint.h"
 
 namespace vtk
 {
 
     class AcquireQTAIMFile
-        : public AcquireFile
+        : public AcquireMoleculeFile
     {
     protected:
         explicit AcquireQTAIMFile();
 
     public:
         static AcquireQTAIMFile *New();
-        vtkTypeMacro(AcquireQTAIMFile, AcquireFile);
+        vtkTypeMacro(AcquireQTAIMFile, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
         vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }

@@ -6,6 +6,7 @@ vtkStandardNewMacro(AcquireQTAIMFile);
 
 //------------------------------------------------------------------------------
 AcquireQTAIMFile::AcquireQTAIMFile()
+    : AcquireMoleculeFile(2, 2)
 {
 }
 

@@ -19,11 +19,11 @@
 #include <vtkSmartPointer.h>
 
 #include "Molecule.h"
-#include "MakeBonds.h"
+#include "MakeBondsDist.h"
 
 #include "NamedOperation.h"
 
-#include "AcquireFile.h"
+#include "AcquireMoleculeFile.h"
 
 #include "TextSource.h"
 #include "ViewMolecule.h"
@@ -104,7 +104,7 @@ protected:
         read_file->SetOutput(newmol);
 
         // Let's make some possible bonds:
-        vtkNew<MakeBondsSimple> mk_bonds;
+        vtkNew<MakeBondsDistances> mk_bonds;
         mk_bonds->SetInputData(read_file->GetOutput());
         mk_bonds->SetOutput(molecule_);
 
