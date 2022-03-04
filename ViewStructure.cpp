@@ -9,6 +9,8 @@
 #include <QString>
 #include <QMessageBox>
 
+#include "MapMoleculeOpenGL.h"
+
 #include "ResetCursor.h"
 
 typedef vtkNew<vtkRenderWindowInteractor> NewRenderWindowInteractor;
@@ -20,7 +22,8 @@ typedef vtkSmartPointer<vtkRenderWindowInteractor> ARenderWindowInteractor;
 ViewStructure::ViewStructure(QWidget *parent)
     : QVTKOpenGLNativeWidget(parent),         //
       styleMol_(StyleMapMolecule::styleFast), //
-      mapMol_(MoleculeMapper::New())          // is it constant?
+      mapMol_(MoleculeMapper::New())
+      // mapMol_(MapMoleculeOpenGL::New())          // is it constant?
 {
     actorMol_->SetMapper(mapMol_);
 
