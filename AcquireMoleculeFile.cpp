@@ -6,6 +6,9 @@ using namespace vtk;
 #include <vtkExecutive.h>
 #include <vtkObjectFactory.h>
 
+#include <vtkInformation.h>
+#include <vtkInformationVector.h>
+
 //------------------------------------------------------------------------------
 vtkStandardNewMacro(AcquireMoleculeFile);
 
@@ -49,4 +52,54 @@ int AcquireMoleculeFile::ScrollStrings(std::istream &in, int ns)
         std::getline(in, one);
     } while (--ns);
     return ns;
+}
+
+//------------------------------------------------------------------------------
+int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
+                                vtkInformationVector **vtkNotUsed(inputVector),
+                                vtkInformationVector *outputVector)
+{
+    vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+
+    if (!output)
+    {
+        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as output.");
+        return 1;
+    }
+
+    vtksys::ifstream fileInput(this->GetFileName());
+
+    if (!fileInput.is_open())
+    {
+        vtkErrorMacro("AcquireMoleculeFile error opening file: " << this->GetFileName());
+        return 0;
+    }
+
+    return 1; // virtually Ok
+}
+
+//------------------------------------------------------------------------------
+int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
+                                vtkInformationVector **vtkNotUsed(inputVector),
+                                vtkInformationVector *outputVector)
+{
+    vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+
+    if (!output)
+    {
+        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as output.");
+        return 1;
+    }
+
+    vtksys::ifstream fileInput(this->GetFileName());
+
+    if (!fileInput.is_open())
+    {
+        vtkErrorMacro("AcquireMoleculeFile error opening file: " << this->GetFileName());
+        return 0;
+    }
+
+    return 1; // virtually Ok
 }

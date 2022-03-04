@@ -19,6 +19,9 @@ using namespace vtk;
 
 #include "CriticalPoint.h"
 
+class vtkInformation;
+class vtkInformationVector;
+
 namespace vtk
 {
 
@@ -33,6 +36,8 @@ namespace vtk
         vtkTypeMacro(AcquireQTAIMFile, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
+        vtkIdType GetNumberOfCP(void) const { return NumberOfCriticals_; }
+
         vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }
         vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
         vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; }
@@ -41,9 +46,12 @@ namespace vtk
         vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
 
     protected:
-        // vtkIdType &NumberOfAtoms(void) { return NumberOfAtoms_; }
+        // To be overriden to read information stored in the (file) stream
+        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
-    private:
+        // private:
+        vtkIdType NumberOfCriticals_ = 0;
         vtkIdType NumberOfNACP_ = 0;
         vtkIdType NumberOfNNACP_ = 0;
         vtkIdType NumberOfBCP_ = 0;

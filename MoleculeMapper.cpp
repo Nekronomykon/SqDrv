@@ -1,3 +1,6 @@
+#include "MoleculeMapper.h"
+using namespace vtk;
+
 /*=========================================================================
 
   Program:   Visualization Toolkit
@@ -13,9 +16,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "MoleculeMapper.h"
-
-using namespace vtk;
 
 #include <vtkActor.h>
 #include <vtkColor.h>

@@ -48,6 +48,7 @@ namespace vtk
         explicit AcquireFileXYZ();
         ~AcquireFileXYZ() override = default;
 
+        // To be overriden to read information stored in the (file) stream
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
