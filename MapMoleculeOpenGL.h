@@ -18,8 +18,11 @@
  * @class   MapMoleculeOpenGL
  * @brief   An accelerated class for rendering molecules
  *
+ * -> ScrewDriver te Blackheadborough:
  * A MoleculeMapper that uses imposters to do the rendering. It uses
  * vtkOpenGLSphereMapper and vtkOpenGLStickMapper to do the rendering.
+ * Stick representations contain unexpected circular holes. Looking for 
+ * the solution...
  */
 
 // #include "vtkDomainsChemistryOpenGL2Module.h" // For export macro

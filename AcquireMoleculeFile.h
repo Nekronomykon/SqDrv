@@ -9,6 +9,8 @@
 #include "MoleculeBuild.h"
 using namespace vtk;
 
+#include "ImplFileName.h"
+
 #include <vtkObjectFactory.h>
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
@@ -38,7 +40,8 @@ namespace vtk
     }
 
     class /* VTKIOCHEMISTRY_EXPORT*/ AcquireMoleculeFile
-        : public MoleculeBuild
+        : public MoleculeBuild,
+          public ImplFileName<AcquireMoleculeFile>
     {
     public:
         static AcquireMoleculeFile *New();
@@ -74,27 +77,6 @@ namespace vtk
 
         ///@{
         /**
-         *    * Get/Set the path to the Molecule file
-         **/
-        // vtkSetStdStringFromCharMacro(nameFile);
-        void SetFileName(const char *arg)
-        {
-            vtkDebugMacro(<< this->GetClassName() << ": setting nameFile to" << ((arg && *arg) ? arg : "(null)"));
-            if (arg && *arg)
-                this->nameFile_.assign(arg);
-            else
-                this->nameFile_.clear();
-            this->Modified();
-        }
-        const char *GetFileName() const
-        {
-            return this->nameFile_.c_str();
-        }
-        bool HasFileName() const { return !nameFile_.empty(); }
-        ///@}
-
-        ///@{
-        /**
          *    * Get/Set the structure name / title of the Molecule File:
          **/
         void SetStructureName(const char *arg)
@@ -124,7 +106,6 @@ namespace vtk
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
     private:
-        std::string nameFile_ = "";
         vtkIdType NumberOfAtoms_ = 0;
         std::string nameStructure_ = "";
         vtkNew<vtkStringArray> nameAtoms_;

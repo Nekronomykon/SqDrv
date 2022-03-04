@@ -1,6 +1,11 @@
 #ifndef Molecule_h__
 #define Molecule_h__
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 /*=========================================================================
 
   Program:   Visualization Toolkit
@@ -68,11 +73,6 @@
  * @sa
  * Atom Bond vtkMoleculeMapper vtkPeriodicTable
  */
-
-#ifdef _MSC_VER
-#pragma once
-#else  // !_MSC_VER
-#endif //  _MSC_VER
 
 // #include <vtkCommonDataModelModule.h> // For export macro
 #include <vtkUndirectedGraph.h>

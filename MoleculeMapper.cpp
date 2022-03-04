@@ -48,9 +48,8 @@ using namespace vtk;
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
 
-// Note this class may have an accelerated subclass ala
-// vtkOpenGLMoleculeMapper. If you change this class please
-// also check that class for impacts.
+// Note this class have an accelerated subclass MapMoleculeOpenGL. 
+// If you change this class please also check that class for impacts.
 
 /*
 ** Tasks (SDtB):
