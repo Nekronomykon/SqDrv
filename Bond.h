@@ -22,8 +22,8 @@
  */
 
 #include "Atom.h"                     // For Atom
-#include "vtkCommonDataModelModule.h" // For export macro
-#include "vtkObject.h"                // For macros, etc
+// #include "vtkCommonDataModelModule.h" // For export macro
+#include <vtkObject.h>                // For macros, etc
 
 namespace vtk
 {

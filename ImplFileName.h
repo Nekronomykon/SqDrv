@@ -29,18 +29,18 @@ public:
             this->nameFile_.assign(arg);
         else
             this->nameFile_.clear();
-        this->Modified();
+
+        // CRTP stuff:
+        T *pThis = static_cast<T *>(this);
+        pThis->Modified();
     }
-    const char *GetFileName() const
-    {
-        return this->nameFile_.c_str();
-    }
-    bool HasFileName() const { return !nameFile_.empty(); }
+    const char *GetFileName() const { return this->nameFile_.c_str(); }
+    bool HasFileName() const { return !this->nameFile_.empty(); }
     //
     ///////////////////////////////////////////////////////////////////////////////
 
 protected:
-    std::string &FileName() { return nameFile_; }
+    std::string &FileName() { return this->nameFile_; }
 
     std::string nameFile_ = "";
 };

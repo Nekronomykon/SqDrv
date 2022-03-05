@@ -24,8 +24,6 @@
  * @class   Molecule
  * @brief   class describing a molecule
  *
- *
- *
  * Molecule and the convenience classes Atom and Bond
  * describe the geometry and connectivity of a molecule. The molecule
  * can be constructed using the AppendAtom() and AppendBond() methods in one
@@ -97,7 +95,8 @@ class vtkUnsignedShortArray;
 namespace vtk
 {
 
-    class /*VTKCOMMONDATAMODEL_EXPORT*/ Molecule : public vtkUndirectedGraph
+    class /*VTKCOMMONDATAMODEL_EXPORT*/ Molecule
+     : public vtkUndirectedGraph
     {
     public:
         static Molecule *New();

@@ -21,7 +21,7 @@
  *
  */
 
-#include "vtkObject.h"                // For macros, defines, etc
+#include <vtkObject.h>                // For macros, defines, etc
 
 class vtkVector3d;
 class vtkVector3f;
