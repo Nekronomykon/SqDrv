@@ -68,7 +68,7 @@ int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
         return 1;
     }
 
-    vtksys::ifstream fileInput(this->GetFileName());
+    InputFile fileInput(this->GetFileName());
 
     if (!fileInput.is_open())
     {
@@ -76,7 +76,7 @@ int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    return 1; // virtually Ok
+    return this->CheckSizesOf(fileInput) ? 1 : 0; // virtually Ok
 }
 
 //------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
         return 1;
     }
 
-    vtksys::ifstream fileInput(this->GetFileName());
+    InputFile fileInput(this->GetFileName());
 
     if (!fileInput.is_open())
     {
@@ -101,5 +101,8 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    return 1; // virtually Ok
+        return this->ReadDataFrom(fileInput) ? 1 : 0; // virtually Ok
 }
+
+int AcquireMoleculeFile::CheckSizesOf(InputFile& /*inp*/) { return 1; }
+int AcquireMoleculeFile::ReadDataFrom(InputFile& /*inp*/) { return 1; }

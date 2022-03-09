@@ -24,6 +24,9 @@ class vtkInformationVector;
 
 namespace vtk
 {
+    typedef vtksys::ifstream InputFile;
+    typedef std::istringstream InputString;
+
     template <class In, class String>
     In &GetLine(In &in, String &line)
     {
@@ -101,9 +104,12 @@ namespace vtk
         vtkIdType &NumberOfAtoms(void) { return NumberOfAtoms_; }
         std::string &NameOfStructure(void) { return nameStructure_; }
 
-        // To be overriden to read information stored in the (file) stream
         int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+
+        // To be overriden to read information stored in the (file) stream
+        virtual int CheckSizesOf(InputFile& /*inp*/);
+        virtual int ReadDataFrom(InputFile& /*inp*/);
 
     private:
         vtkIdType NumberOfAtoms_ = 0;
