@@ -3,6 +3,8 @@
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
 
+#include <vtkCamera.h>
+
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkInteractorStyleRubberBandPick.h>
 
@@ -23,7 +25,7 @@ ViewStructure::ViewStructure(QWidget *parent)
     : QVTKOpenGLNativeWidget(parent),         //
       styleMol_(StyleMapMolecule::styleFast), //
       mapMol_(MoleculeMapper::New())
-      // mapMol_(MapMoleculeOpenGL::New())          // is it constant?
+// mapMol_(MapMoleculeOpenGL::New())          // is it constant?
 {
     actorMol_->SetMapper(mapMol_);
 
@@ -31,7 +33,7 @@ ViewStructure::ViewStructure(QWidget *parent)
     vtkRenderWindow *pRW = this->renderWindow();
     pRW->SetNumberOfLayers(2);
 
-    colorBg_.SetRed(1.0); // debug colors
+    colorBg_.SetRed(1.0);   // debug colors
     colorBg_.SetGreen(1.0); // total up to yellow
     colorBg_.SetBlue(0.75); // light-yellow
 
@@ -141,5 +143,28 @@ bool ViewStructure::exportImageTo(vtkImageWriter *pIW, bool bAlpha)
     return true;
 }
 //
+///////////////////////////////////////////////////////////////////////////////
+//
+void ViewStructure::ProjectParallel()
+{
+    vtkRenderWindow *pRW = this->renderWindow();
+    pRW->RemoveRenderer(renderMol_);
+    renderMol_->GetActiveCamera()->ParallelProjectionOn();  
+    pRW->AddRenderer(renderMol_);
+    // renderMol_->Render();
+    pRW->Render();
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+void ViewStructure::ProjectPerspective()
+{
+    vtkRenderWindow *pRW = this->renderWindow();
+    pRW->RemoveRenderer(renderMol_);
+    renderMol_->GetActiveCamera()->ParallelProjectionOff();  
+    pRW->AddRenderer(renderMol_);
+    // renderMol_->Render();
+    pRW->Render();
+}
 //
 ///////////////////////////////////////////////////////////////////////////////

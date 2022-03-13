@@ -1223,6 +1223,7 @@ void FrameBrowser::on_actionProjectPerspective__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     ViewStructure *pView = pMol->viewStructure();
+    pView->ProjectPerspective();
     pView->renderWindow()->Render();
     this->updateUi();
 }
@@ -1234,6 +1235,7 @@ void FrameBrowser::on_actionProjectReset__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     ViewStructure *pView = pMol->viewStructure();
+    pView->ProjectParallel();
     pView->renderWindow()->Render();
     this->updateUi();
 }
