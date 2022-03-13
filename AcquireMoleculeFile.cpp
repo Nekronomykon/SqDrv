@@ -56,8 +56,8 @@ int AcquireMoleculeFile::ScrollStrings(std::istream &in, int ns)
 
 //------------------------------------------------------------------------------
 int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
+                                            vtkInformationVector **vtkNotUsed(inputVector),
+                                            vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
@@ -76,13 +76,15 @@ int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    return this->CheckSizesOf(fileInput) ? 1 : 0; // virtually Ok
+    int nRes = this->ReadSizesFrom(fileInput) ? 1 : 0; // virtually Ok
+    fileInput.close();
+    return nRes;
 }
 
 //------------------------------------------------------------------------------
 int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
+                                     vtkInformationVector **vtkNotUsed(inputVector),
+                                     vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
@@ -101,8 +103,10 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-        return this->ReadDataFrom(fileInput) ? 1 : 0; // virtually Ok
+    int nRes = this->ReadDataFrom(fileInput) ? 1 : 0; // virtually Ok
+    fileInput.close();
+    return nRes;
 }
 
-int AcquireMoleculeFile::CheckSizesOf(InputFile& /*inp*/) { return 1; }
-int AcquireMoleculeFile::ReadDataFrom(InputFile& /*inp*/) { return 1; }
+int AcquireMoleculeFile::ReadSizesFrom(InputFile & /*inp*/) { return 1; }
+int AcquireMoleculeFile::ReadDataFrom(InputFile & /*inp*/) { return 1; }

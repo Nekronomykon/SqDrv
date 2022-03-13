@@ -51,6 +51,7 @@ namespace vtk
         // To be overriden to read information stored in the (file) stream
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int ReadSizesFrom(InputFile& /*inp*/) override;
 
     private:
         AcquireFileXYZ(const AcquireFileXYZ &) = delete;

@@ -108,7 +108,7 @@ namespace vtk
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
         // To be overriden to read information stored in the (file) stream
-        virtual int CheckSizesOf(InputFile& /*inp*/);
+        virtual int ReadSizesFrom(InputFile& /*inp*/);
         virtual int ReadDataFrom(InputFile& /*inp*/);
 
     private:

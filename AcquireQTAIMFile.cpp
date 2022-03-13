@@ -32,7 +32,7 @@ void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
 int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
 {
     // call base class:
-    if (!this->Superclass::RequestData(p_info, pp_ifv, p_ifv))
+    if (!this->Superclass::RequestInformation(p_info, pp_ifv, p_ifv))
         return 0;
 
     // whatever
