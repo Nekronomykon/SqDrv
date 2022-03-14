@@ -48,8 +48,15 @@ namespace vtk
         explicit AcquireFileWFN();
         ~AcquireFileWFN() override = default;
 
+        // ----------------------------------------------------------------------------------------------------
+        // To be overriden to read information stored in the (file) stream
+        // ----------------------------------------------------------------------------------------------------
+        // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int ReadSizesFrom(InputFile& /*inp*/) override;
+        // ----------------------------------------------------------------------------------------------------
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int ReadDataFrom(InputFile& /*inp*/) override;
+        // ----------------------------------------------------------------------------------------------------
 
     private:
         AcquireFileWFN(const AcquireFileWFN &) = delete;

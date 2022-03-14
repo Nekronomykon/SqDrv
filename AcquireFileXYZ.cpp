@@ -38,11 +38,12 @@ vtkStandardNewMacro(AcquireFileXYZ);
 AcquireFileXYZ::AcquireFileXYZ() : AcquireMoleculeFile(0, 1) {}
 
 //------------------------------------------------------------------------------
- int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
-                                        vtkInformationVector **vtkNotUsed(inputVector),
-                                        vtkInformationVector *outputVector)
-// int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
+// int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
+//                                       vtkInformationVector **vtkNotUsed(inputVector),
+//                                       vtkInformationVector *outputVector)
+int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
 {
+    /*
         vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
         vtksys::ifstream inp(this->GetFileName());
@@ -52,9 +53,9 @@ AcquireFileXYZ::AcquireFileXYZ() : AcquireMoleculeFile(0, 1) {}
             vtkErrorMacro("AcquireFileXYZ error opening file: " << this->GetFileName());
             return 0;
         }
-    /*
-    if (this->Superclass::ReadSizesFrom(inp))
-        return 0;
+
+        if (!this->Superclass::ReadSizesFrom(inp))
+            eturn 0;
     */
 
     std::string one_line;
@@ -84,7 +85,8 @@ AcquireFileXYZ::AcquireFileXYZ() : AcquireMoleculeFile(0, 1) {}
     //
 
     GetLine(inp, this->NameOfStructure()); // second (title) line may be empty
-
+    
+    // simply scroll NumberOfAtom lines of the file:
     for (; na; --na)
     {
         if (!GetLine(inp, one_line) || one_line.empty())
@@ -153,9 +155,9 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
     {
         if (!GetLine(inp, one_line))
         {
-            vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while reading "
-                          << i
-                          << "th atom of overall " << nAtoms
+            vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while reading atom "
+                          << i + 1
+                          << " of overall " << nAtoms
                           << " from " << this->GetFileName());
             return 0;
         }

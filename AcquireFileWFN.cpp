@@ -37,27 +37,22 @@ vtkStandardNewMacro(AcquireFileWFN);
 AcquireFileWFN::AcquireFileWFN() : AcquireMoleculeFile(0, 1) {}
 
 //------------------------------------------------------------------------------
-int AcquireFileWFN::RequestInformation(vtkInformation *vtkNotUsed(request),
-                                       vtkInformationVector **vtkNotUsed(inputVector),
-                                       vtkInformationVector *outputVector)
+// int AcquireFileWFN::RequestInformation(vtkInformation *vtkNotUsed(request),
+//                                       vtkInformationVector **vtkNotUsed(inputVector),
+//                                       vtkInformationVector *outputVector)
+int AcquireFileWFN::ReadSizesFrom(InputFile& inp)
 {
+    /*
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    */
 
-    vtksys::ifstream fileInput(this->GetFileName());
-
-    if (!fileInput.is_open())
-    {
-        vtkErrorMacro("AcquireFileWFN error opening file: " << this->GetFileName());
-        return 0;
-    }
-
-    GetLine(fileInput, this->NameOfStructure()); // first (title) line may be empty
+    GetLine(inp, this->NameOfStructure()); // first (title) line may be empty
 
     std::string one_line;
     int nOrb, nPrim;
 
     // second line: NumberOfAtoms is the rightmost of the numeric fields
-    if (!GetLine(fileInput, one_line) || one_line.empty()) // second line: Sizes
+    if (!GetLine(inp, one_line) || one_line.empty()) // second line: Sizes
     {
         vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->GetFileName());
         return 0;
@@ -76,10 +71,9 @@ int AcquireFileWFN::RequestInformation(vtkInformation *vtkNotUsed(request),
 
     for (; na; --na)
     {
-        if (!GetLine(fileInput, one_line) || one_line.empty())
+        if (!GetLine(inp, one_line) || one_line.empty())
             break; // for each atom a line with symbol, x, y, z
     }
-    fileInput.close();
 
     return (!na) ? 1 : 0;
 }
