@@ -75,7 +75,7 @@
 // #include <vtkCommonDataModelModule.h> // For export macro
 #include <vtkUndirectedGraph.h>
 
-#include <vtkNew.h> // For vtkNew
+#include <vtkNew.h>          // For vtkNew
 #include <vtkSmartPointer.h> // For vtkSmartPointer
 
 #include "Atom.h" // Simple proxy class dependent on Molecule
@@ -95,6 +95,9 @@ class vtkUnsignedShortArray;
 
 namespace vtk
 {
+
+    typedef vtkNew<vtkPoints> NewPoints;
+    typedef vtkSmartPointer<vtkPoints> ThePoints;
 
     class /*VTKCOMMONDATAMODEL_EXPORT*/ Molecule
         : public vtkUndirectedGraph
@@ -313,49 +316,6 @@ namespace vtk
         ///@}
 
         /**
-         * Return true if a unit cell lattice is defined.
-         */
-        // bool HasLattice();
-
-        /**
-         * Remove any unit cell lattice information from the molecule.
-         */
-        // void ClearLattice();
-
-        ///@{
-        /**
-         * The unit cell vectors. The matrix is stored using a row-major layout, with
-         * the vectors encoded as columns.
-         */
-        // void SetLattice(vtkMatrix3x3 *matrix);
-        // void SetLattice(const vtkVector3d &a, const vtkVector3d &b, const vtkVector3d &c);
-        ///@}
-
-        /**
-         * Get the unit cell lattice vectors. The matrix is stored using a row-major
-         * layout, with the vectors encoded as columns. Will return nullptr if no
-         * unit cell information is available.
-         * @sa GetLatticeOrigin
-         */
-        // vtkMatrix3x3 *GetLattice();
-
-        ///@{
-        /**
-         * Get the unit cell lattice vectors, and optionally, the origin.
-         */
-        // void GetLattice(vtkVector3d &a, vtkVector3d &b, vtkVector3d &c);
-        // void GetLattice(vtkVector3d &a, vtkVector3d &b, vtkVector3d &c, vtkVector3d &origin);
-        ///@}
-
-        ///@{
-        /**
-         * Get the unit cell origin (for rendering purposes).
-         */
-        // vtkGetMacro(LatticeOrigin, vtkVector3d);
-        // vtkSetMacro(LatticeOrigin, vtkVector3d);
-        ///@}
-
-        /**
          * Get the array that defines the ghost type of each atom.
          */
         vtkUnsignedCharArray *GetAtomGhostArray();
@@ -474,15 +434,13 @@ namespace vtk
         /**
          * The edge spots locations.
          */
-        vtkSmartPointer<vtkPoints> BondSpots_;
+        ThePoints BondSpots_;
         ///@}
 
         friend class Atom;
         friend class Bond;
 
         vtkAbstractElectronicData *ElectronicData;
-        // vtkSmartPointer<vtkMatrix3x3> Lattice;
-        // vtkVector3d LatticeOrigin;
 
         vtkUnsignedCharArray *AtomGhostArray;
         vtkUnsignedCharArray *BondGhostArray;
