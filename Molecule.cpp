@@ -42,7 +42,7 @@ vtkStandardNewMacro(Molecule);
 
 //------------------------------------------------------------------------------
 Molecule::Molecule()
-    : ElectronicData(nullptr), BondSpots(ThePoints::New())
+    : ElectronicData(nullptr), BondSpots_(ThePoints::New())
     , AtomGhostArray(nullptr), BondGhostArray(nullptr), AtomicNumberArrayName(nullptr), BondOrdersArrayName(nullptr)
 {
   this->Initialize();
