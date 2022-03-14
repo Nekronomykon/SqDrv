@@ -46,9 +46,16 @@ namespace vtk
         vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
 
     protected:
+        // ----------------------------------------------------------------------------------------------------
         // To be overriden to read information stored in the (file) stream
+        // ----------------------------------------------------------------------------------------------------
+        // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int ReadSizesFrom(InputFile& /*inp*/) override;
+        // ----------------------------------------------------------------------------------------------------
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int ReadDataFrom(InputFile& /*inp*/) override;
+        // ----------------------------------------------------------------------------------------------------
+        virtual int ReadQTAIMSizes(InputFile& /* inp */);
 
         // private:
         vtkIdType NumberOfCriticals_ = 0;

@@ -29,14 +29,16 @@ void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
 }
 
 // To be overriden to read information stored in the (file) stream
-int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
+// int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
+int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 {
     // call base class:
-    if (!this->Superclass::RequestInformation(p_info, pp_ifv, p_ifv))
+    if (!this->Superclass::ReadSizesFrom(inp))
         return 0;
 
+
     // whatever
-    return 1;
+    return (this->ReadQTAIMSizes(inp)) ? 1 : 0;
 }
 
 // To be overriden to read information stored in the (file) stream
@@ -48,4 +50,10 @@ int AcquireQTAIMFile::RequestData(vtkInformation *p_info, vtkInformationVector *
 
     // whatever
     return 1;
+}
+
+int AcquireQTAIMFile::ReadQTAIMSizes(InputFile& /* inp */)
+{
+    NumberOfNACP_ = this->GetNumberOfAtoms(); 
+    return (NumberOfNACP_) ? 1 : 0;
 }
