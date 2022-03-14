@@ -84,3 +84,10 @@ void Atom::SetPosition(const vtkVector3f& pos)
 {
   this->molecule_->SetAtomPosition(this->Id, pos);
 }
+
+//------------------------------------------------------------------------------
+//void Atom::SetPosition(const vtkVector3d &pos)
+//{
+//  this->molecule_->SetAtomPosition(this->Id, pos);
+//}
+

@@ -148,11 +148,12 @@ bool ViewStructure::exportImageTo(vtkImageWriter *pIW, bool bAlpha)
 void ViewStructure::ProjectParallel()
 {
     vtkRenderWindow *pRW = this->renderWindow();
-    pRW->RemoveRenderer(renderMol_);
+    // pRW->RemoveRenderer(renderMol_);
     renderMol_->GetActiveCamera()->ParallelProjectionOn();  
-    pRW->AddRenderer(renderMol_);
+    // pRW->AddRenderer(renderMol_);
     // renderMol_->Render();
-    pRW->Render();
+    pRW->Modified();
+    // pRW->Render();
 }
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,11 +161,12 @@ void ViewStructure::ProjectParallel()
 void ViewStructure::ProjectPerspective()
 {
     vtkRenderWindow *pRW = this->renderWindow();
-    pRW->RemoveRenderer(renderMol_);
+    // pRW->RemoveRenderer(renderMol_);
     renderMol_->GetActiveCamera()->ParallelProjectionOff();  
-    pRW->AddRenderer(renderMol_);
+    // pRW->AddRenderer(renderMol_);
     // renderMol_->Render();
-    pRW->Render();
+    pRW->Modified();
+    // pRW->Render();
 }
 //
 ///////////////////////////////////////////////////////////////////////////////

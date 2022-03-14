@@ -298,6 +298,12 @@ vtkPoints *Molecule::GetAtomicPositionArray()
 }
 
 //------------------------------------------------------------------------------
+vtkPoints *Molecule::GetBondSpots()
+{
+  return this->BondSpots_;
+}
+
+//------------------------------------------------------------------------------
 vtkUnsignedShortArray *Molecule::GetAtomicNumberArray()
 {
   vtkUnsignedShortArray *atomicNums = vtkArrayDownCast<vtkUnsignedShortArray>(

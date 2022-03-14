@@ -69,6 +69,7 @@ namespace vtk
         void SetPosition(float x, float y, float z);
         vtkVector3f GetPosition() const;
         void SetPosition(const vtkVector3f &pos);
+        // void SetPosition(const vtkVector3d &pos);
         ///@}
 
     protected:

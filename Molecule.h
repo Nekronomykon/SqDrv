@@ -221,11 +221,35 @@ namespace vtk
 
         ///@{
         /**
+         * Set the position of the atom with the specified id.
+         */
+        // void SetBondSpot(vtkIdType atomId, const vtkVector3f &pos);
+        // void SetBondSpot(vtkIdType atomId, double x, double y, double z);
+        // void SetBondSpot(vtkIdType atomId, double pos[3])
+        // {
+        //    this->SetBondSpot(atomId, pos[0], pos[1], pos[2]);
+        // }
+        ///@}
+
+        ///@{
+        /**
+         * Get the spot position of the bond with the specified id.
+         */
+        // vtkVector3f GetBondSpot(vtkIdType idBond);
+        // void GetBondSpot(vtkIdType idBond, float pos[3]);
+        // void GetBondSpot(vtkIdType idBond, double pos[3]);
+        ///@}
+
+
+        ///@{
+        /**
          * Access the raw arrays used in this Molecule instance
          */
         vtkPoints *GetAtomicPositionArray();
         vtkUnsignedShortArray *GetAtomicNumberArray();
+        // 
         vtkUnsignedShortArray *GetBondOrdersArray();
+        vtkPoints *GetBondSpots();
         ///@}
 
         ///@{
