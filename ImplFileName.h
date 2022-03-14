@@ -24,14 +24,14 @@ public:
     //
     void SetFileName(const char *arg)
     {
-        vtkDebugMacro(<< this->GetClassName() << ": setting nameFile to" << ((arg && *arg) ? arg : "(null)"));
+        // CRTP stuff:
+        T *pThis = static_cast<T *>(this);
+        vtkDebugMacro(<< pThis->GetClassName() << ": setting nameFile to" << ((arg && *arg) ? arg : "(null)"));
         if (arg && *arg)
             this->nameFile_.assign(arg);
         else
             this->nameFile_.clear();
 
-        // CRTP stuff:
-        T *pThis = static_cast<T *>(this);
         pThis->Modified();
     }
     const char *GetFileName() const { return this->nameFile_.c_str(); }

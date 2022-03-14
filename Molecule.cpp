@@ -15,23 +15,23 @@ PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
 
-#include "vtkAbstractElectronicData.h"
-#include "vtkDataSetAttributes.h"
-#include "vtkEdgeListIterator.h"
-#include "vtkFloatArray.h"
-#include "vtkGraphInternals.h"
-#include "vtkIdTypeArray.h"
-#include "vtkInformation.h"
-#include "vtkInformationVector.h"
-#include "vtkMatrix3x3.h"
-#include "vtkNew.h"
-#include "vtkObjectFactory.h"
-#include "vtkPlane.h"
-#include "vtkPoints.h"
-#include "vtkUnsignedCharArray.h"
-#include "vtkUnsignedShortArray.h"
-#include "vtkVector.h"
-#include "vtkVectorOperators.h"
+#include <vtkAbstractElectronicData.h>
+#include <vtkDataSetAttributes.h>
+#include <vtkEdgeListIterator.h>
+#include <vtkFloatArray.h>
+#include <vtkGraphInternals.h>
+#include <vtkIdTypeArray.h>
+#include <vtkInformation.h>
+#include <vtkInformationVector.h>
+#include <vtkMatrix3x3.h>
+#include <vtkNew.h>
+#include <vtkObjectFactory.h>
+#include <vtkPlane.h>
+#include <vtkPoints.h>
+#include <vtkUnsignedCharArray.h>
+#include <vtkUnsignedShortArray.h>
+#include <vtkVector.h>
+#include <vtkVectorOperators.h>
 
 using namespace vtk;
 
@@ -42,13 +42,8 @@ vtkStandardNewMacro(Molecule);
 
 //------------------------------------------------------------------------------
 Molecule::Molecule()
-  : ElectronicData(nullptr)
-  , Lattice(nullptr)
-  , LatticeOrigin(0., 0., 0.)
-  , AtomGhostArray(nullptr)
-  , BondGhostArray(nullptr)
-  , AtomicNumberArrayName(nullptr)
-  , BondOrdersArrayName(nullptr)
+    : ElectronicData(nullptr), BondSpots(nullptr)
+    , AtomGhostArray(nullptr), BondGhostArray(nullptr), AtomicNumberArrayName(nullptr), BondOrdersArrayName(nullptr)
 {
   this->Initialize();
 }
@@ -60,7 +55,7 @@ void Molecule::Initialize()
   this->Superclass::Initialize();
 
   // Setup vertex data
-  vtkDataSetAttributes* vertData = this->GetVertexData();
+  vtkDataSetAttributes *vertData = this->GetVertexData();
   vertData->AllocateArrays(1); // atomic nums
 
   // Atomic numbers
@@ -71,12 +66,12 @@ void Molecule::Initialize()
   vertData->SetScalars(atomicNums);
 
   // Nuclear coordinates
-  vtkPoints* points = vtkPoints::New();
+  vtkPoints *points = vtkPoints::New();
   this->SetPoints(points);
   points->Delete();
 
   // Setup edge data
-  vtkDataSetAttributes* edgeData = this->GetEdgeData();
+  vtkDataSetAttributes *edgeData = this->GetEdgeData();
   edgeData->AllocateArrays(1); // Bond orders
 
   this->SetBondOrdersArrayName("Bond Orders");
@@ -85,6 +80,7 @@ void Molecule::Initialize()
   bondOrders->SetName(this->GetBondOrdersArrayName());
   edgeData->SetScalars(bondOrders);
 
+  BondSpots_->Initialize();
   this->UpdateBondList();
 
   // Electronic data
@@ -102,7 +98,7 @@ Molecule::~Molecule()
 }
 
 //------------------------------------------------------------------------------
-void Molecule::PrintSelf(ostream& os, vtkIndent indent)
+void Molecule::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 
@@ -119,17 +115,6 @@ void Molecule::PrintSelf(ostream& os, vtkIndent indent)
   {
     os << subIndent << "===== Bond " << i << ": =====\n";
     this->GetBond(i).PrintSelf(os, subIndent);
-  }
-
-  os << indent << "Lattice:\n";
-  if (this->HasLattice())
-  {
-    double* m = this->Lattice->GetData();
-    os << subIndent << "a: " << m[0] << " " << m[3] << " " << m[6] << "\n";
-    os << subIndent << "b: " << m[1] << " " << m[4] << " " << m[7] << "\n";
-    os << subIndent << "c: " << m[2] << " " << m[5] << " " << m[8] << "\n";
-    os << subIndent << "origin: " << this->LatticeOrigin[0] << " " << this->LatticeOrigin[1] << " "
-       << this->LatticeOrigin[2] << "\n";
   }
 
   os << indent << "Electronic Data:\n";
@@ -149,7 +134,7 @@ void Molecule::PrintSelf(ostream& os, vtkIndent indent)
 //------------------------------------------------------------------------------
 Atom Molecule::AppendAtom(unsigned short atomicNumber, double x, double y, double z)
 {
-  vtkUnsignedShortArray* atomicNums = this->GetAtomicNumberArray();
+  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
 
   assert(atomicNums);
 
@@ -179,7 +164,7 @@ unsigned short Molecule::GetAtomAtomicNumber(vtkIdType id)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
 
-  vtkUnsignedShortArray* atomicNums = this->GetAtomicNumberArray();
+  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
 
   return atomicNums->GetValue(id);
 }
@@ -189,14 +174,14 @@ void Molecule::SetAtomAtomicNumber(vtkIdType id, unsigned short atomicNum)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
 
-  vtkUnsignedShortArray* atomicNums = this->GetAtomicNumberArray();
+  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
 
   atomicNums->SetValue(id, atomicNum);
   this->Modified();
 }
 
 //------------------------------------------------------------------------------
-void Molecule::SetAtomPosition(vtkIdType id, const vtkVector3f& pos)
+void Molecule::SetAtomPosition(vtkIdType id, const vtkVector3f &pos)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
   this->Points->SetPoint(id, pos.GetData());
@@ -215,11 +200,11 @@ void Molecule::SetAtomPosition(vtkIdType id, double x, double y, double z)
 vtkVector3f Molecule::GetAtomPosition(vtkIdType id)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
-  vtkDataArray* positions = this->Points->GetData();
+  vtkDataArray *positions = this->Points->GetData();
   auto positionsF = vtkArrayDownCast<vtkFloatArray>(positions);
   if (positionsF)
   {
-    float* data = positionsF->GetPointer(id * 3);
+    float *data = positionsF->GetPointer(id * 3);
     return vtkVector3f(data);
   }
 
@@ -250,9 +235,9 @@ vtkIdType Molecule::GetNumberOfAtoms()
 
 //------------------------------------------------------------------------------
 Bond Molecule::AppendBond(
-  const vtkIdType atom1, const vtkIdType atom2, const unsigned short order)
+    const vtkIdType atom1, const vtkIdType atom2, const unsigned short order)
 {
-  vtkUnsignedShortArray* bondOrders = this->GetBondOrdersArray();
+  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
 
   assert(bondOrders);
 
@@ -271,9 +256,9 @@ Bond Molecule::GetBond(vtkIdType bondId)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
-  vtkIdTypeArray* bonds = this->GetBondList();
+  vtkIdTypeArray *bonds = this->GetBondList();
   // An array with two components holding the bonded atom's ids
-  vtkIdType* ids = bonds->GetPointer(2 * bondId);
+  vtkIdType *ids = bonds->GetPointer(2 * bondId);
   return Bond(this, bondId, ids[0], ids[1]);
 }
 
@@ -282,7 +267,7 @@ void Molecule::SetBondOrder(vtkIdType bondId, unsigned short order)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
-  vtkUnsignedShortArray* bondOrders = this->GetBondOrdersArray();
+  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
   assert(bondOrders);
 
   this->Modified();
@@ -294,7 +279,7 @@ unsigned short Molecule::GetBondOrder(vtkIdType bondId)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
-  vtkUnsignedShortArray* bondOrders = this->GetBondOrdersArray();
+  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
 
   return bondOrders ? bondOrders->GetValue(bondId) : 0;
 }
@@ -307,16 +292,16 @@ double Molecule::GetBondLength(vtkIdType bondId)
 }
 
 //------------------------------------------------------------------------------
-vtkPoints* Molecule::GetAtomicPositionArray()
+vtkPoints *Molecule::GetAtomicPositionArray()
 {
   return this->Points;
 }
 
 //------------------------------------------------------------------------------
-vtkUnsignedShortArray* Molecule::GetAtomicNumberArray()
+vtkUnsignedShortArray *Molecule::GetAtomicNumberArray()
 {
-  vtkUnsignedShortArray* atomicNums = vtkArrayDownCast<vtkUnsignedShortArray>(
-    this->GetVertexData()->GetScalars(this->GetAtomicNumberArrayName()));
+  vtkUnsignedShortArray *atomicNums = vtkArrayDownCast<vtkUnsignedShortArray>(
+      this->GetVertexData()->GetScalars(this->GetAtomicNumberArrayName()));
 
   assert(atomicNums);
 
@@ -324,10 +309,10 @@ vtkUnsignedShortArray* Molecule::GetAtomicNumberArray()
 }
 
 //------------------------------------------------------------------------------
-vtkUnsignedShortArray* Molecule::GetBondOrdersArray()
+vtkUnsignedShortArray *Molecule::GetBondOrdersArray()
 {
   return vtkArrayDownCast<vtkUnsignedShortArray>(
-    this->GetBondData()->GetScalars(this->GetBondOrdersArrayName()));
+      this->GetBondData()->GetScalars(this->GetBondOrdersArrayName()));
 }
 
 //------------------------------------------------------------------------------
@@ -340,9 +325,9 @@ vtkIdType Molecule::GetNumberOfBonds()
 vtkCxxSetObjectMacro(Molecule, ElectronicData, vtkAbstractElectronicData);
 
 //------------------------------------------------------------------------------
-void Molecule::ShallowCopy(vtkDataObject* obj)
+void Molecule::ShallowCopy(vtkDataObject *obj)
 {
-  Molecule* m = Molecule::SafeDownCast(obj);
+  Molecule *m = Molecule::SafeDownCast(obj);
   if (!m)
   {
     vtkErrorMacro("Can only shallow copy from Molecule or subclass.");
@@ -353,9 +338,9 @@ void Molecule::ShallowCopy(vtkDataObject* obj)
 }
 
 //------------------------------------------------------------------------------
-void Molecule::DeepCopy(vtkDataObject* obj)
+void Molecule::DeepCopy(vtkDataObject *obj)
 {
-  Molecule* m = Molecule::SafeDownCast(obj);
+  Molecule *m = Molecule::SafeDownCast(obj);
   if (!m)
   {
     vtkErrorMacro("Can only deep copy from Molecule or subclass.");
@@ -366,7 +351,7 @@ void Molecule::DeepCopy(vtkDataObject* obj)
 }
 
 //------------------------------------------------------------------------------
-bool Molecule::CheckedShallowCopy(vtkGraph* g)
+bool Molecule::CheckedShallowCopy(vtkGraph *g)
 {
   bool result = this->Superclass::CheckedShallowCopy(g);
   this->BondListIsDirty = true;
@@ -374,7 +359,7 @@ bool Molecule::CheckedShallowCopy(vtkGraph* g)
 }
 
 //------------------------------------------------------------------------------
-bool Molecule::CheckedDeepCopy(vtkGraph* g)
+bool Molecule::CheckedDeepCopy(vtkGraph *g)
 {
   bool result = this->Superclass::CheckedDeepCopy(g);
   this->BondListIsDirty = true;
@@ -382,31 +367,31 @@ bool Molecule::CheckedDeepCopy(vtkGraph* g)
 }
 
 //------------------------------------------------------------------------------
-void Molecule::ShallowCopyStructure(Molecule* m)
+void Molecule::ShallowCopyStructure(Molecule *m)
 {
   this->CopyStructureInternal(m, false);
 }
 
 //------------------------------------------------------------------------------
-void Molecule::DeepCopyStructure(Molecule* m)
+void Molecule::DeepCopyStructure(Molecule *m)
 {
   this->CopyStructureInternal(m, true);
 }
 
 //------------------------------------------------------------------------------
-void Molecule::ShallowCopyAttributes(Molecule* m)
+void Molecule::ShallowCopyAttributes(Molecule *m)
 {
   this->CopyAttributesInternal(m, false);
 }
 
 //------------------------------------------------------------------------------
-void Molecule::DeepCopyAttributes(Molecule* m)
+void Molecule::DeepCopyAttributes(Molecule *m)
 {
   this->CopyAttributesInternal(m, true);
 }
 
 //------------------------------------------------------------------------------
-void Molecule::CopyStructureInternal(Molecule* m, bool deep)
+void Molecule::CopyStructureInternal(Molecule *m, bool deep)
 {
   // Call superclass
   if (deep)
@@ -418,30 +403,11 @@ void Molecule::CopyStructureInternal(Molecule* m, bool deep)
     this->Superclass::ShallowCopy(m);
   }
 
-  if (!m->HasLattice())
-  {
-    this->ClearLattice();
-  }
-  else
-  {
-    if (deep)
-    {
-      vtkNew<vtkMatrix3x3> newLattice;
-      newLattice->DeepCopy(m->Lattice);
-      this->SetLattice(newLattice);
-    }
-    else
-    {
-      this->SetLattice(m->Lattice);
-    }
-    this->LatticeOrigin = m->LatticeOrigin;
-  }
-
   this->BondListIsDirty = true;
 }
 
 //------------------------------------------------------------------------------
-void Molecule::CopyAttributesInternal(Molecule* m, bool deep)
+void Molecule::CopyAttributesInternal(Molecule *m, bool deep)
 {
   if (deep)
   {
@@ -462,10 +428,10 @@ void Molecule::UpdateBondList()
 }
 
 //------------------------------------------------------------------------------
-vtkIdTypeArray* Molecule::GetBondList()
+vtkIdTypeArray *Molecule::GetBondList()
 {
   // Create the edge list if it doesn't exist, or is marked as dirty.
-  vtkIdTypeArray* edgeList = this->BondListIsDirty ? nullptr : this->GetEdgeList();
+  vtkIdTypeArray *edgeList = this->BondListIsDirty ? nullptr : this->GetEdgeList();
   if (!edgeList)
   {
     this->UpdateBondList();
@@ -476,14 +442,14 @@ vtkIdTypeArray* Molecule::GetBondList()
 }
 
 //------------------------------------------------------------------------------
-bool Molecule::GetPlaneFromBond(const Bond& bond, const vtkVector3f& normal, vtkPlane* plane)
+bool Molecule::GetPlaneFromBond(const Bond &bond, const vtkVector3f &normal, vtkPlane *plane)
 {
   return Molecule::GetPlaneFromBond(bond.GetBeginAtom(), bond.GetEndAtom(), normal, plane);
 }
 
 //------------------------------------------------------------------------------
 bool Molecule::GetPlaneFromBond(
-  const Atom& atom1, const Atom& atom2, const vtkVector3f& normal, vtkPlane* plane)
+    const Atom &atom1, const Atom &atom2, const vtkVector3f &normal, vtkPlane *plane)
 {
   if (plane == nullptr)
   {
@@ -519,119 +485,10 @@ bool Molecule::GetPlaneFromBond(
 }
 
 //------------------------------------------------------------------------------
-bool Molecule::HasLattice()
-{
-  return this->Lattice != nullptr;
-}
-
-//------------------------------------------------------------------------------
-void Molecule::ClearLattice()
-{
-  this->SetLattice(nullptr);
-}
-
-//------------------------------------------------------------------------------
-void Molecule::SetLattice(vtkMatrix3x3* matrix)
-{
-  if (!matrix)
-  {
-    if (this->Lattice)
-    {
-      // If we're clearing a matrix, zero out the origin:
-      this->LatticeOrigin = vtkVector3d(0., 0., 0.);
-      this->Lattice = nullptr;
-      this->Modified();
-    }
-  }
-  else if (this->Lattice != matrix)
-  {
-    this->Lattice = matrix;
-    this->Modified();
-  }
-}
-
-//------------------------------------------------------------------------------
-void Molecule::SetLattice(const vtkVector3d& a, const vtkVector3d& b, const vtkVector3d& c)
-{
-  if (this->Lattice == nullptr)
-  {
-    this->Lattice.TakeReference(vtkMatrix3x3::New());
-    this->Modified();
-  }
-
-  double* mat = this->Lattice->GetData();
-  if (mat[0] != a[0] || mat[1] != b[0] || mat[2] != c[0] || mat[3] != a[1] || mat[4] != b[1] ||
-    mat[5] != c[1] || mat[6] != a[2] || mat[7] != b[2] || mat[8] != c[2])
-  {
-    mat[0] = a[0];
-    mat[1] = b[0];
-    mat[2] = c[0];
-    mat[3] = a[1];
-    mat[4] = b[1];
-    mat[5] = c[1];
-    mat[6] = a[2];
-    mat[7] = b[2];
-    mat[8] = c[2];
-    this->Modified();
-  }
-}
-
-//------------------------------------------------------------------------------
-vtkMatrix3x3* Molecule::GetLattice()
-{
-  return this->Lattice;
-}
-
-//------------------------------------------------------------------------------
-void Molecule::GetLattice(vtkVector3d& a, vtkVector3d& b, vtkVector3d& c)
-{
-  if (this->Lattice)
-  {
-    double* mat = this->Lattice->GetData();
-    a[0] = mat[0];
-    a[1] = mat[3];
-    a[2] = mat[6];
-    b[0] = mat[1];
-    b[1] = mat[4];
-    b[2] = mat[7];
-    c[0] = mat[2];
-    c[1] = mat[5];
-    c[2] = mat[8];
-  }
-  else
-  {
-    a = b = c = vtkVector3d(0., 0., 0.);
-  }
-}
-
-//------------------------------------------------------------------------------
-void Molecule::GetLattice(vtkVector3d& a, vtkVector3d& b, vtkVector3d& c, vtkVector3d& origin)
-{
-  if (this->Lattice)
-  {
-    double* mat = this->Lattice->GetData();
-    a[0] = mat[0];
-    a[1] = mat[3];
-    a[2] = mat[6];
-    b[0] = mat[1];
-    b[1] = mat[4];
-    b[2] = mat[7];
-    c[0] = mat[2];
-    c[1] = mat[5];
-    c[2] = mat[8];
-    origin = this->LatticeOrigin;
-  }
-  else
-  {
-    a = b = c = origin = vtkVector3d(0., 0., 0.);
-  }
-}
-
-//------------------------------------------------------------------------------
-vtkUnsignedCharArray* Molecule::GetAtomGhostArray()
+vtkUnsignedCharArray *Molecule::GetAtomGhostArray()
 {
   return vtkArrayDownCast<vtkUnsignedCharArray>(
-    this->GetVertexData()->GetArray(vtkDataSetAttributes::GhostArrayName()));
+      this->GetVertexData()->GetArray(vtkDataSetAttributes::GhostArrayName()));
 }
 
 //------------------------------------------------------------------------------
@@ -653,10 +510,10 @@ void Molecule::AllocateAtomGhostArray()
 }
 
 //------------------------------------------------------------------------------
-vtkUnsignedCharArray* Molecule::GetBondGhostArray()
+vtkUnsignedCharArray *Molecule::GetBondGhostArray()
 {
   return vtkArrayDownCast<vtkUnsignedCharArray>(
-    this->GetEdgeData()->GetArray(vtkDataSetAttributes::GhostArrayName()));
+      this->GetEdgeData()->GetArray(vtkDataSetAttributes::GhostArrayName()));
 }
 
 //------------------------------------------------------------------------------
@@ -679,7 +536,7 @@ void Molecule::AllocateBondGhostArray()
 
 //------------------------------------------------------------------------------
 int Molecule::Initialize(
-  vtkPoints* atomPositions, vtkDataArray* atomicNumberArray, vtkDataSetAttributes* atomData)
+    vtkPoints *atomPositions, vtkDataArray *atomicNumberArray, vtkDataSetAttributes *atomData)
 {
   // Start with default initialization the molecule
   this->Initialize();
@@ -746,8 +603,8 @@ int Molecule::Initialize(
 
     // if atomData contains an array with the atomic number name,
     // copy this array with a new name as we will overwrite it.
-    vtkDataArray* otherArray = atomData->GetArray(atomicNumberName.c_str());
-    if (otherArray && otherArray != static_cast<vtkAbstractArray*>(atomicNumberArray))
+    vtkDataArray *otherArray = atomData->GetArray(atomicNumberName.c_str());
+    if (otherArray && otherArray != static_cast<vtkAbstractArray *>(atomicNumberArray))
     {
       this->GetVertexData()->RemoveArray(atomicNumberName.c_str());
 
@@ -758,7 +615,7 @@ int Molecule::Initialize(
       // else no backup is done, array will be replaced.
       if (!atomData->GetArray(newName.c_str()))
       {
-        vtkDataArray* otherArrayCopy = otherArray->NewInstance();
+        vtkDataArray *otherArrayCopy = otherArray->NewInstance();
         otherArrayCopy->ShallowCopy(otherArray);
         otherArrayCopy->SetName(newName.c_str());
         this->GetVertexData()->AddArray(otherArrayCopy);
@@ -790,7 +647,7 @@ int Molecule::Initialize(
 }
 
 //------------------------------------------------------------------------------
-int Molecule::Initialize(Molecule* molecule)
+int Molecule::Initialize(Molecule *molecule)
 {
   if (molecule == nullptr)
   {
@@ -799,17 +656,17 @@ int Molecule::Initialize(Molecule* molecule)
   }
 
   return this->Initialize(
-    molecule->GetPoints(), molecule->GetAtomicNumberArray(), molecule->GetVertexData());
+      molecule->GetPoints(), molecule->GetAtomicNumberArray(), molecule->GetVertexData());
 }
 
 //------------------------------------------------------------------------------
-Molecule* Molecule::GetData(vtkInformation* info)
+Molecule *Molecule::GetData(vtkInformation *info)
 {
   return info ? Molecule::SafeDownCast(info->Get(DATA_OBJECT())) : nullptr;
 }
 
 //------------------------------------------------------------------------------
-Molecule* Molecule::GetData(vtkInformationVector* v, int i)
+Molecule *Molecule::GetData(vtkInformationVector *v, int i)
 {
   return Molecule::GetData(v->GetInformationObject(i));
 }
