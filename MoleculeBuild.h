@@ -6,7 +6,8 @@
   Program:   Visualization Toolkit
   Module:    MoleculeBuild.h
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen,
+                ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -18,8 +19,6 @@
 /**
  * @class   MoleculeBuild
  * @brief   Superclass for algorithms that builds vtk::Molecule objects
- *
- *
  *
  * MoleculeBuild is a convenience class to make writing algorithms
  * easier. There are some assumptions and defaults made by this class you
@@ -59,8 +58,9 @@ namespace vtk
         /**
          * see vtkAlgorithm for details
          */
-        vtkTypeBool ProcessRequest(
-            vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        vtkTypeBool ProcessRequest(vtkInformation *,
+                                   vtkInformationVector **,
+                                   vtkInformationVector *) override;
 
         // this method is not recommended for use, but lots of old style filters
         // use it

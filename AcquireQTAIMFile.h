@@ -39,8 +39,10 @@ namespace vtk
         vtkIdType GetNumberOfCP(void) const { return NumberOfCriticals_; }
 
         vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }
+        // --
         vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
-        vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; }
+        vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; } // generally 0
+        // -- 
         vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }
         vtkIdType GetNumberOfRCP(void) const { return NumberOfRCP_; }
         vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
@@ -52,8 +54,8 @@ namespace vtk
         // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int ReadSizesFrom(InputFile& /*inp*/) override;
         // ----------------------------------------------------------------------------------------------------
-        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        // int ReadDataFrom(InputFile& /*inp*/) override;
+        // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int ReadDataFrom(InputFile& /*inp*/) override;
         // ----------------------------------------------------------------------------------------------------
         virtual int ReadQTAIMSizes(InputFile& /* inp */);
 

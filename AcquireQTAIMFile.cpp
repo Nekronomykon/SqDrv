@@ -40,20 +40,40 @@ int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
     // whatever
     return (this->ReadQTAIMSizes(inp)) ? 1 : 0;
 }
-
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
 // To be overriden to read information stored in the (file) stream
-int AcquireQTAIMFile::RequestData(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
+// int AcquireQTAIMFile::RequestData(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
+//
+int AcquireQTAIMFile::ReadDataFrom(InputFile& inp)
 {
     // call base class:
-    if (!this->Superclass::RequestData(p_info, pp_ifv, p_ifv))
+    if (!this->Superclass::RequestData(inp))
         return 0;
+    // this->GetOutput()->InitCriticalData(this->GetNumberOfCP());
 
-    // whatever
+    std::string one_line;
+    vtkIdType nReadCrit = 0;
+    // ??  inp.seekg(0L);
+    /*
+    if(!GetLinePrefixed(inp, "CP#", one_line))
+    return 0;
+    do
+    {
+        
+    } while (GetLinePrefixed(inp, "CP#", one_line));
+    */
+    // whatever else...
     return 1;
 }
-
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
 int AcquireQTAIMFile::ReadQTAIMSizes(InputFile& /* inp */)
 {
     NumberOfNACP_ = this->GetNumberOfAtoms(); 
     return (NumberOfNACP_) ? 1 : 0;
 }
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
