@@ -27,21 +27,6 @@ namespace vtk
     typedef vtksys::ifstream InputFile;
     typedef std::istringstream InputString;
 
-    template <class In, class String>
-    In &GetLine(In &in, String &line)
-    {
-        std::getline(in, line);
-        // trim from the end
-        auto k = line.rbegin();
-        while (k != line.rend())
-        {
-            if (!std::isspace(*k))
-                break;
-            *(k++) = 0;
-        }
-        return in;
-    }
-
     class /* VTKIOCHEMISTRY_EXPORT*/ AcquireMoleculeFile
         : public MoleculeBuild,
           public ImplFileName<AcquireMoleculeFile>

@@ -10,8 +10,71 @@
 
 #include <string>
 
+struct ImplFileRoot
+{
+    /* no data */
+
+    // Reads a string and trim it from the end:
+    template <class In, class String>
+    static In &GetLine(In &in, String &line)
+    {
+        std::getline(in, line);
+        // trim from the end
+        auto k = line.rbegin();
+        while (k != line.rend())
+        {
+            if (!std::isspace(*k))
+                break;
+            *(k++) = 0;
+        }
+        return in;
+    }
+
+    template <class In, class String>
+    static In &ScrollToPrefix(In &in, const char *key, String &line)
+    {
+        if (key && *key)
+            return in;
+
+        const size_t nSym = strlen(key);
+        while (GetLine(in, line))
+        {
+            if (!line.find(key))
+            {
+                do
+                {
+                    line = String(line, nSym);
+                } while (!line.find(key));
+
+                break;
+            }
+        }
+
+        return in;
+    }
+
+    template <class In>
+    static In &ScrollToEmpty(In &in)
+    {
+        std::string one_line;
+        while (GetLine(in, one_line))
+        {
+            if (one_line.empty())
+                break;
+        }
+        return in;
+    }
+
+    template <class In, class String>
+    static In &GatherToEmpty(In &in, String &line)
+    {
+        return in; // not finished yet
+    }
+};
+
 template <class T>
 class ImplFileName
+    : public ImplFileRoot
 {
 private:
     /* data */
