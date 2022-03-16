@@ -33,9 +33,9 @@ QString ChooseNamedColor::name_color_bg(tr("gainsboro"));
 ChooseNamedColor::ChooseNamedColor(QWidget *parent)
     : QComboBox(parent)
 {
-  this->addItem(QString("User...")); // placeholder
+  this->addItem(QString(":: user ::")); // placeholder
   this->addItems(ColorNames());
-  this->setCurrentText(ChooseNamedColor::getDefaultColorName());
+  // this->setCurrentText(ChooseNamedColor::getDefaultColorName());
 }
 
 void ChooseNamedColor::adjustColorName()

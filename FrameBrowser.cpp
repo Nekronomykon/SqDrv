@@ -201,7 +201,7 @@ FrameBrowser::FrameBrowser(QWidget *parent)
       workspace_(new ViewWorkspace(this)),
       // log_(new ViewLogActions(this)),
       // commandline_(new ViewCommandLine(this)),
-      files_(new ViewFiles(this)) ,
+      files_(new ViewFiles(this)),
       // =========================================================== //
       printer_(QPrinter::HighResolution)
 {
@@ -337,7 +337,7 @@ void FrameBrowser::setupActions(void)
 
     const QIcon iconClear = QIcon::fromTheme("edit-clear", QIcon(":/images/Clear.png"));
     actionClear_->setIcon(iconClear);
-    //actionClear_->setShortcut(QKeySequence::Clear);
+    // actionClear_->setShortcut(QKeySequence::Clear);
     actionClear_->setEnabled(false);
     connect(frameDoc_->getTextSource()->editAtoms(),
             &EditSource::copyAvailable, actionClear_, &QAction::setEnabled);
@@ -374,6 +374,11 @@ void FrameBrowser::setupActions(void)
     const QIcon iconMolSphere(":/images/MolVDW.png");
     actionViewMoleculeSpheres_->setIcon(iconMolSphere);
 
+    const QIcon iconProjOrtho(":/images/ProjOrtho.png");
+    actionProjectOrthogonal_->setIcon(iconProjOrtho);
+    const QIcon iconProjPersp(":/images/ProjPersp.png");
+    actionProjectPerspective_->setIcon(iconProjPersp);
+
     const QIcon iconAbout = QIcon::fromTheme("help-about", QIcon(":/images/Help.png"));
     actionAbout_->setIcon(iconAbout);
 
@@ -402,7 +407,7 @@ void FrameBrowser::setupDocking(void)
 
     QDockWidget *pFiles = new QDockWidget(tr("File system"), this);
     pFiles->setWidget(files_);
-    this->tabifyDockWidget(pLeft,pFiles);
+    this->tabifyDockWidget(pLeft, pFiles);
 
     // QDockWidget *pLog = new QDockWidget(tr("Log actions"), this);
     // pLog->setWidget(log_);
@@ -441,16 +446,15 @@ void FrameBrowser::setupToolBars(void)
     tbView->addAction(actionViewMolecule_);
     tbView->addSeparator();
     tbView->addWidget(nameBgColor_);
-    // connect(choose_color_, &ChooseColor::currentTextChanged, this,
-    //        &FrameBrowser::setSceneBgColor);
+    connect(nameBgColor_, &ChooseNamedColor::currentTextChanged, this,
+            &FrameBrowser::setBgColorByName);
 
     // editBgRed_->setValidator(vldColorComp_);
-    editBgRed_->setClearButtonEnabled(true);
+    // editBgRed_->setClearButtonEnabled(true);
     // editBgGreen_->setValidator(vldColorComp_);
-    editBgGreen_->setClearButtonEnabled(true);
+    // editBgGreen_->setClearButtonEnabled(true);
     // editBgBlue_->setValidator(vldColorComp_);
-    editBgBlue_->setClearButtonEnabled(true);
-
+    // editBgBlue_->setClearButtonEnabled(true);
     editBgRed_->setMaximumWidth(100);
     tbView->addWidget(editBgRed_);
     connect(editBgRed_, &QLineEdit::editingFinished, this, &FrameBrowser::updateBackgroundRed);
@@ -466,6 +470,9 @@ void FrameBrowser::setupToolBars(void)
     tbView->addAction(actionViewMoleculeSticks_);
     tbView->addAction(actionViewMoleculeBalls_);
     tbView->addAction(actionViewMoleculeSpheres_);
+    tbView->addSeparator();
+    tbView->addAction(actionProjectOrthogonal_);
+    tbView->addAction(actionProjectPerspective_);
 
     QToolBar *tbHelp = this->addToolBar(tr("Help"));
     tbHelp->addAction(actionProperties_);
@@ -735,6 +742,28 @@ void FrameBrowser::contentModified(void)
 }
 //
 ///////////////////////////////////////////////////////////////////////
+/// \brief FrameBrowse::setBgColorByName
+///
+void FrameBrowser::setBgColorByName(const QString &name)
+{
+    if (name.isEmpty() || name[0] == QChar(':'))
+        return;
+    QByteArray byteName = name.toLocal8Bit();
+
+    ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
+    if (!pViewMol)
+        return;
+    ViewStructure *pVStr = pViewMol->viewStructure();
+    // QVariant vText(editBgRed_->text());
+    vtkNew<vtkNamedColors> ptrCol;
+    if (!ptrCol->ColorExists(byteName.data()))
+        return;
+    pVStr->BgColor() = ptrCol->GetColor3d(byteName.data());
+    frameDoc_->reviewMolecule();
+    this->updateUi();
+}
+//
+///////////////////////////////////////////////////////////////////////
 /// \brief FrameBrowse::updateBackgroundRed
 ///
 void FrameBrowser::updateBackgroundRed(void)
@@ -746,6 +775,7 @@ void FrameBrowser::updateBackgroundRed(void)
     QVariant vText(editBgRed_->text());
     pVStr->BgColor().SetRed(vText.toDouble());
     frameDoc_->reviewMolecule();
+    nameBgColor_->setCurrentIndex(0);
     this->updateUi();
 }
 //
@@ -761,6 +791,7 @@ void FrameBrowser::updateBackgroundGreen(void)
     QVariant vText(editBgGreen_->text());
     pVStr->BgColor().SetGreen(vText.toDouble());
     frameDoc_->reviewMolecule();
+    nameBgColor_->setCurrentIndex(0);
     this->updateUi();
 }
 //
@@ -776,6 +807,7 @@ void FrameBrowser::updateBackgroundBlue(void)
     QVariant vText(editBgBlue_->text());
     pVStr->BgColor().SetBlue(vText.toDouble());
     frameDoc_->reviewMolecule();
+    nameBgColor_->setCurrentIndex(0);
     this->updateUi();
 }
 //

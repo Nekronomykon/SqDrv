@@ -99,6 +99,7 @@ private slots:
     void onChangedClipboardData(void);
 
     /* background color update */
+    void setBgColorByName(const QString& /* name */);
     void updateBackgroundRed(void); 
     void updateBackgroundGreen(void); 
     void updateBackgroundBlue(void); 
