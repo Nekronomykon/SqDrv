@@ -793,7 +793,9 @@ void FrameBrowser::updateBackgroundGreen(void)
     QVariant vText(editBgGreen_->text());
     pVStr->BgColor().SetGreen(vText.toDouble());
     frameDoc_->reviewMolecule();
+    // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
+    // TODO: if so, put first of its names active hereabove...
     this->updateUi();
 }
 //
@@ -809,7 +811,9 @@ void FrameBrowser::updateBackgroundBlue(void)
     QVariant vText(editBgBlue_->text());
     pVStr->BgColor().SetBlue(vText.toDouble());
     frameDoc_->reviewMolecule();
+    // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
+    // TODO: if so, put first of its names active hereabove...
     this->updateUi();
 }
 //
