@@ -744,6 +744,7 @@ void FrameBrowser::contentModified(void)
 ///////////////////////////////////////////////////////////////////////
 /// \brief FrameBrowse::setBgColorByName
 ///
+/// void FrameBrowser::on_nameBgColor__currentTextChanged ???
 void FrameBrowser::setBgColorByName(const QString &name)
 {
     if (name.isEmpty() || name[0] == QChar(':'))
@@ -1261,8 +1262,9 @@ void FrameBrowser::on_actionProjectPerspective__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     ViewStructure *pView = pMol->viewStructure();
-    pView->ProjectPerspective();
-    pView->renderWindow()->Render();
+    pView->ProjectPerspective(); // ???
+    // pView->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1273,8 +1275,9 @@ void FrameBrowser::on_actionProjectReset__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     ViewStructure *pView = pMol->viewStructure();
-    pView->ProjectParallel();
-    pView->renderWindow()->Render();
+    pView->ProjectParallel(); // ???
+    // pView->renderWindow()->Render();
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
