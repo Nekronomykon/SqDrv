@@ -53,7 +53,7 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp)
         return 0;
 
     // CriticalStructure* pCrit =
-    //    this->GetOutput()->InitCriticalData(this->GetNumberOfCP());
+    //    this->GetOutput()->InitCriticalData(  this->GetNumberOfCP()  );
 
     std::string one_line;
     vtkIdType nReadCrit = 0;
@@ -72,14 +72,21 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp)
                 >> equals         // '='
                 >> q0 >> q1 >> q2 // (xyz) of the point:
                 ;
+            // adjust the value of the CP index;
             if (idCP && --idCP == nReadCrit)
             {
-                ; // adjust the value of the CP index;
                 // ...!!! AND HERE IS THE PROPER PLACE !!!...
+                // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
+                std::string str_2nd;
+                if (!GetLine(inp, str_2nd))
+                    break;
+                else
+                { // setup the critical molecular structure
+                }
             }
             // enter here to input the critical data point-by-point
             ++nReadCrit;
-            ScrollToEmpty(inp); // GatherUntilEmpty()???
+            ScrollToEmpty(inp);
         } while (ScrollToPrefix(inp, "CP#", one_line));
     }
     // whatever else...
