@@ -775,7 +775,9 @@ void FrameBrowser::updateBackgroundRed(void)
     QVariant vText(editBgRed_->text());
     pVStr->BgColor().SetRed(vText.toDouble());
     frameDoc_->reviewMolecule();
+    // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
+    // TODO: if so, put first of its names active hereabove...
     this->updateUi();
 }
 //
