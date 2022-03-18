@@ -37,20 +37,10 @@ vtkStandardNewMacro(AcquireFileMGP);
 AcquireFileMGP::AcquireFileMGP() {}
 
 //------------------------------------------------------------------------------
-int AcquireFileMGP::RequestInformation(vtkInformation *vtkNotUsed(request),
-                                       vtkInformationVector **vtkNotUsed(inputVector),
-                                       vtkInformationVector *outputVector)
+int AcquireFileMGP::ReadSizesFrom(InputFile& inp)
 {
-    vtkInformation *outInfo = outputVector->GetInformationObject(0);
-
-    vtksys::ifstream fileInput(this->GetFileName());
-    if (!fileInput.is_open())
-    {
-        vtkErrorMacro("AcquireFileMGP error opening file: " << this->GetFileName());
-        return 0;
-    }
-
-    if (ScrollStrings(fileInput, NumLinesHeader))
+    // inp.seekg(0L);
+    if (ScrollStrings(inp, NumLinesHeader))
     {
         vtkErrorMacro("AcquireFileMGP signaled an unexpected EOF in file: " << this->GetFileName());
         return 0;
@@ -61,15 +51,14 @@ int AcquireFileMGP::RequestInformation(vtkInformation *vtkNotUsed(request),
     do
     {
         ++idAtom;
-        if (!getline(fileInput, atom_line))
+        if (!GetLine(inp, atom_line))
         {
             vtkErrorMacro("AcquireFileMGP reading atoms signaled an EOF in: " << this->GetFileName());
             return 0;
         }
     } while (!atom_line.empty());
-    fileInput.close();
-
-    // there is some additional information after
+    
+    this->NumberOfAtoms() = idAtom;
 
     return 1;
 }
@@ -122,14 +111,14 @@ int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
         inp >> atom_label >> q >> x >> y >> z;
         if(q <= 0.0)
         {
-            vtkErrorMacro("AcquireFileSUM error reading file: "
+            vtkErrorMacro("AcquireFileMGP error reading file: "
                           << this->GetFileName() << " Irregular values");
             break;
 
         }
        output->AppendAtom((unsigned short)q, x, y, z);
         ++idAtom;
-    } while (GetLine(fileInput, atom_line) && *atom_line.begin());
+    } while (GetLine(fileInput, atom_line) && !atom_line.empty());
     fileInput.close();
 
     return 1;

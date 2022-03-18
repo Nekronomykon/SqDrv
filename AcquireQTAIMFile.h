@@ -55,7 +55,7 @@ namespace vtk
         int ReadSizesFrom(InputFile& /*inp*/) override;
         // ----------------------------------------------------------------------------------------------------
         // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int ReadDataFrom(InputFile& /*inp*/) override;
+        int ReadDataFrom(InputFile& /*inp*/, Molecule* /*ptrMol*/) override;
         // ----------------------------------------------------------------------------------------------------
         virtual int ReadQTAIMSizes(InputFile& /* inp */);
 

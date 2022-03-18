@@ -24,13 +24,14 @@ PURPOSE.  See the above copyright notice for more information.
 #include <cassert>
 
 //------------------------------------------------------------------------------
-Bond::Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId)
-    : molecule_(parent), Id(id), BeginAtomId(beginAtomId), EndAtomId(endAtomId)
+Bond::Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId, vtkIdType idSpot)
+    : molecule_(parent), Id(id), BeginAtomId(beginAtomId), EndAtomId(endAtomId), IdSpot_(idSpot)
 {
     assert(parent != nullptr);
     assert(id < parent->GetNumberOfBonds());
     assert(beginAtomId < parent->GetNumberOfAtoms());
     assert(endAtomId < parent->GetNumberOfAtoms());
+    assert(idSpot < 0 || idSpot >= parent->GetNumberOfAtoms());
 }
 
 //------------------------------------------------------------------------------
@@ -53,43 +54,25 @@ double Bond::GetLength() const
 }
 
 //------------------------------------------------------------------------------
-vtkIdType Bond::GetBeginAtomId() const
-{
-    return this->BeginAtomId;
-}
+vtkIdType Bond::GetBeginAtomId() const { return this->BeginAtomId; }
 
 //------------------------------------------------------------------------------
-vtkIdType Bond::GetEndAtomId() const
-{
-    return this->EndAtomId;
-}
+vtkIdType Bond::GetEndAtomId() const { return this->EndAtomId; }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetBeginAtom()
-{
-    return this->molecule_->GetAtom(this->BeginAtomId);
-}
+vtkIdType Bond::GetSpotId() const { return IdSpot_; }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetEndAtom()
-{
-    return this->molecule_->GetAtom(this->EndAtomId);
-}
+Atom Bond::GetBeginAtom() { return this->molecule_->GetAtom(this->BeginAtomId); }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetBeginAtom() const
-{
-    return this->molecule_->GetAtom(this->BeginAtomId);
-}
+Atom Bond::GetEndAtom() { return this->molecule_->GetAtom(this->EndAtomId); }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetEndAtom() const
-{
-    return this->molecule_->GetAtom(this->EndAtomId);
-}
+Atom Bond::GetBeginAtom() const { return this->molecule_->GetAtom(this->BeginAtomId); }
 
 //------------------------------------------------------------------------------
-unsigned short Bond::GetOrder()
-{
-    return this->molecule_->GetBondOrder(this->Id);
-}
+Atom Bond::GetEndAtom() const { return this->molecule_->GetAtom(this->EndAtomId); }
+
+//------------------------------------------------------------------------------
+unsigned short Bond::GetOrder() { return this->molecule_->GetBondOrder(this->Id); }

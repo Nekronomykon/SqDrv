@@ -26,9 +26,9 @@ Molecule *AcquireMoleculeFile::GetOutput()
 }
 
 //------------------------------------------------------------------------------
-void AcquireMoleculeFile::SetOutput(Molecule *output)
+void AcquireMoleculeFile::SetOutput(Molecule *ptrMol)
 {
-    this->GetExecutive()->SetOutputData(0, output);
+    this->GetExecutive()->SetOutputData(0, ptrMol);
 }
 
 //------------------------------------------------------------------------------
@@ -60,11 +60,11 @@ int AcquireMoleculeFile::RequestInformation(vtkInformation *vtkNotUsed(request),
                                             vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
-    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+    Molecule *ptrMol = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
 
-    if (!output)
+    if (!ptrMol)
     {
-        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as output.");
+        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as ptrMol.");
         return 1;
     }
 
@@ -87,11 +87,11 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
                                      vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
-    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+    Molecule *ptrMol = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
 
-    if (!output)
+    if (!ptrMol)
     {
-        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as output.");
+        vtkErrorMacro("AcquireMoleculeFile does not have a Molecule as output");
         return 1;
     }
 
@@ -103,10 +103,14 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
         return 0;
     }
 
-    int nRes = this->ReadDataFrom(fileInput) ? 1 : 0; // virtually Ok
+    int nRes = this->ReadDataFrom(fileInput, ptrMol) ? 1 : 0; // virtually Ok
     fileInput.close();
     return nRes;
 }
 
 int AcquireMoleculeFile::ReadSizesFrom(InputFile & /*inp*/) { return 1; }
-int AcquireMoleculeFile::ReadDataFrom(InputFile & /*inp*/) { return 1; }
+int AcquireMoleculeFile::ReadDataFrom(InputFile & /*inp*/, Molecule *ptrMol)
+{
+    ptrMol->Initialize();
+    return 1;
+}

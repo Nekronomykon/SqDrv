@@ -75,10 +75,10 @@ namespace vtk
     protected:
         friend class Molecule;
 
-        Atom(Molecule *parent, vtkIdType id);
+        explicit Atom(Molecule *parent, vtkIdType id);
 
-        Molecule *molecule_;
-        vtkIdType Id;
+        Molecule *molecule_ = nullptr;
+        vtkIdType Id = -1;
     };
 
 };

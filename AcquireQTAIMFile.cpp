@@ -46,18 +46,19 @@ int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 //    , vtkInformationVector **pp_ifv
 //    , vtkInformationVector *p_ifv)
 //
-int AcquireQTAIMFile::ReadDataFrom(InputFile &inp)
+int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 {
     // call base class:
-    if (!this->Superclass::ReadDataFrom(inp))
+    if (!this->Superclass::ReadDataFrom(inp, ptrMol))
         return 0;
 
     // CriticalStructure* pCrit =
     //    this->GetOutput()->InitCriticalData(  this->GetNumberOfCP()  );
+    inp.seekg(0L);
+    // could it be a one-pass reading?
 
     std::string one_line;
     vtkIdType nReadCrit = 0;
-    // ??  inp.seekg(0L);
     if (ScrollToPrefix(inp, "CP#", one_line))
     {
         do
@@ -73,20 +74,44 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp)
                 >> q0 >> q1 >> q2 // (xyz) of the point:
                 ;
             // adjust the value of the CP index;
-            if (idCP && --idCP == nReadCrit)
-            {
-                // ...!!! AND HERE IS THE PROPER PLACE !!!...
-                // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
-                std::string str_2nd;
-                if (!GetLine(inp, str_2nd))
-                    break;
-                else
-                { // setup the critical molecular structure
-                }
+            if (!idCP || --idCP != nReadCrit)
+                return 0;
+
+            // ...!!! AND HERE IS THE PROPER PLACE !!!...
+            // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
+            std::string str_type;
+            if (!GetLine(inp, str_type))
+                break;
+            else
+            { // setup the critical molecular structure
+                std::string AtomType;
+                CriticalPointType type;
+                InputString inp_type(str_type);
+                inp_type >> name // "Type"
+                    >> equals    // '='
+                    >> type      // (+3(??),Sigma)
+                    >> name      // "((N|NN)A|B|R|C)CP"
+                    >> AtomType  //  "ElementIndex" ...
+                    ;
+                // size_t idx = name.find("ACP");
+                // if(idx != std::npos)
+                // {
+                //    if(idx == 1) ... ["NACP"]
+                //    if(idx == 2) ... ["NNACP"] ??? Never seen this beast
+                // }
+                // else if  (name.find("BCP") != std::npos) -> AtomType1 // exactly the only
+                //  . . .   (name.find("RCP") != std::npos) -> AtomType1 AtomType2  ???  may be greater than 3 atoms
+                //  . . .   (name.find("CCP") != std::npos) -> AtomType1 AtomType2 -> should be greater than 3 atoms
             }
             // enter here to input the critical data point-by-point
             ++nReadCrit;
-            ScrollToEmpty(inp);
+            // std::string str_props = GatherNonEmptyLines(inp);
+            // OR
+            std::string str_props;
+            if (!GatherNonEmpty(inp, str_props))
+                return 0;
+            // below is the simplest case of skipping this info:
+            // ScrollToEmpty(inp);
         } while (ScrollToPrefix(inp, "CP#", one_line));
     }
     // whatever else...
@@ -95,7 +120,7 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp)
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-int AcquireQTAIMFile::ReadQTAIMSizes(InputFile & /* inp */)
+int AcquireQTAIMFile::ReadQTAIMSizes(InputFile &inp)
 {
     NumberOfNACP_ = this->GetNumberOfAtoms();
     return (NumberOfNACP_) ? 1 : 0;

@@ -19,6 +19,9 @@ using namespace vtk;
 
 #include <vtksys/FStream.hxx>
 
+#include <algorithm>
+#include <utility>
+
 class vtkInformation;
 class vtkInformationVector;
 
@@ -87,14 +90,20 @@ namespace vtk
         ~AcquireMoleculeFile() override = default;
 
         vtkIdType &NumberOfAtoms(void) { return NumberOfAtoms_; }
+        vtkIdType ResetNumberOfAtoms(vtkIdType nNewAtoms)
+        {
+            if (nNewAtoms != NumberOfAtoms_)
+                std::swap(NumberOfAtoms_, nNewAtoms);
+            return nNewAtoms;
+        }
         std::string &NameOfStructure(void) { return nameStructure_; }
 
         int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
         // To be overriden to read information stored in the (file) stream
-        virtual int ReadSizesFrom(InputFile& /*inp*/);
-        virtual int ReadDataFrom(InputFile& /*inp*/);
+        virtual int ReadSizesFrom(InputFile & /*inp*/);
+        virtual int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/);
 
     private:
         vtkIdType NumberOfAtoms_ = 0;

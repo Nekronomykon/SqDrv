@@ -48,8 +48,9 @@ namespace vtk
         explicit AcquireFileMGP();
         ~AcquireFileMGP() override = default;
 
-        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *); //  override;
+        int ReadSizesFrom(InputFile& /* inp */) override;
+        // RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *); // override;
 
     private:
         enum

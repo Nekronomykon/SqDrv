@@ -43,21 +43,6 @@ AcquireFileXYZ::AcquireFileXYZ() : AcquireMoleculeFile(0, 1) {}
 //                                       vtkInformationVector *outputVector)
 int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
 {
-    /*
-        vtkInformation *outInfo = outputVector->GetInformationObject(0);
-
-        vtksys::ifstream inp(this->GetFileName());
-
-        if (!inp.is_open())
-        {
-            vtkErrorMacro("AcquireFileXYZ error opening file: " << this->GetFileName());
-            return 0;
-        }
-
-        if (!this->Superclass::ReadSizesFrom(inp))
-            eturn 0;
-    */
-
     std::string one_line;
 
     if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
@@ -149,7 +134,9 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
 
     // reconstruct Molecule
     output->Initialize();
-    // output-SetNumberOfAtoms(this->GetNumberOfAtoms());
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The same meaning has:
+    // int iRes = this->Superclass::ReadDataFrom(inp,ptrMol);
+
 
     for (int i = 0; i < nAtoms; i++)
     {

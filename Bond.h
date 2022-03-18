@@ -21,9 +21,9 @@
  *
  */
 
-#include "Atom.h"                     // For Atom
+#include "Atom.h" // For Atom
 // #include "vtkCommonDataModelModule.h" // For export macro
-#include <vtkObject.h>                // For macros, etc
+#include <vtkObject.h> // For macros, etc
 
 namespace vtk
 {
@@ -76,15 +76,18 @@ namespace vtk
      */
     double GetLength() const;
 
+    vtkIdType GetSpotId() const;
+
   protected:
     friend class Molecule;
 
-    Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId);
+    explicit Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId, vtkIdType id_spot = -1);
 
-    Molecule *molecule_;
-    vtkIdType Id;
-    vtkIdType BeginAtomId;
-    vtkIdType EndAtomId;
+    Molecule *molecule_ = nullptr;
+    vtkIdType Id = -1;
+    vtkIdType BeginAtomId = -1;
+    vtkIdType EndAtomId = -1;
+    vtkIdType IdSpot_ = -1;
   };
 
 }; // namespace vtk

@@ -9,6 +9,9 @@
 #include <vtkObjectFactory.h>
 
 #include <string>
+#include <sstream>
+
+typedef std::ostringstream OutputString;
 
 struct ImplFileRoot
 {
@@ -66,9 +69,21 @@ struct ImplFileRoot
     }
 
     template <class In, class String>
-    static In &GatherToEmpty(In &in, String &line)
+    static In &GatherNonEmpty(In &in, String &line)
     {
-        return in; // not finished yet
+        bool bNew = line.empty();
+        OutputString add(line);
+        if (bNew)
+            add << std::endl;
+        String add_one;
+        while (GetLine(in, add_one))
+        {
+            if (add_one.empty())
+                break;
+            add << add_one << std::endl;
+        }
+
+        return in; 
     }
 };
 
@@ -79,7 +94,7 @@ class ImplFileName
 private:
     /* data */
 public:
-    typedef std::ifstream InputFileStream;
+    typedef std::ifstream InputFile;
 
     explicit ImplFileName() {}
 
