@@ -103,9 +103,10 @@ void TextSource::showMolecule(Molecule *pMol, const QString &title)
 
     QPointer<QTextDocument> doc(new QTextDocument);
 
+    // COORDINATES
+    ostringstream out_atom;
     for (int i = 0; i < nAtoms; ++i)
     {
-        ostringstream out_atom;
         const Atom ai = pMol->GetAtom(i);
 
         long idElem = ai.GetAtomicNumber();
@@ -113,25 +114,16 @@ void TextSource::showMolecule(Molecule *pMol, const QString &title)
 
         vtkStdString sElem = Elements::GetElementSymbol(idElem);
 
-        out
-            << qSetFieldWidth(4)
-            // << '[' << i+1 << ']'
-            << sElem.c_str()
-            // << idTypeNum[i]
-            << ' ';
-
-        out
-            << qSetFieldWidth(12) << qSetRealNumberPrecision(8)
-            << ai.GetPosition().GetX() // << ' '
-            << ai.GetPosition().GetY() // << ' '
-            << ai.GetPosition().GetZ()
-            << Qt::endl /// ???
-            ;
+        out_atom // << showpoint
+            << setw(5) << sElem.c_str()
+            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetX()
+            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetY()
+            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetZ() << std::endl;
     }
-    out.flush();
-    editAtoms_->setPlainText(atoms);
+    editAtoms_->setPlainText(tr(out_atom.str().c_str()));
 
-    // molecular properties 'as a whole chunk' (no bonds yet)
+    // Molecular properties computed 'as a whole chunk' (no bonds yet)
+    // FORMULA
     QString formula;
     double vMass(0.0);
     QString mass;
