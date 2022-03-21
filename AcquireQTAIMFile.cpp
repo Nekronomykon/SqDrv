@@ -124,7 +124,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         InputString inp_type(str_type);
         inp_type >> name // "Type"
             >> equals    // '='
-            >> type      // (+3(??),Sigma)
+            >> type      // (+3(or smth. else??),Sigma)
             >> name      // "((N|NN)A|B|R|C)CP"
             >> AtomType  //  "ElementIndex" ...
             ;
@@ -161,5 +161,6 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         // below is the simplest case of skipping this info:
         // ScrollToEmpty(inp);
     } while (ScrollToPrefix(inp, "CP#", one_line));
+    
     return idCP;
 }
