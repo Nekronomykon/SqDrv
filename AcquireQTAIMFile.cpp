@@ -133,22 +133,26 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         {
             //    if(idx == 1) ... ["NACP"]
             //    if(idx == 2) ... ["NNACP"] ??? Never ever seen this beast
-            idElementAdd = Elements::SymbolToNumber(AtomType.c_str());
+            if (type == cpTypeMaximum)
+                idElementAdd = Elements::SymbolToNumber(AtomType.c_str());
         }
         else if (!name.find("BCP"))
         {
             // -> AtomType1 // exactly the only
-            idElementAdd = 2; // fictituous He
+            if (type == cpTypeSaddleB)
+                idElementAdd = 2; // fictituous He
         }
         else if (!name.find("RCP"))
         {
             // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
-            idElementAdd = 10; // fictituous Ne
+            if (type == cpTypeSaddleR)
+                idElementAdd = 10; // fictituous Ne
         }
         else if (!name.find("CCP"))
         {
             // -> AtomType1 AtomType2 -> should be greater than 3 atoms
-            idElementAdd = 18; // fictituous Ar
+            if (type == cpTypeMininum)
+                idElementAdd = 18; // fictituous Ar
         }
         else
             return 0;
@@ -161,6 +165,6 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         // below is the simplest case of skipping this info:
         // ScrollToEmpty(inp);
     } while (ScrollToPrefix(inp, "CP#", one_line));
-    
+
     return idCP;
 }
