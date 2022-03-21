@@ -70,7 +70,7 @@ int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
     //
 
     GetLine(inp, this->NameOfStructure()); // second (title) line may be empty
-    
+
     // simply scroll NumberOfAtom lines of the file:
     for (; na; --na)
     {
@@ -84,26 +84,14 @@ int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
 }
 
 //------------------------------------------------------------------------------
-int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
+// int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
+//                                vtkInformationVector **vtkNotUsed(inputVector),
+//                                vtkInformationVector *outputVector)
+int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 {
-    vtkInformation *outInfo = outputVector->GetInformationObject(0);
-    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
-
-    if (!output)
-    {
-        vtkErrorMacro("AcquireFileXYZ does not have a Molecule as output.");
-        return 1;
-    }
-
-    vtksys::ifstream inp(this->GetFileName());
-
-    if (!inp.is_open())
-    {
-        vtkErrorMacro("AcquireFileXYZ error opening file: " << this->GetFileName());
-        return 0;
-    }
+    // call base class:
+    if (!this->Superclass::ReadDataFrom(inp, ptrMol))
+        return 0; // ptrMol->Initialize()
 
     vtkIdType nAtoms;
 
@@ -131,13 +119,7 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
         vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while taking to atoms of " << this->GetFileName());
         return 0;
     }
-
-    // reconstruct Molecule
-    output->Initialize();
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The same meaning has:
-    // int iRes = this->Superclass::ReadDataFrom(inp,ptrMol);
-
-
+    // Read and append XYZ atoms --> to make it the traits structure:
     for (int i = 0; i < nAtoms; i++)
     {
         if (!GetLine(inp, one_line))
@@ -159,10 +141,9 @@ int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
             inp.close();
             return 0;
         }
-        output->AppendAtom(Elements::SymbolToNumber(atomType.c_str()),
+        ptrMol->AppendAtom(Elements::SymbolToNumber(atomType.c_str()),
                            x, y, z);
     }
-    inp.close();
 
     return 1;
 }

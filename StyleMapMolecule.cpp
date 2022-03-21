@@ -6,8 +6,9 @@
 #include "StyleMapMolecule.h"
 using namespace vtk;
 
+const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
+
 const StyleMapMolecule StyleMapMolecule::styleStyx = {UnitRadius, 0.250f, true, true, DiscreteByAtom, 0.250f, {75, 75, 75}};
-const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {100, 100, 150}};
 const StyleMapMolecule StyleMapMolecule::styleCPK = {VDWRadius, 1.000f, false, false, SingleColor, 0.125f, {75, 75, 75}};
 const StyleMapMolecule StyleMapMolecule::styleBnS = {UnitRadius, 0.375f, true, true, DiscreteByAtom, 0.125f, {75, 75, 75}};
 

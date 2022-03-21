@@ -12,14 +12,16 @@
 #include <sstream>
 
 typedef std::ostringstream OutputString;
+typedef std::istringstream InputString;
+typedef std::string String;
 
 struct ImplFileRoot
 {
     /* no data */
 
     // Reads a string and trim it from the end:
-    template <class In, class String>
-    static In &GetLine(In &in, String &line)
+    template <class _In, class _String>
+    static _In &GetLine(_In &in, _String &line)
     {
         std::getline(in, line);
         // trim from the end
@@ -33,8 +35,8 @@ struct ImplFileRoot
         return in;
     }
 
-    template <class In, class String>
-    static In &ScrollToPrefix(In &in, const char *key, String &line)
+    template <class _In, class _String>
+    static _In &ScrollToPrefix(_In &in, const char *key, _String &line)
     {
         if (key && *key)
             return in;
@@ -46,7 +48,7 @@ struct ImplFileRoot
             {
                 do
                 {
-                    line = String(line, nSym);
+                    line = _String(line, nSym);
                 } while (!line.find(key));
 
                 break;
@@ -56,10 +58,25 @@ struct ImplFileRoot
         return in;
     }
 
-    template <class In>
-    static In &ScrollToEmpty(In &in)
+    template <class In, class Value>
+    static In &ReadAfterPrefix(In &in, const char *key, Value &val)
     {
-        std::string one_line;
+        if (key && *key)
+            return in;
+        String src;
+        if (ScrollToPrefix(in, key, src))
+        {
+            InputString input(src);
+            input >> val;
+        }
+
+        return in;
+    }
+
+    template <class _In>
+    static _In &ScrollToEmpty(_In &in)
+    {
+        String one_line;
         while (GetLine(in, one_line))
         {
             if (one_line.empty())
@@ -68,14 +85,14 @@ struct ImplFileRoot
         return in;
     }
 
-    template <class In, class String>
-    static In &GatherNonEmpty(In &in, String &line)
+    template <class _In, class _String>
+    static _In &GatherNonEmpty(_In &in, _String &line)
     {
         bool bNew = line.empty();
         OutputString add(line);
         if (bNew)
             add << std::endl;
-        String add_one;
+        _String add_one;
         while (GetLine(in, add_one))
         {
             if (add_one.empty())
@@ -83,7 +100,7 @@ struct ImplFileRoot
             add << add_one << std::endl;
         }
 
-        return in; 
+        return in;
     }
 };
 
@@ -104,7 +121,7 @@ public:
     {
         // CRTP stuff:
         T *pThis = static_cast<T *>(this);
-        vtkDebugMacro(<< pThis->GetClassName() << ": setting nameFile to" << ((arg && *arg) ? arg : "(null)"));
+        // vtkDebugMacro(<< pThis->GetClassName() << ": setting nameFile to" << ((arg && *arg) ? arg : "(null)"));
         if (arg && *arg)
             this->nameFile_.assign(arg);
         else

@@ -37,7 +37,7 @@ vtkStandardNewMacro(AcquireFileMGP);
 AcquireFileMGP::AcquireFileMGP() {}
 
 //------------------------------------------------------------------------------
-int AcquireFileMGP::ReadSizesFrom(InputFile& inp)
+int AcquireFileMGP::ReadSizesFrom(InputFile &inp)
 {
     // inp.seekg(0L);
     if (ScrollStrings(inp, NumLinesHeader))
@@ -57,12 +57,11 @@ int AcquireFileMGP::ReadSizesFrom(InputFile& inp)
             return 0;
         }
     } while (!atom_line.empty());
-    
+
     this->NumberOfAtoms() = idAtom;
 
     return 1;
 }
-
 //------------------------------------------------------------------------------
 int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
@@ -77,7 +76,7 @@ int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
         return 1;
     }
 
-    vtksys::ifstream fileInput(this->GetFileName());
+    InputFile fileInput(this->GetFileName());
 
     if (!fileInput.is_open())
     {
@@ -109,14 +108,13 @@ int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
         double q, x, y, z;
         std::istringstream inp(atom_line);
         inp >> atom_label >> q >> x >> y >> z;
-        if(q <= 0.0)
+        if (q <= 0.0)
         {
             vtkErrorMacro("AcquireFileMGP error reading file: "
                           << this->GetFileName() << " Irregular values");
             break;
-
         }
-       output->AppendAtom((unsigned short)q, x, y, z);
+        output->AppendAtom((unsigned short)q, x, y, z);
         ++idAtom;
     } while (GetLine(fileInput, atom_line) && !atom_line.empty());
     fileInput.close();

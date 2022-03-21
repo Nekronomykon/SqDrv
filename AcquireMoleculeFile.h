@@ -27,6 +27,7 @@ class vtkInformationVector;
 
 namespace vtk
 {
+    typedef std::string String;
     typedef vtksys::ifstream InputFile;
     typedef std::istringstream InputString;
 
@@ -96,7 +97,7 @@ namespace vtk
                 std::swap(NumberOfAtoms_, nNewAtoms);
             return nNewAtoms;
         }
-        std::string &NameOfStructure(void) { return nameStructure_; }
+        String &NameOfStructure(void) { return nameStructure_; }
 
         int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
@@ -107,7 +108,7 @@ namespace vtk
 
     private:
         vtkIdType NumberOfAtoms_ = 0;
-        std::string nameStructure_ = "";
+        String nameStructure_ = "";
         vtkNew<vtkStringArray> nameAtoms_;
 
     private:

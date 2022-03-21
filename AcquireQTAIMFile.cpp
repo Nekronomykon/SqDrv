@@ -1,5 +1,8 @@
 #include "AcquireQTAIMFile.h"
 
+#include "Elements.h"
+#include "Molecule.h"
+
 #include <vtkInformation.h>
 #include <vtkInformationVector.h>
 
@@ -32,12 +35,32 @@ void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
 // int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
 int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 {
-    // call base class:
-    if (!this->Superclass::ReadSizesFrom(inp))
-        return 0;
+{
+    const char sKeyTotal[] = "Total number of electron density critical points found =";
+    const char sKeyNACP[] = "Number of NACPs  =";
+    const char sKeyNNACP[] = "Number of NNACPs =";
+    const char sKeyBCP[] = "Number of BCPs   =";
+    const char sKeyRCP[] = "Number of RCPs   =";
+    const char sKeyCCP[] = "Number of CCPs   =";
 
-    // whatever
-    return (this->ReadQTAIMSizes(inp)) ? 1 : 0;
+    inp.seekg(0L);
+
+    if (!ReadAfterPrefix(inp, sKeyTotal, NumberOfCriticals_))
+        inp.seekg(0L);
+
+    ReadAfterPrefix(inp, sKeyNACP, NumberOfNACP_);
+    ReadAfterPrefix(inp, sKeyNNACP, NumberOfNNACP_);
+    ReadAfterPrefix(inp, sKeyBCP, NumberOfBCP_);
+    ReadAfterPrefix(inp, sKeyRCP, NumberOfRCP_);
+    ReadAfterPrefix(inp, sKeyCCP, NumberOfCCP_);
+
+    if (!NumberOfCriticals_)
+        NumberOfCriticals_ = NumberOfNACP_ + NumberOfNNACP_ + NumberOfBCP_ + NumberOfRCP_ + NumberOfCCP_;
+
+    this->ResetNumberOfAtoms(NumberOfCriticals_);
+
+    return 1;
+}
 }
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,10 +69,10 @@ int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 //    , vtkInformationVector **pp_ifv
 //    , vtkInformationVector *p_ifv)
 //
-int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
+int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
 {
     // call base class:
-    if (!this->Superclass::ReadDataFrom(inp, ptrMol))
+    if (!this->Superclass::ReadDataFrom(inp, pMol))
         return 0;
 
     // CriticalStructure* pCrit =
@@ -59,71 +82,82 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 
     std::string one_line;
     vtkIdType nReadCrit = 0;
-    if (ScrollToPrefix(inp, "CP#", one_line))
+    if (!ScrollToPrefix(inp, "CP#", one_line))
     {
-        do
-        {
-            size_t idCP(0);
-            std::string name;
-            char equals;
-            double q0, q1, q2;
-            std::istringstream inp_str(one_line);
-            inp_str >> idCP       // == nCP + 1
-                >> name           // "Coords"
-                >> equals         // '='
-                >> q0 >> q1 >> q2 // (xyz) of the point:
-                ;
-            // adjust the value of the CP index;
-            if (!idCP || --idCP != nReadCrit)
-                return 0;
-
-            // ...!!! AND HERE IS THE PROPER PLACE !!!...
-            // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
-            std::string str_type;
-            if (!GetLine(inp, str_type))
-                break;
-            else
-            { // setup the critical molecular structure
-                std::string AtomType;
-                CriticalPointType type;
-                InputString inp_type(str_type);
-                inp_type >> name // "Type"
-                    >> equals    // '='
-                    >> type      // (+3(??),Sigma)
-                    >> name      // "((N|NN)A|B|R|C)CP"
-                    >> AtomType  //  "ElementIndex" ...
-                    ;
-                // size_t idx = name.find("ACP");
-                // if(idx != std::npos)
-                // {
-                //    if(idx == 1) ... ["NACP"]
-                //    if(idx == 2) ... ["NNACP"] ??? Never seen this beast
-                // }
-                // else if  (name.find("BCP") != std::npos) -> AtomType1 // exactly the only
-                //  . . .   (name.find("RCP") != std::npos) -> AtomType1 AtomType2  ???  may be greater than 3 atoms
-                //  . . .   (name.find("CCP") != std::npos) -> AtomType1 AtomType2 -> should be greater than 3 atoms
-            }
-            // enter here to input the critical data point-by-point
-            ++nReadCrit;
-            // std::string str_props = GatherNonEmptyLines(inp);
-            // OR
-            std::string str_props;
-            if (!GatherNonEmpty(inp, str_props))
-                return 0;
-            // below is the simplest case of skipping this info:
-            // ScrollToEmpty(inp);
-        } while (ScrollToPrefix(inp, "CP#", one_line));
+        vtkErrorMacro("AcquireQTAIMFile error: file " << this->GetFileName() << "does not contain critical structure data");
+        return 0;
     }
+
+    do
+    {
+        size_t idCP(0);
+        std::string name;
+        char equals;
+        vtkIdType idElementAdd(0);
+        double q0, q1, q2;
+        InputString inp_str(one_line);
+        inp_str >> idCP       // == nCP + 1
+            >> name           // "Coords"
+            >> equals         // '='
+            >> q0 >> q1 >> q2 // (xyz) of the point:
+            ;
+        // adjust the value of the CP index;
+        if (!idCP || --idCP != nReadCrit)
+            return 0;
+
+        // ...!!! AND HERE IS THE PROPER PLACE !!!...
+        // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
+        std::string str_type;
+        if (!GetLine(inp, str_type))
+            break;
+
+        // setup the critical molecular structure
+        std::string AtomType;
+        CriticalPointType type;
+        InputString inp_type(str_type);
+        inp_type >> name // "Type"
+            >> equals    // '='
+            >> type      // (+3(??),Sigma)
+            >> name      // "((N|NN)A|B|R|C)CP"
+            >> AtomType  //  "ElementIndex" ...
+            ;
+        size_t idx = name.find("ACP");
+        if (idx != std::string::npos)
+        {
+            //    if(idx == 1) ... ["NACP"]
+            //    if(idx == 2) ... ["NNACP"] ??? Never ever seen this beast
+            idElementAdd = Elements::SymbolToNumber(AtomType.c_str());
+        }
+        else if (!name.find("BCP"))
+        {
+            // -> AtomType1 // exactly the only
+            idElementAdd = 2; // fictituous He
+        }
+        else if (!name.find("RCP"))
+        {
+            // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
+            idElementAdd = 10; // fictituous Ne
+        }
+        else if (!name.find("CCP"))
+        {
+            // -> AtomType1 AtomType2 -> should be greater than 3 atoms
+            idElementAdd = 18; // fictituous Ar
+        }
+        else
+            return 0;
+        // enter here to input the critical data point-by-point
+        pMol->AppendAtom(idElementAdd, q0, q1, q2);
+        ++nReadCrit;
+        // std::string str_props = GatherNonEmptyLines(inp);
+        // OR
+        std::string str_props;
+        if (!GatherNonEmpty(inp, str_props))
+            return 0;
+        // below is the simplest case of skipping this info:
+        // ScrollToEmpty(inp);
+    } while (ScrollToPrefix(inp, "CP#", one_line));
     // whatever else...
     return (nReadCrit > 0) ? 1 : 0;
-}
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-//
-int AcquireQTAIMFile::ReadQTAIMSizes(InputFile &inp)
-{
-    NumberOfNACP_ = this->GetNumberOfAtoms();
-    return (NumberOfNACP_) ? 1 : 0;
 }
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////

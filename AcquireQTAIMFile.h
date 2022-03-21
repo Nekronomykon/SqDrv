@@ -57,7 +57,7 @@ namespace vtk
         // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int ReadDataFrom(InputFile& /*inp*/, Molecule* /*ptrMol*/) override;
         // ----------------------------------------------------------------------------------------------------
-        virtual int ReadQTAIMSizes(InputFile& /* inp */);
+        // virtual int ReadQTAIMSizes(InputFile& /* inp */);
 
         // private:
         vtkIdType NumberOfCriticals_ = 0;
