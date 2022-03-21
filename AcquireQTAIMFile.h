@@ -46,6 +46,9 @@ namespace vtk
         vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }
         vtkIdType GetNumberOfRCP(void) const { return NumberOfRCP_; }
         vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
+        // ===========================================================================
+
+        int ReadCriticalPoints(InputFile& /*inp*/, Molecule * /*ptrMol*/);
 
     protected:
         // ----------------------------------------------------------------------------------------------------

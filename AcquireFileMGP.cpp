@@ -37,32 +37,6 @@ vtkStandardNewMacro(AcquireFileMGP);
 AcquireFileMGP::AcquireFileMGP() {}
 
 //------------------------------------------------------------------------------
-int AcquireFileMGP::ReadSizesFrom(InputFile &inp)
-{
-    // inp.seekg(0L);
-    if (ScrollStrings(inp, NumLinesHeader))
-    {
-        vtkErrorMacro("AcquireFileMGP signaled an unexpected EOF in file: " << this->GetFileName());
-        return 0;
-    }
-    vtkIdType idAtom = 0;
-
-    std::string atom_line;
-    do
-    {
-        ++idAtom;
-        if (!GetLine(inp, atom_line))
-        {
-            vtkErrorMacro("AcquireFileMGP reading atoms signaled an EOF in: " << this->GetFileName());
-            return 0;
-        }
-    } while (!atom_line.empty());
-
-    this->NumberOfAtoms() = idAtom;
-
-    return 1;
-}
-//------------------------------------------------------------------------------
 int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)

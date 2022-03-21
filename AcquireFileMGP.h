@@ -49,7 +49,7 @@ namespace vtk
         ~AcquireFileMGP() override = default;
 
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *); //  override;
-        int ReadSizesFrom(InputFile& /* inp */) override;
+        // int ReadSizesFrom(InputFile& /* inp */) override;
         // int ReadQTAIMSizes(InputFile& /* inp */) override;
         // RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *); // override;
 

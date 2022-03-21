@@ -35,7 +35,6 @@ void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
 // int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
 int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 {
-{
     const char sKeyTotal[] = "Total number of electron density critical points found =";
     const char sKeyNACP[] = "Number of NACPs  =";
     const char sKeyNNACP[] = "Number of NNACPs =";
@@ -61,7 +60,7 @@ int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 
     return 1;
 }
-}
+
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // To be overriden to read information stored in the (file) stream
@@ -73,14 +72,20 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
 {
     // call base class:
     if (!this->Superclass::ReadDataFrom(inp, pMol))
-        return 0;
+        return 0; // pMol->Initialize()
 
-    // CriticalStructure* pCrit =
-    //    this->GetOutput()->InitCriticalData(  this->GetNumberOfCP()  );
+    // Could it be a one-pass reading? Not al all...
     inp.seekg(0L);
-    // could it be a one-pass reading?
 
-    std::string one_line;
+    // Whatever else...
+    return (this->ReadCriticalPoints(inp, pMol) == this->GetNumberOfAtoms()) ? 1 : 0;
+}
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
+{
+    String one_line;
     vtkIdType nReadCrit = 0;
     if (!ScrollToPrefix(inp, "CP#", one_line))
     {
@@ -88,13 +93,20 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
         return 0;
     }
 
+    size_t idCP(0);
     do
     {
-        size_t idCP(0);
-        std::string name;
+        String name;
+        String AtomType;
+        String str_type;
+        String str_props;
+
         char equals;
+
         vtkIdType idElementAdd(0);
         double q0, q1, q2;
+        CriticalPointType type;
+
         InputString inp_str(one_line);
         inp_str >> idCP       // == nCP + 1
             >> name           // "Coords"
@@ -105,15 +117,10 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
         if (!idCP || --idCP != nReadCrit)
             return 0;
 
-        // ...!!! AND HERE IS THE PROPER PLACE !!!...
-        // this->CriticalPoint(idCP)->SetPos(q0, q1, q2);
-        std::string str_type;
         if (!GetLine(inp, str_type))
             break;
 
         // setup the critical molecular structure
-        std::string AtomType;
-        CriticalPointType type;
         InputString inp_type(str_type);
         inp_type >> name // "Type"
             >> equals    // '='
@@ -146,19 +153,13 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
         else
             return 0;
         // enter here to input the critical data point-by-point
-        pMol->AppendAtom(idElementAdd, q0, q1, q2);
+        if (idElementAdd)
+            pMol->AppendAtom(idElementAdd, q0, q1, q2);
         ++nReadCrit;
-        // std::string str_props = GatherNonEmptyLines(inp);
-        // OR
-        std::string str_props;
         if (!GatherNonEmpty(inp, str_props))
             return 0;
         // below is the simplest case of skipping this info:
         // ScrollToEmpty(inp);
     } while (ScrollToPrefix(inp, "CP#", one_line));
-    // whatever else...
-    return (nReadCrit > 0) ? 1 : 0;
+    return idCP;
 }
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-//
