@@ -157,7 +157,9 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         else
             return 0;
         // enter here to input the critical data point-by-point
-        if (idElementAdd)
+        if (!idElementAdd)
+            return 0;
+        else
             pMol->AppendAtom(idElementAdd, q0, q1, q2);
         ++nReadCrit;
         if (!GatherNonEmpty(inp, str_props))
