@@ -100,7 +100,6 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
     do
     {
         String skip;
-        String str_type;
         String str_props;
 
         vtkIdType idElementAdd(0);
@@ -116,11 +115,14 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         // if (!idCP || --idCP != nReadCP)
         // return 0;
 
-        vtkErrorMacro(" idCP " << idCP << " skip " << skip << " equals " << equals << "q[] = " << q0 << " | " << q1 << " | " << q2 << "\n");
         Atom atom_new = pMol->AppendAtom(2, q0, q1, q2);
 
+        String str_type;
         if (!GetLine(inp, str_type))
-            break;
+        {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP << "in file " << this->GetFileName() << "does not contain the type data");
+            return 0;
+        }
         InputString inp_type(str_type);
         // setup the critical molecular structure
         inp_type >> skip // "Type"
@@ -129,7 +131,6 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
             >> skip      // "((N|NN)A|B|R|C)CP"
             >> AtomType  //  "ElementIndex" ...
             ;
-        /*
         size_t idx = skip.find("ACP");
         char *str_aux(nullptr);
         vtkIdType idAtomAux;
@@ -162,6 +163,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         }
         else
             return 0;
+        /*
         // enter here to input the critical data point-by-point
         if (!idElementAdd)
             return 0;
@@ -170,6 +172,8 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
             return 0;
         // below is the simplest case of skipping this info:
         // ScrollToEmpty(inp); */
+        if(idElementAdd)
+            atom_new.SetAtomicNumber(idElementAdd);
         ++nReadCP;
     } while (ScrollToPrefix(inp, "CP#", one_line));
 

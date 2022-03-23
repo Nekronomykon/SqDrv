@@ -38,8 +38,8 @@ struct ImplFileRoot
     template <class _In, class _String>
     static _In &ScrollToPrefix(_In &in, const char *key, _String &line)
     {
-        if (key && *key)
-            return in;
+        if (!key || !*key)
+            return in; // 
 
         const size_t nSym = strlen(key);
         while (GetLine(in, line))
