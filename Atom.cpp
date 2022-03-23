@@ -44,7 +44,7 @@ unsigned short Atom::GetAtomicNumber() const
 }
 
 //------------------------------------------------------------------------------
-void Atom::SetAtomicNumber(unsigned short atomicNum)
+void Atom::SetAtomicNumber(unsigned short atomicNum, short subtype)
 {
   this->molecule_->SetAtomAtomicNumber(this->Id, atomicNum);
 }

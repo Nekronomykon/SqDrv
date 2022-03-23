@@ -2,11 +2,13 @@
 
 #include "Elements.h"
 #include "Molecule.h"
+using namespace vtk;
 
 #include <vtkInformation.h>
 #include <vtkInformationVector.h>
 
-using namespace vtk;
+#include <vtkSetGet.h>
+
 //------------------------------------------------------------------------------
 vtkStandardNewMacro(AcquireQTAIMFile);
 
@@ -115,7 +117,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         // if (!idCP || --idCP != nReadCP)
         // return 0;
 
-        Atom atom_new = pMol->AppendAtom(2, q0, q1, q2);
+        Atom atom_new = pMol->AppendAtom(0, q0, q1, q2);
 
         String str_type;
         if (!GetLine(inp, str_type))
@@ -140,39 +142,77 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
             //    if(idx == 2) ... ["NNACP"] ??? Never ever seen this beast
             if (type == cpTypeMaximum)
                 idElementAdd = Elements::SymbolToNumber(AtomType.c_str(), &str_aux);
-                // idAtomAux = strtol(str_aux, &str_aux, 10);
+            else
+            {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                << "in file " << this->GetFileName()
+                                                                << "has incompatible NameType=" << skip
+                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
+                return 0;
+            }
+
+            // idAtomAux = strtol(str_aux, &str_aux, 10);
         }
         else if (!skip.find("BCP"))
         {
             // -> AtomType1 // exactly the only
             if (type == cpTypeSaddleB)
-                idElementAdd = 2; // fictituous He
+                idElementAdd = 2; // ??? fictituous He
                                   // pMol->AppendBond(idCP)
+            else
+            {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                << "in file " << this->GetFileName()
+                                                                << "has incompatible NameType=" << skip
+                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
+                return 0;
+            }
         }
         else if (!skip.find("RCP"))
         {
             // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
             if (type == cpTypeSaddleR)
                 idElementAdd = 10; // fictituous Ne
+            else
+            {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                << "in file " << this->GetFileName()
+                                                                << "has incompatible NameType=" << skip
+                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
+                return 0;
+            }
         }
         else if (!skip.find("CCP"))
         {
             // -> AtomType1 AtomType2 -> should be greater than 3 atoms
             if (type == cpTypeMininum)
                 idElementAdd = 18; // fictituous Ar
+            else
+            {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                << "in file " << this->GetFileName()
+                                                                << "has incompatible NameType=" << skip
+                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
+                return 0;
+            }
         }
         else
+        {
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                << "in file " << this->GetFileName()
+                                                                << "has incompatible NameType=" << skip
+                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
             return 0;
-        /*
-        // enter here to input the critical data point-by-point
-        if (!idElementAdd)
-            return 0;
-        pMol->AppendAtom(idElementAdd, q0, q1, q2);
-        if (!GatherNonEmpty(inp, str_props))
-            return 0;
-        // below is the simplest case of skipping this info:
-        // ScrollToEmpty(inp); */
-        if(idElementAdd)
+        } /*
+         // enter here to input the critical data point-by-point
+         if (!idElementAdd)
+             return 0;
+         pMol->AppendAtom(idElementAdd, q0, q1, q2);
+         if (!GatherNonEmpty(inp, str_props))
+             return 0;
+         // below is the simplest case of skipping this info:
+         // ScrollToEmpty(inp); */
+        if (idElementAdd)
             atom_new.SetAtomicNumber(idElementAdd);
         ++nReadCP;
     } while (ScrollToPrefix(inp, "CP#", one_line));

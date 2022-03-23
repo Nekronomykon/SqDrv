@@ -56,7 +56,7 @@ namespace vtk
          * Get/Set the atomic number of this atom
          */
         unsigned short GetAtomicNumber() const;
-        void SetAtomicNumber(unsigned short atomicNum);
+        void SetAtomicNumber(unsigned short atomicNum, short subtype = 0);
         ///@}
 
         ///@{
