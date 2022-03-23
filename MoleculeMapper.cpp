@@ -361,16 +361,6 @@ void MoleculeMapper::UpdateGlyphPolyData()
         this->UpdateBondGlyphPolyData();
     }
 
-    /*
-    if (!this->GlyphDataInitialized ||
-        ((molecule->GetMTime() > this->LatticePolyData->GetMTime() ||
-          this->GetMTime() > this->LatticePolyData->GetMTime()) &&
-         this->RenderLattice))
-    {
-        this->UpdateLatticePolyData();
-    }
-    */
-   
     this->GlyphDataInitialized = true;
 }
 
@@ -830,89 +820,6 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     this->BondGlyphMapper->UseSelectionIdsOn();
 }
 
-/*
-//------------------------------------------------------------------------------
-void MoleculeMapper::UpdateLatticePolyData()
-{
-    this->LatticePolyData->Initialize();
-
-    vtkMolecule *molecule = this->GetInput();
-    if (!molecule->HasLattice())
-    {
-        return;
-    }
-
-    vtkVector3d a;
-    vtkVector3d b;
-    vtkVector3d c;
-    vtkVector3d origin;
-
-    molecule->GetLattice(a, b, c, origin);
-
-    vtkNew<vtkPoints> points;
-    points->SetNumberOfPoints(8);
-    points->SetPoint(0, origin.GetData());
-    points->SetPoint(1, (origin + a).GetData());
-    points->SetPoint(2, (origin + b).GetData());
-    points->SetPoint(3, (origin + c).GetData());
-    points->SetPoint(4, (origin + a + b).GetData());
-    points->SetPoint(5, (origin + a + c).GetData());
-    points->SetPoint(6, (origin + b + c).GetData());
-    points->SetPoint(7, (origin + a + b + c).GetData());
-    this->LatticePolyData->SetPoints(points);
-
-    vtkNew<vtkUnsignedCharArray> latticeColors;
-    latticeColors->SetNumberOfComponents(3);
-    latticeColors->SetNumberOfTuples(8);
-    for (vtkIdType i = 0; i < 8; ++i)
-    {
-        latticeColors->SetTypedTuple(i, this->LatticeColor);
-    }
-    this->LatticePolyData->GetPointData()->SetScalars(latticeColors);
-
-    vtkNew<vtkCellArray> lines;
-    vtkIdType line[2];
-
-    line[0] = 0;
-    line[1] = 1;
-    lines->InsertNextCell(2, line);
-    line[0] = 1;
-    line[1] = 4;
-    lines->InsertNextCell(2, line);
-    line[0] = 4;
-    line[1] = 2;
-    lines->InsertNextCell(2, line);
-    line[0] = 2;
-    line[1] = 0;
-    lines->InsertNextCell(2, line);
-    line[0] = 0;
-    line[1] = 3;
-    lines->InsertNextCell(2, line);
-    line[0] = 2;
-    line[1] = 6;
-    lines->InsertNextCell(2, line);
-    line[0] = 4;
-    line[1] = 7;
-    lines->InsertNextCell(2, line);
-    line[0] = 1;
-    line[1] = 5;
-    lines->InsertNextCell(2, line);
-    line[0] = 6;
-    line[1] = 3;
-    lines->InsertNextCell(2, line);
-    line[0] = 5;
-    line[1] = 3;
-    lines->InsertNextCell(2, line);
-    line[0] = 5;
-    line[1] = 7;
-    lines->InsertNextCell(2, line);
-    line[0] = 6;
-    line[1] = 7;
-    lines->InsertNextCell(2, line);
-
-    this->LatticePolyData->SetLines(lines);
-}
-*/
 
 //------------------------------------------------------------------------------
 void MoleculeMapper::ReleaseGraphicsResources(vtkWindow *w)

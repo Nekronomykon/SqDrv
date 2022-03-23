@@ -37,7 +37,7 @@ vtkStandardNewMacro(AcquireFileMGP);
 AcquireFileMGP::AcquireFileMGP() {}
 
 //------------------------------------------------------------------------------
-int AcquireFileMGP::RequestData(vtkInformation *vtkNotUsed(request),
+int AcquireFileMGP::_RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {

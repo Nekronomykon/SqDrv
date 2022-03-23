@@ -75,10 +75,10 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
         return 0; // pMol->Initialize()
 
     // Could it be a one-pass reading? Not al all...
-    inp.seekg(0L);
+    // inp.seekg(0L);
 
     // Whatever else...
-    return (this->ReadCriticalPoints(inp, pMol) == this->GetNumberOfAtoms()) ? 1 : 0;
+    return (this->ReadCriticalPoints(inp, pMol)) ? 1 : 0;
 }
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
 int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
 {
     String one_line;
-    vtkIdType nReadCrit = 0;
+    vtkIdType nReadCP = 0;
     if (!ScrollToPrefix(inp, "CP#", one_line))
     {
         vtkErrorMacro("AcquireQTAIMFile error: file " << this->GetFileName() << "does not contain critical structure data");
@@ -94,61 +94,67 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
     }
 
     size_t idCP(0);
+    String AtomType;
+    char equals;
+    double q0, q1, q2;
     do
     {
-        String name;
-        String AtomType;
+        String skip;
         String str_type;
         String str_props;
 
-        char equals;
-
         vtkIdType idElementAdd(0);
-        double q0, q1, q2;
         CriticalPointType type;
 
-        InputString inp_str(one_line);
-        inp_str >> idCP       // == nCP + 1
-            >> name           // "Coords"
+        InputString inp_point(one_line);
+        inp_point >> idCP     // == nCP + 1
+            >> skip           // "Coords"
             >> equals         // '='
             >> q0 >> q1 >> q2 // (xyz) of the point:
             ;
         // adjust the value of the CP index;
-        if (!idCP || --idCP != nReadCrit)
-            return 0;
+        // if (!idCP || --idCP != nReadCP)
+        // return 0;
+
+        vtkErrorMacro(" idCP " << idCP << " skip " << skip << " equals " << equals << "q[] = " << q0 << " | " << q1 << " | " << q2 << "\n");
+        Atom atom_new = pMol->AppendAtom(2, q0, q1, q2);
 
         if (!GetLine(inp, str_type))
             break;
-
-        // setup the critical molecular structure
         InputString inp_type(str_type);
-        inp_type >> name // "Type"
+        // setup the critical molecular structure
+        inp_type >> skip // "Type"
             >> equals    // '='
             >> type      // (+3(or smth. else??),Sigma)
-            >> name      // "((N|NN)A|B|R|C)CP"
+            >> skip      // "((N|NN)A|B|R|C)CP"
             >> AtomType  //  "ElementIndex" ...
             ;
-        size_t idx = name.find("ACP");
+        /*
+        size_t idx = skip.find("ACP");
+        char *str_aux(nullptr);
+        vtkIdType idAtomAux;
         if (idx != std::string::npos)
         {
             //    if(idx == 1) ... ["NACP"]
             //    if(idx == 2) ... ["NNACP"] ??? Never ever seen this beast
             if (type == cpTypeMaximum)
-                idElementAdd = Elements::SymbolToNumber(AtomType.c_str());
+                idElementAdd = Elements::SymbolToNumber(AtomType.c_str(), &str_aux);
+                // idAtomAux = strtol(str_aux, &str_aux, 10);
         }
-        else if (!name.find("BCP"))
+        else if (!skip.find("BCP"))
         {
             // -> AtomType1 // exactly the only
             if (type == cpTypeSaddleB)
                 idElementAdd = 2; // fictituous He
+                                  // pMol->AppendBond(idCP)
         }
-        else if (!name.find("RCP"))
+        else if (!skip.find("RCP"))
         {
             // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
             if (type == cpTypeSaddleR)
                 idElementAdd = 10; // fictituous Ne
         }
-        else if (!name.find("CCP"))
+        else if (!skip.find("CCP"))
         {
             // -> AtomType1 AtomType2 -> should be greater than 3 atoms
             if (type == cpTypeMininum)
@@ -159,14 +165,13 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         // enter here to input the critical data point-by-point
         if (!idElementAdd)
             return 0;
-        else
-            pMol->AppendAtom(idElementAdd, q0, q1, q2);
-        ++nReadCrit;
+        pMol->AppendAtom(idElementAdd, q0, q1, q2);
         if (!GatherNonEmpty(inp, str_props))
             return 0;
         // below is the simplest case of skipping this info:
-        // ScrollToEmpty(inp);
+        // ScrollToEmpty(inp); */
+        ++nReadCP;
     } while (ScrollToPrefix(inp, "CP#", one_line));
 
-    return idCP;
+    return nReadCP;
 }

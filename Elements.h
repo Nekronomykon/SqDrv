@@ -146,7 +146,7 @@ namespace vtk
 
   public:
     static vtkIdType NumberOfElements() { return NumberOfKnownElements; }
-    static vtkIdType SymbolToNumber(const char * /* s */);
+    static vtkIdType SymbolToNumber(const char * /* s */, char** save = nullptr);
     static bool IsValidAtomNumber(vtkIdType idAtomType)
     {
       return ((idAtomType & idAtomNumberMask) < idUnknownYet);

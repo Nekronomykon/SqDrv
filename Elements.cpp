@@ -79,15 +79,22 @@ const double Elements::MeanMass[] = {
     286.0, 289.0, 290.0, 293.0, 294.0, 294.0                        // Og
 };
 
-vtkIdType Elements::SymbolToNumber(const char *symbol)
+vtkIdType Elements::SymbolToNumber(const char *symbol, char **save)
 {
-  if (!symbol || !isalpha(symbol[0]))
+  if (!symbol || !isalpha(*symbol))
+  {
+    if (save)
+      *save = nullptr;
     return 0L;
+  }
   vtkIdType number(id_Q);
-  int k0 = toupper(symbol[0]),
-      k1 = isalpha(symbol[1]) ? tolower(symbol[1]) : 0,
-      k2 = ((k0 == 'U') && k1 && isalpha(symbol[2])) ? tolower(symbol[2]) : 0;
+  int k0 = toupper(*symbol++);
+  int k1 = isalpha(*symbol) ? tolower(*symbol++) : 0;
+  int k2 = ((k0 == 'U') && k1 && isalpha(*symbol)) ? tolower(*symbol++) : 0;
   // rare cases of the Uu? / Ub? / Ut? heavy elements
+  if (save)
+    *save = const_cast<char *>(symbol);
+
   switch (k0)
   {
   case ('A'):
