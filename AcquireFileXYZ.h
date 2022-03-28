@@ -56,6 +56,7 @@ namespace vtk
         // ----------------------------------------------------------------------------------------------------
         // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         int ReadDataFrom(InputFile& /*inp*/, Molecule* /* pMol */) override;
+        int OnReadDataComplete(Molecule* /* ptrMol */) override;
         // ----------------------------------------------------------------------------------------------------
 
     private:

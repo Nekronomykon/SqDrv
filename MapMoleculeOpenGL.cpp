@@ -33,7 +33,7 @@ using namespace vtk;
 vtkStandardNewMacro(MapMoleculeOpenGL);
 
 //------------------------------------------------------------------------------
-void MapMoleculeOpenGL::PrintSelf(ostream& os, vtkIndent indent)
+void MapMoleculeOpenGL::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
   os << indent << "FastAtomMapper:\n";
@@ -72,16 +72,13 @@ MapMoleculeOpenGL::MapMoleculeOpenGL()
 MapMoleculeOpenGL::~MapMoleculeOpenGL() = default;
 
 //------------------------------------------------------------------------------
-void MapMoleculeOpenGL::Render(vtkRenderer* ren, vtkActor* act)
+void MapMoleculeOpenGL::Render(vtkRenderer *ren, vtkActor *act)
 {
   // Update cached polydata if needed
   this->UpdateGlyphPolyData();
 
   // Pass rendering call on
-  if (this->RenderAtoms)
-  {
-    this->FastAtomMapper->Render(ren, act);
-  }
+  this->FastAtomMapper->Render(ren, act);
 
   if (this->RenderBonds)
   {
@@ -95,13 +92,10 @@ void MapMoleculeOpenGL::Render(vtkRenderer* ren, vtkActor* act)
 }
 
 void MapMoleculeOpenGL::ProcessSelectorPixelBuffers(
-  vtkHardwareSelector* sel, std::vector<unsigned int>& pixeloffsets, vtkProp* prop)
+    vtkHardwareSelector *sel, std::vector<unsigned int> &pixeloffsets, vtkProp *prop)
 {
   // forward to helper
-  if (this->RenderAtoms)
-  {
-    this->FastAtomMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
-  }
+  this->FastAtomMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
 
   if (this->RenderBonds)
   {
@@ -115,7 +109,7 @@ void MapMoleculeOpenGL::ProcessSelectorPixelBuffers(
 }
 
 //------------------------------------------------------------------------------
-void MapMoleculeOpenGL::ReleaseGraphicsResources(vtkWindow* w)
+void MapMoleculeOpenGL::ReleaseGraphicsResources(vtkWindow *w)
 {
   this->FastAtomMapper->ReleaseGraphicsResources(w);
   this->FastBondMapper->ReleaseGraphicsResources(w);
@@ -156,7 +150,7 @@ void MapMoleculeOpenGL::SetMapScalars(bool map)
 {
   this->Superclass::SetMapScalars(map);
   this->FastAtomMapper->SetColorMode(
-    map ? VTK_COLOR_MODE_MAP_SCALARS : VTK_COLOR_MODE_DIRECT_SCALARS);
+      map ? VTK_COLOR_MODE_MAP_SCALARS : VTK_COLOR_MODE_DIRECT_SCALARS);
   this->FastBondMapper->SetColorMode(
-    map ? VTK_COLOR_MODE_MAP_SCALARS : VTK_COLOR_MODE_DIRECT_SCALARS);
+      map ? VTK_COLOR_MODE_MAP_SCALARS : VTK_COLOR_MODE_DIRECT_SCALARS);
 }

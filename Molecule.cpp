@@ -234,8 +234,7 @@ vtkIdType Molecule::GetNumberOfAtoms()
 }
 
 //------------------------------------------------------------------------------
-Bond Molecule::AppendBond(
-    const vtkIdType atom1, const vtkIdType atom2, const unsigned short order)
+Bond Molecule::AppendBond(const vtkIdType atom1, const vtkIdType atom2, const unsigned short order)
 {
   vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
 

@@ -105,6 +105,7 @@ namespace vtk
         // To be overriden to read information stored in the (file) stream
         virtual int ReadSizesFrom(InputFile & /*inp*/);
         virtual int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/);
+        virtual int OnReadDataComplete(Molecule* /* ptrMol */);
 
     private:
         vtkIdType NumberOfAtoms_ = 0;

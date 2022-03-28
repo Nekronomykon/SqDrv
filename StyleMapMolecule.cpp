@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <utility>
 
+#include "MoleculeMapper.h"
+
 #include "StyleMapMolecule.h"
 using namespace vtk;
 
-const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
+const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.075f, {75, 75, 75}};
 
 const StyleMapMolecule StyleMapMolecule::styleStyx = {UnitRadius, 0.250f, true, true, DiscreteByAtom, 0.250f, {75, 75, 75}};
 const StyleMapMolecule StyleMapMolecule::styleCPK = {VDWRadius, 1.000f, false, false, SingleColor, 0.125f, {75, 75, 75}};
@@ -45,4 +47,18 @@ const char *StyleMapMolecule::AtomRadiusModeName(short mode)
     default:
         return nullptr;
     }
+}
+
+void StyleMapMolecule::SetupMapMolecule(MoleculeMapper *pmap) const
+{
+    assert(pmap);
+    // atoms
+    pmap->SetAtomicRadiusType(styleAtomRadius_);
+    pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
+    // bonds
+    pmap->SetRenderBonds(bRenderBonds_);
+    pmap->SetBondColorMode(styleBondColor_);
+    pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
+    pmap->SetBondRadius(radBonds_);
+    pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
 }

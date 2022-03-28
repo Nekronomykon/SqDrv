@@ -8,12 +8,12 @@
 
 // #include <vtkColor.h>
 
-class vtkMoleculeMapper;
-
 namespace vtk
 {
 
   // class StyleMapMolecule;
+
+  class MoleculeMapper;
 
   // static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
   // static bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
@@ -141,6 +141,7 @@ namespace vtk
     // Just in case the application of the external style upon the VTK class
     // vtkMoleculeMapper
     //
+    /*
     template <class MMapper>
     void SetupMoleculeMapper(MMapper *pmap) const
     {
@@ -155,9 +156,11 @@ namespace vtk
       pmap->SetBondRadius(radBonds_);
       pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
     }
-    //
-    //////////////////////////////////////////////////////////////////////////
-  };
+    */
+    void SetupMapMolecule(MoleculeMapper * /*pmap*/) const;
+  }; // struct StyleMapMolecule
+     //
+     //////////////////////////////////////////////////////////////////////////
 
 } // namespace vtk
 

@@ -98,15 +98,6 @@ namespace vtk
 
         ///@{
         /**
-         * Get/Set whether or not to render atoms. Default: On.
-         */
-        vtkGetMacro(RenderAtoms, bool);
-        vtkSetMacro(RenderAtoms, bool);
-        vtkBooleanMacro(RenderAtoms, bool);
-        ///@}
-
-        ///@{
-        /**
          * Get/Set whether or not to render bonds. Default: On.
          */
         vtkGetMacro(RenderBonds, bool);
@@ -297,7 +288,6 @@ namespace vtk
         /**
          * Customize atom rendering
          */
-        bool RenderAtoms;
         int AtomicRadiusType;
         float AtomicRadiusScaleFactor;
         char *AtomicRadiusArrayName;
@@ -309,7 +299,7 @@ namespace vtk
         /**
          * Customize bond rendering
          */
-        bool RenderBonds;
+        bool RenderBonds = true;
         int BondColorMode;
         bool UseMultiCylindersForBonds;
         float BondRadius;
@@ -317,6 +307,7 @@ namespace vtk
         ///@}
 
         // bool RenderLattice;
+        StyleMapMolecule style_;
 
         /**
          * Internal render methods

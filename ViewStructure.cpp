@@ -87,7 +87,7 @@ bool ViewStructure::initRendering(Molecule *pMol)
 
     if (pMol)
     { // if molecule is valid to render (nullptr is to clear most of parameters)
-        styleMol_.SetupMoleculeMapper(mapMol_.Get());
+        styleMol_.SetupMapMolecule(mapMol_.Get());
     }
     mapMol_->SetInputData(pMol);
 
@@ -107,7 +107,7 @@ bool ViewStructure::resetMoleculeStyle(const StyleMapMolecule &style)
     if (bChanged)
     {
         styleMol_ = style;
-        styleMol_.SetupMoleculeMapper(mapMol_.Get());
+        styleMol_.SetupMapMolecule(mapMol_.Get());
     }
     return bChanged;
 }
@@ -149,7 +149,7 @@ void ViewStructure::ProjectParallel()
 {
     vtkRenderWindow *pRW = this->renderWindow();
     // pRW->RemoveRenderer(renderMol_);
-    renderMol_->GetActiveCamera()->ParallelProjectionOn();  
+    renderMol_->GetActiveCamera()->ParallelProjectionOn();
     // pRW->AddRenderer(renderMol_);
     // renderMol_->Render();
     pRW->Modified();
@@ -162,7 +162,7 @@ void ViewStructure::ProjectPerspective()
 {
     vtkRenderWindow *pRW = this->renderWindow();
     // pRW->RemoveRenderer(renderMol_);
-    renderMol_->GetActiveCamera()->ParallelProjectionOff();  
+    renderMol_->GetActiveCamera()->ParallelProjectionOff();
     // pRW->AddRenderer(renderMol_);
     // renderMol_->Render();
     pRW->Modified();

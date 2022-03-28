@@ -102,14 +102,9 @@ protected:
         vtkNew<MoleculeReader> read_file;
         read_file->SetFileName(arg.data());
         read_file->SetOutput(newmol);
-
-        // Let's make some possible bonds:
-        vtkNew<MakeBondsDistances> mk_bonds;
-        mk_bonds->SetInputData(read_file->GetOutput());
-        mk_bonds->SetOutput(molecule_);
-
         read_file->Update();
-        mk_bonds->Update();
+
+        molecule_->DeepCopy(newmol);
 
         return bool(molecule_->GetNumberOfAtoms() > 0);
     }

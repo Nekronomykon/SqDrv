@@ -48,7 +48,7 @@ using namespace vtk;
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
 
-// Note this class have an accelerated subclass MapMoleculeOpenGL. 
+// Note this class have an accelerated subclass MapMoleculeOpenGL.
 // If you change this class please also check that class for impacts.
 
 /*
@@ -56,26 +56,33 @@ using namespace vtk;
 ** 1. Remove its lattice part;
 ** 2. Adopt to use vtk::Elements instead of vtkPeriodicTable;
 ** 3. Take care of the OpenGL descendent class mentioned above;
-** 4. Prepare for the realization and visualization 
+** 4. Prepare for the realization and visualization
 **    of 3D control spots for the bond in the structure (--> QTAIM View)
 */
 vtkObjectFactoryNewMacro(MoleculeMapper);
 
 //------------------------------------------------------------------------------
-MoleculeMapper::MoleculeMapper() : RenderAtoms(true) //
-    , AtomicRadiusType(VDWRadius)                    //
-    , AtomicRadiusScaleFactor(0.3)                   //
-    , AtomicRadiusArrayName(nullptr)                 //
-    , AtomColorMode(DiscreteByAtom)                  //
-    , RenderBonds(true)                              //
-    , BondColorMode(DiscreteByAtom)                  //
-    , UseMultiCylindersForBonds(true)                //
-    , BondRadius(0.025)                              //
-    // , RenderLattice(false)                            // was 'true' in original VTK
+MoleculeMapper::MoleculeMapper() : AtomicRadiusType(VDWRadius) //
+                                   ,
+                                   AtomicRadiusScaleFactor(0.3) //
+                                   ,
+                                   AtomicRadiusArrayName(nullptr) //
+                                   ,
+                                   AtomColorMode(DiscreteByAtom) //
+                                   ,
+                                   RenderBonds(true) //
+                                   ,
+                                   BondColorMode(DiscreteByAtom) //
+                                   ,
+                                   UseMultiCylindersForBonds(true) //
+                                   ,
+                                   BondRadius(0.025) //
 {
     // Initialize ivars:
-    this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 150;
-    this->BondColor[0] = 200; this->BondColor[1] = 200; this->BondColor[2] = 0;
+    this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 100;
+    this->BondColor[0] = 200;
+    this->BondColor[1] = 200;
+    this->BondColor[2] = 0;
     // this->LatticeColor[0] = this->LatticeColor[1] = this->LatticeColor[2] = 255;
     this->SetAtomicRadiusArrayName("radii");
 
@@ -135,9 +142,6 @@ MoleculeMapper::MoleculeMapper() : RenderAtoms(true) //
     this->BondGlyphPointOutput->SetOutput(this->BondGlyphPolyData);
     this->BondGlyphMapper->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 
-    // this->LatticeMapper->SetInputData(this->LatticePolyData);
-    // this->LatticeMapper->SetColorModeToDefault();
-
     // Force the glyph data to be generated on the next render:
     this->GlyphDataInitialized = false;
 
@@ -162,59 +166,6 @@ void MoleculeMapper::SetInputData(Molecule *input)
 Molecule *MoleculeMapper::GetInput()
 {
     return Molecule::SafeDownCast(this->GetExecutive()->GetInputData(0, 0));
-}
-
-//------------------------------------------------------------------------------
-void MoleculeMapper::UseBallAndStickSettings()
-{
-    this->SetRenderAtoms(true);
-    this->SetRenderBonds(true);
-    this->SetAtomicRadiusType(VDWRadius);
-    this->SetAtomicRadiusScaleFactor(0.3);
-    this->SetAtomColorMode(DiscreteByAtom);
-    this->SetBondColorMode(DiscreteByAtom);
-    this->SetUseMultiCylindersForBonds(true);
-    this->SetBondRadius(0.075);
-}
-
-//------------------------------------------------------------------------------
-void MoleculeMapper::UseVDWSpheresSettings()
-{
-    this->SetRenderAtoms(true);
-    this->SetRenderBonds(true);
-    this->SetAtomicRadiusType(VDWRadius);
-    this->SetAtomicRadiusScaleFactor(1.0);
-    this->SetAtomColorMode(DiscreteByAtom);
-    this->SetBondColorMode(DiscreteByAtom);
-    this->SetUseMultiCylindersForBonds(true);
-    this->SetBondRadius(0.075);
-}
-
-//------------------------------------------------------------------------------
-void MoleculeMapper::UseLiquoriceStickSettings()
-{
-    this->SetRenderAtoms(true);
-    this->SetRenderBonds(true);
-    this->SetAtomicRadiusType(UnitRadius);
-    this->SetAtomicRadiusScaleFactor(0.15);
-    this->SetAtomColorMode(DiscreteByAtom);
-    this->SetBondColorMode(DiscreteByAtom);
-    this->SetUseMultiCylindersForBonds(false);
-    this->SetBondRadius(0.15);
-}
-
-//------------------------------------------------------------------------------
-void MoleculeMapper::UseFastSettings()
-{
-    this->SetRenderAtoms(true);
-    this->SetRenderBonds(true);
-    this->SetAtomicRadiusType(UnitRadius);
-    this->SetAtomicRadiusScaleFactor(0.60);
-    this->SetAtomColorMode(DiscreteByAtom);
-    this->SetBondColorMode(SingleColor);
-    this->SetBondColor(50, 50, 50);
-    this->SetUseMultiCylindersForBonds(false);
-    this->SetBondRadius(0.075);
 }
 
 //------------------------------------------------------------------------------
@@ -322,20 +273,12 @@ void MoleculeMapper::GlyphRender(vtkRenderer *ren, vtkActor *act)
     this->UpdateGlyphPolyData();
 
     // Pass rendering call on
-    if (this->RenderAtoms)
-    {
-        this->AtomGlyphMapper->Render(ren, act);
-    }
+    this->AtomGlyphMapper->Render(ren, act);
 
     if (this->RenderBonds)
     {
         this->BondGlyphMapper->Render(ren, act);
     }
-
-    // if (this->RenderLattice)
-    // {
-    //    this->LatticeMapper->Render(ren, act);
-    // }
 }
 
 //------------------------------------------------------------------------------
@@ -346,8 +289,7 @@ void MoleculeMapper::UpdateGlyphPolyData()
     if (!this->GlyphDataInitialized ||
         ((molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime() ||
           this->GetMTime() > this->AtomGlyphPolyData->GetMTime() ||
-          this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()) &&
-         this->RenderAtoms))
+          this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime())))
     {
         this->UpdateAtomGlyphPolyData();
     }
@@ -819,7 +761,6 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     this->BondGlyphMapper->SetSelectionIdArray("Selection Ids");
     this->BondGlyphMapper->UseSelectionIdsOn();
 }
-
 
 //------------------------------------------------------------------------------
 void MoleculeMapper::ReleaseGraphicsResources(vtkWindow *w)
