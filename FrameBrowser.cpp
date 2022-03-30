@@ -401,13 +401,15 @@ void FrameBrowser::setupActions(void)
 ///
 void FrameBrowser::setupDocking(void)
 {
-    QDockWidget *pLeft = new QDockWidget(tr("Workspace"), this);
-    pLeft->setWidget(workspace_);
-    this->addDockWidget(Qt::LeftDockWidgetArea, pLeft);
+    QDockWidget *pWkSpc = new QDockWidget(tr("Workspace"), this);
+    pWkSpc->setWidget(workspace_);
+    this->addDockWidget(Qt::LeftDockWidgetArea, pWkSpc);
 
     QDockWidget *pFiles = new QDockWidget(tr("File system"), this);
     pFiles->setWidget(files_);
-    this->tabifyDockWidget(pLeft, pFiles);
+    this->addDockWidget(Qt::LeftDockWidgetArea,pFiles);
+    
+    this->tabifyDockWidget(pFiles,pWkSpc);
 
     // QDockWidget *pLog = new QDockWidget(tr("Log actions"), this);
     // pLog->setWidget(log_);

@@ -25,13 +25,14 @@ struct NamedOperationT
 template <class Host, class Arg>
 struct NamedFileFormatT
 {
+    typedef QString NameFormat;
     typedef bool (Host::*Operation)(const Arg &);
-    QString name_;
+    NameFormat name_;
     Operation reader_;
     Operation writer_;
     // whatever operations??
     // Attributes:
-    const QString &getName() const { return name_; }
+    const NameFormat &getName() const { return name_; }
     bool isUnnamed() const { return name_.isEmpty(); }
     bool HasRead() const { return bool(reader_); }
     bool HasSave() const { return bool(writer_); }
