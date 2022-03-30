@@ -20,6 +20,7 @@ find_package(VTK 9 COMPONENTS
   ImagingSources
   InteractionStyle
   RenderingCore
+  RenderingLabel
   RenderingFreeType
   RenderingGL2PSOpenGL2
   RenderingLOD

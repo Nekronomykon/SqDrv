@@ -11,11 +11,14 @@
 #include <vtkRenderWindow.h>
 #include <vtkImageWriter.h>
 
+#include <vtkLabeledDataMapper.h>
+
 #include <vtkRenderer.h>
 #include <vtkColor.h>
 
 #include <vtkActor.h>
 #include <vtkLODActor.h>
+#include <vtkActor2D.h>
 
 #include "Molecule.h"
 #include "MoleculeMapper.h"
@@ -25,17 +28,23 @@
 
 using namespace vtk;
 
-typedef vtkNew<MoleculeMapper> NewMoleculeMapper;
+typedef vtkNew<vtkLabeledDataMapper> ANewLabeledDataMapper;
+typedef vtkSmartPointer<vtkLabeledDataMapper> ALabeledDataMapper;
+
+typedef vtkNew<MoleculeMapper> ANewMoleculeMapper;
 typedef vtkSmartPointer<MoleculeMapper> AMoleculeMapper;
 
-typedef vtkNew<vtkRenderer> NewRenderer;
+typedef vtkNew<vtkRenderer> ANewRenderer;
 typedef vtkSmartPointer<vtkRenderer> ARenderer;
 
-typedef vtkNew<vtkActor> NewActor;
+typedef vtkNew<vtkActor> ANewActor;
 typedef vtkSmartPointer<vtkActor> AnActor;
 
-typedef vtkNew<vtkLODActor> NewLODActor;
+typedef vtkNew<vtkLODActor> ANewLODActor;
 typedef vtkSmartPointer<vtkLODActor> ALODActor;
+
+typedef vtkNew<vtkActor2D> ANewActor2D;
+typedef vtkSmartPointer<vtkActor2D> AnActor2D;
 
 class ViewMolecule : public QVTKOpenGLNativeWidget
 {
@@ -55,13 +64,16 @@ public:
     void ProjectPerspective();
 
 private:
-    NewRenderer renderBg_;
+    ANewRenderer renderBg_;
     vtkColor3d colorBg_;
 
+    ANewLabeledDataMapper mapLabels_;
+    ANewActor2D actorLabels_;
+
     StyleMapMolecule styleMol_;
-    NewRenderer renderMol_;
-    // NewLODActor actorMol_;
-    NewActor actorMol_;
+    ANewRenderer renderMol_;
+    // ANewLODActor actorMol_;
+    ANewActor actorMol_;
     AMoleculeMapper mapMol_;
 };
 
