@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-    QSurfaceFormat::setDefaultFormat(ViewStructure::defaultFormat());
+    QSurfaceFormat::setDefaultFormat(ViewMolecule::defaultFormat());
 
     // QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     // QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

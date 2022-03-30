@@ -33,7 +33,7 @@
 #include <QSettings>
 
 #include "ViewMolecule.h"
-#include "ViewStructure.h"
+#include "ViewSubstructures.h"
 
 #include "TableElements.h"
 #include "DialogFileProperties.h"
@@ -253,7 +253,7 @@ void FrameBrowser::updateUi(void)
     ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
     vtkColor3d cbg;
     if (pViewMol)
-        cbg = pViewMol->viewStructure()->getBgColor();
+        cbg = pViewMol->getBgColor();
     QString strVal(tr("%1"));
     nameBgColor_->setEnabled(!pViewMol ? false : true);
     editBgRed_->setEnabled(!pViewMol ? false : true);
@@ -754,12 +754,11 @@ void FrameBrowser::setBgColorByName(const QString &name)
     ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
     if (!pViewMol)
         return;
-    ViewStructure *pVStr = pViewMol->viewStructure();
-    // QVariant vText(editBgRed_->text());
+
     vtkNew<vtkNamedColors> ptrCol;
     if (!ptrCol->ColorExists(byteName.data()))
         return;
-    pVStr->BgColor() = ptrCol->GetColor3d(byteName.data());
+    pViewMol->BgColor() = ptrCol->GetColor3d(byteName.data());
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -772,9 +771,8 @@ void FrameBrowser::updateBackgroundRed(void)
     ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
     if (!pViewMol)
         return;
-    ViewStructure *pVStr = pViewMol->viewStructure();
     QVariant vText(editBgRed_->text());
-    pVStr->BgColor().SetRed(vText.toDouble());
+    pViewMol->BgColor().SetRed(vText.toDouble());
     frameDoc_->reviewMolecule();
     // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
@@ -790,9 +788,8 @@ void FrameBrowser::updateBackgroundGreen(void)
     ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
     if (!pViewMol)
         return;
-    ViewStructure *pVStr = pViewMol->viewStructure();
     QVariant vText(editBgGreen_->text());
-    pVStr->BgColor().SetGreen(vText.toDouble());
+    pViewMol->BgColor().SetGreen(vText.toDouble());
     frameDoc_->reviewMolecule();
     // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
@@ -808,9 +805,8 @@ void FrameBrowser::updateBackgroundBlue(void)
     ViewMolecule *pViewMol = frameDoc_->getViewMolecule();
     if (!pViewMol)
         return;
-    ViewStructure *pVStr = pViewMol->viewStructure();
     QVariant vText(editBgBlue_->text());
-    pVStr->BgColor().SetBlue(vText.toDouble());
+    pViewMol->BgColor().SetBlue(vText.toDouble());
     frameDoc_->reviewMolecule();
     // TODO: is there any name for the color chosen by RGB?
     nameBgColor_->setCurrentIndex(0);
@@ -1122,10 +1118,7 @@ void FrameBrowser::on_actionFullScreen__triggered(void)
     ViewMolecule *pMol = frameDoc_->viewMolecule();
     if (!pMol)
         return;
-    ViewStructure *pView = pMol->viewStructure();
-    if (!pView)
-        return;
-    vtkRenderWindow *pRW = pView->renderWindow();
+    vtkRenderWindow *pRW = pMol->renderWindow();
     bool bFS = pRW->GetFullScreen();
     pRW->SetFullScreen(!bFS);
     pRW->Render();
@@ -1167,7 +1160,7 @@ void FrameBrowser::on_actionViewMolecule__triggered(void)
 void FrameBrowser::on_actionViewMoleculeFast__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    pMol->setMoleculeVisualStyle(StyleMapMolecule::styleFast);
+    pMol->resetMoleculeStyle(StyleMapMolecule::styleFast);
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -1178,7 +1171,7 @@ void FrameBrowser::on_actionViewMoleculeFast__triggered(void)
 void FrameBrowser::on_actionViewMoleculeSticks__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    pMol->setMoleculeVisualStyle(StyleMapMolecule::styleStyx);
+    pMol->resetMoleculeStyle(StyleMapMolecule::styleStyx);
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -1189,7 +1182,7 @@ void FrameBrowser::on_actionViewMoleculeSticks__triggered(void)
 void FrameBrowser::on_actionViewMoleculeSpheres__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    pMol->setMoleculeVisualStyle(StyleMapMolecule::styleCPK);
+    pMol->resetMoleculeStyle(StyleMapMolecule::styleCPK);
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -1201,7 +1194,7 @@ void FrameBrowser::on_actionViewMoleculeSpheres__triggered(void)
 void FrameBrowser::on_actionViewMoleculeBalls__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    pMol->setMoleculeVisualStyle(StyleMapMolecule::styleBnS);
+    pMol->resetMoleculeStyle(StyleMapMolecule::styleBnS);
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -1250,8 +1243,8 @@ void FrameBrowser::on_actionSetSourceFont__triggered(void)
 void FrameBrowser::on_actionProjectOrthogonal__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    ViewStructure *pView = pMol->viewStructure();
-    pView->renderWindow()->Render();
+    pMol->ProjectParallel(); // ???
+    frameDoc_->reviewMolecule();
     this->updateUi();
 }
 //
@@ -1261,9 +1254,7 @@ void FrameBrowser::on_actionProjectOrthogonal__triggered(void)
 void FrameBrowser::on_actionProjectPerspective__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    ViewStructure *pView = pMol->viewStructure();
-    pView->ProjectPerspective(); // ???
-    // pView->renderWindow()->Render();
+    pMol->ProjectPerspective(); // ???
     frameDoc_->reviewMolecule();
     this->updateUi();
 }
@@ -1274,9 +1265,7 @@ void FrameBrowser::on_actionProjectPerspective__triggered(void)
 void FrameBrowser::on_actionProjectReset__triggered(void)
 {
     ViewMolecule *pMol = frameDoc_->viewMolecule();
-    ViewStructure *pView = pMol->viewStructure();
-    pView->ProjectParallel(); // ???
-    // pView->renderWindow()->Render();
+    // pMol->ProjectParallel(); // ???
     frameDoc_->reviewMolecule();
     this->updateUi();
 }

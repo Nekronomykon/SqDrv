@@ -469,10 +469,12 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     this->BondGlyphPolyData->Initialize();
 
     Molecule *molecule = this->GetInput();
-    const vtkIdType numBonds = molecule->GetNumberOfBonds();
 
-    // For selection ID offset:
+    // For the selection ID offset:
     const vtkIdType numAtoms = molecule->GetNumberOfAtoms();
+
+    // number of bonds itself:
+    const vtkIdType numBonds = molecule->GetNumberOfBonds();
 
     // Create arrays
     vtkNew<vtkPoints> cylCenters;

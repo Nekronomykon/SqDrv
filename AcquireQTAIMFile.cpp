@@ -77,7 +77,7 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
         return 0; // pMol->Initialize()
 
     // Could it be a one-pass reading? Not al all...
-    // inp.seekg(0L);
+    pMol->resetUnits(Molecule::Bohr);
 
     // Whatever else...
     return (this->ReadCriticalPoints(inp, pMol)) ? 1 : 0;
@@ -122,7 +122,10 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         String str_type;
         if (!GetLine(inp, str_type))
         {
-            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP << "in file " << this->GetFileName() << "does not contain the type data");
+            vtkErrorMacro("AcquireQTAIMFile error: CP record #"
+                          << ++nReadCP
+                          << "in file " << this->GetFileName()
+                          << "does not contain the type data");
             return 0;
         }
         InputString inp_type(str_type);
@@ -144,10 +147,11 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
                 idElementAdd = Elements::SymbolToNumber(AtomType.c_str(), &str_aux);
             else
             {
-            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
-                                                                << "in file " << this->GetFileName()
-                                                                << "has NameType=" << skip
-                                                                << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
+                vtkErrorMacro("AcquireQTAIMFile error: CP record #"
+                              << ++nReadCP
+                              << "in file " << this->GetFileName()
+                              << "has NameType=" << skip
+                              << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
                 return 0;
             }
 
@@ -158,24 +162,27 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
             // -> AtomType1 // exactly the only
             if (type == cpTypeSaddleB)
                 idElementAdd = 18; // ??? fictituous Ar
-                                  // pMol->AppendBond(idCP)
+                                   // pMol->AppendBond(idCP)
             else
             {
-            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
-                                                                << "in file " << this->GetFileName()
-                                                                << "has NameType=" << skip
-                                                                << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
+                vtkErrorMacro("AcquireQTAIMFile error: CP record #"
+                              << ++nReadCP
+                              << "in file " << this->GetFileName()
+                              << "has NameType=" << skip
+                              << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
                 return 0;
             }
             vtkIdType idE0 = Elements::SymbolToNumber(AtomType.c_str(), &str_aux);
-            vtkIdType idA0 = strtol(str_aux, &str_aux, 10); --idA0; // number to index
+            vtkIdType idA0 = strtol(str_aux, &str_aux, 10);
+            --idA0;               // number to index
             inp_type >> AtomType; // second atom
             vtkIdType idE1 = Elements::SymbolToNumber(AtomType.c_str(), &str_aux);
-            vtkIdType idA1 = strtol(str_aux, &str_aux, 10); --idA1; // number to index
+            vtkIdType idA1 = strtol(str_aux, &str_aux, 10);
+            --idA1; // number to index
             // adding a simplex
-            pMol->AppendBond(atom_new.GetId(),idA0,0);
-            pMol->AppendBond(atom_new.GetId(),idA1,0);
-            pMol->AppendBond(idA0,idA1,1);
+            pMol->AppendBond(atom_new.GetId(), idA0, 0);
+            pMol->AppendBond(atom_new.GetId(), idA1, 0);
+            pMol->AppendBond(idA0, idA1, 1);
         }
         else if (!skip.find("RCP"))
         {
@@ -184,10 +191,10 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
                 idElementAdd = 10; // fictituous Ne
             else
             {
-            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
-                                                                << "in file " << this->GetFileName()
-                                                                << "has NameType=" << skip
-                                                                << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
+                vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                    << "in file " << this->GetFileName()
+                                                                    << "has NameType=" << skip
+                                                                    << " incompatible with Type=(" << type.real() << "," << type.imag() << ")");
                 return 0;
             }
         }
@@ -198,10 +205,10 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
                 idElementAdd = 2; // fictituous He; local minimum
             else
             {
-            vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
-                                                                << "in file " << this->GetFileName()
-                                                                << "has incompatible NameType=" << skip
-                                                                << " and Type=(" << type.real() << "," << type.imag() << ")");
+                vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
+                                                                    << "in file " << this->GetFileName()
+                                                                    << "has incompatible NameType=" << skip
+                                                                    << " and Type=(" << type.real() << "," << type.imag() << ")");
                 return 0;
             }
         }

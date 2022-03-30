@@ -78,6 +78,7 @@
 #include <vtkNew.h>          // For vtkNew
 #include <vtkSmartPointer.h> // For vtkSmartPointer
 
+#include "CriticalPoint.h"
 #include "Atom.h" // Simple proxy class dependent on Molecule
 #include "Bond.h" // Simple proxy class dependent on Molecule
 
@@ -92,6 +93,7 @@ class vtkPlane;
 class vtkPoints;
 class vtkUnsignedCharArray;
 class vtkUnsignedShortArray;
+class vtkIdTypeArray;
 
 namespace vtk
 {
@@ -107,6 +109,12 @@ namespace vtk
         vtkTypeMacro(Molecule, vtkUndirectedGraph);
         void PrintSelf(ostream &os, vtkIndent indent) override;
         void Initialize() override;
+
+        enum
+        {
+            Angstrom = 0,
+            Bohr = 1
+        };
 
         /**
          * Return what type of dataset this is.
@@ -240,14 +248,13 @@ namespace vtk
         // void GetBondSpot(vtkIdType idBond, double pos[3]);
         ///@}
 
-
         ///@{
         /**
          * Access the raw arrays used in this Molecule instance
          */
         vtkPoints *GetAtomicPositionArray();
         vtkUnsignedShortArray *GetAtomicNumberArray();
-        // 
+        //
         vtkUnsignedShortArray *GetBondOrdersArray();
         vtkPoints *GetBondSpots();
         ///@}
@@ -340,6 +347,13 @@ namespace vtk
         ///@}
 
         /**
+         * @brief AddCriticalPoint
+         *
+         */
+
+        vtkIdType AddCriticalPoint(CriticalPointType type, double x, double y, double z, vtkIdTypeArray *context = nullptr);
+
+        /**
          * Get the array that defines the ghost type of each atom.
          */
         vtkUnsignedCharArray *GetAtomGhostArray();
@@ -427,9 +441,14 @@ namespace vtk
          */
         unsigned long GetActualMemorySize() override;
 
+        short int isAtomicUnits() const { return idUnits_; }
+        void resetUnits(short int /* units */);
+
     protected:
         Molecule();
         ~Molecule() override;
+
+        short int idUnits_ = Angstrom;
 
         /**
          * Copy bonds and atoms.

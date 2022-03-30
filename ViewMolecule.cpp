@@ -1,60 +1,172 @@
 #include "ViewMolecule.h"
 
-#include <QHeaderView>
+#include <vtkRenderWindow.h>
+#include <vtkWindowToImageFilter.h>
 
+#include <vtkCamera.h>
+
+#include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkInteractorStyleRubberBandPick.h>
+
+#include <QString>
+#include <QMessageBox>
+
+#include "MapMoleculeOpenGL.h"
+
+#include "ResetCursor.h"
+
+typedef vtkNew<vtkRenderWindowInteractor> NewRenderWindowInteractor;
+typedef vtkSmartPointer<vtkRenderWindowInteractor> ARenderWindowInteractor;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//
 ViewMolecule::ViewMolecule(QWidget *parent)
-    : QSplitter(Qt::Horizontal, parent), view3D_(new ViewStructure), viewSub_(new ViewSubstructures)
+    : QVTKOpenGLNativeWidget(parent),         //
+      styleMol_(StyleMapMolecule::styleFast), //
+      mapMol_(MoleculeMapper::New())
+// mapMol_(MapMoleculeOpenGL::New())          // is it constant?
 {
-    this->setOpaqueResize(false);
+    actorMol_->SetMapper(mapMol_);
+
+    // initializing window mode:
+    vtkRenderWindow *pRW = this->renderWindow();
+    pRW->SetNumberOfLayers(2);
+
+    colorBg_.SetRed(1.0);   // debug colors
+    colorBg_.SetGreen(1.0); // total up to yellow
+    colorBg_.SetBlue(0.75); // light-yellow
+
+    // general rendering setup
+    this->initRendering();
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+vtkColor3d ViewMolecule::getBgColor() const
+{
+    return colorBg_;
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+vtkColor3d &ViewMolecule::BgColor()
+{
+    return colorBg_;
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+bool ViewMolecule::initRendering(Molecule *pMol)
+{
+    vtkRenderWindow *pRW = this->renderWindow();
+
+    vtkRenderWindowInteractor *pRWI = this->interactor();
+
+    vtkSmartPointer<vtkInteractorStyleTrackballCamera>
+        istyle_rb(vtkInteractorStyleRubberBandPick::New()); // see the song...
+    // The InteractorStyle mechanism is the 3D GUI mechanism to be used in editing,
+    // So we would try to override it by our own mechanism...
+    if (!pRWI)
+    {
+        NewRenderWindowInteractor new_rwi;
+        pRW->SetInteractor(new_rwi);
+        pRWI = new_rwi.Get();
+    }
+    pRWI->SetInteractorStyle(istyle_rb);
+
+    // [0] BACKGROUND
+    renderBg_->SetLayer(0);
+    renderBg_->SetBackground(colorBg_.GetData());
+    pRW->AddRenderer(renderBg_);
+
+    // [1] MOLECULE
+    // reset molecular rendering:
+    renderMol_->RemoveActor(actorMol_);
+    pRW->RemoveRenderer(renderMol_); // detached:
+
+    if (pMol)
+    { // if molecule is valid to render (nullptr is to clear most of parameters)
+        styleMol_.SetupMapMolecule(mapMol_.Get());
+    }
+    mapMol_->SetInputData(pMol);
+
+    // rebuilding:
+    renderMol_->SetLayer(1);
+    renderMol_->AddActor(actorMol_);
+    // renderMol_->SetBackground(colorBg_.GetData());
+    pRW->AddRenderer(renderMol_);
+    return true;
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+bool ViewMolecule::resetMoleculeStyle(const StyleMapMolecule &style)
+{
+    bool bChanged(styleMol_ != style);
+    if (bChanged)
+    {
+        styleMol_ = style;
+        styleMol_.SetupMapMolecule(mapMol_.Get());
+    }
+    return bChanged;
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+bool ViewMolecule::exportImageTo(vtkImageWriter *pIW, bool bAlpha)
+{
+    if (!pIW)
+        return false;
     //
-    viewSub_->setColumnCount(2);
-    viewSub_->headerItem()->setText(0, tr("Geometry"));
-    viewSub_->headerItem()->setText(1, tr("Value"));
-    viewSub_->setAllColumnsShowFocus(true);
-    //*========================================================================*
-    // Categories:
-    itemAtoms_ = new QTreeWidgetItem(viewSub_, nullptr);
-    itemAtoms_->setText(0, tr("Atoms"));
-    // ------------------------------------------------------------------------
-    itemBonds_ = new QTreeWidgetItem(viewSub_, itemAtoms_);
-    itemBonds_->setText(0, tr("Bonds"));
-    // ------------------------------------------------------------------------
-    itemAngles_ = new QTreeWidgetItem(viewSub_, itemBonds_);
-    itemAngles_->setText(0, tr("Valency angles"));
-    // ------------------------------------------------------------------------
-    itemTorsions_ = new QTreeWidgetItem(viewSub_, itemAngles_);
-    itemTorsions_->setText(0, tr("Dihedral angles"));
-    // ------------------------------------------------------------------------
-    itemPaths_ = new QTreeWidgetItem(viewSub_, itemTorsions_);
-    itemPaths_->setText(0, tr("Paths"));
-    // ------------------------------------------------------------------------
-    itemCycles_ = new QTreeWidgetItem(viewSub_, itemPaths_);
-    itemCycles_->setText(0, tr("Cycles"));
-    // ------------------------------------------------------------------------
-    itemStars_ = new QTreeWidgetItem(viewSub_, itemCycles_);
-    itemStars_->setText(0, tr("Stars"));
-    // ------------------------------------------------------------------------
-    itemFragments_ = new QTreeWidgetItem(viewSub_, itemStars_);
-    itemFragments_->setText(0, tr("Fragments"));
-    //*========================================================================*
-    this->addWidget(view3D_);
-    this->addWidget(viewSub_);
-}
+    vtkRenderWindow *pRW = this->renderWindow();
+    if (!pRW)
+        return false;
+    pRW->Render();
+    //
+    vtkNew<vtkWindowToImageFilter> w2if;
+    w2if->SetFixBoundary(true);
+    w2if->SetScale(4);
+    //
+    w2if->SetInput(pRW);
+    if (bAlpha)
+        w2if->SetInputBufferTypeToRGBA();
+    else
+        w2if->SetInputBufferTypeToRGB();
+    w2if->ReadFrontBufferOff();
+    w2if->Update();
 
-ViewStructure *ViewMolecule::viewStructure(void) const
-{
-    return view3D_;
+    pIW->SetInputConnection(w2if->GetOutputPort());
+    pIW->Write();
+    //
+    pRW->Modified();
+    return true;
 }
-
-void ViewMolecule::resetMolecule(Molecule *pMol)
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+void ViewMolecule::ProjectParallel()
 {
-    if (view3D_->initRendering(pMol))
-        view3D_->repaint();
-    /* whatever */;
+    vtkRenderWindow *pRW = this->renderWindow();
+    // pRW->RemoveRenderer(renderMol_);
+    renderMol_->GetActiveCamera()->ParallelProjectionOn();
+    // pRW->AddRenderer(renderMol_);
+    // renderMol_->Render();
+    pRW->Modified();
+    // pRW->Render();
 }
-
-void ViewMolecule::setMoleculeVisualStyle(const StyleMapMolecule &style)
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+void ViewMolecule::ProjectPerspective()
 {
-    if (view3D_->resetMoleculeStyle(style))
-        view3D_->repaint();
+    vtkRenderWindow *pRW = this->renderWindow();
+    // pRW->RemoveRenderer(renderMol_);
+    renderMol_->GetActiveCamera()->ParallelProjectionOff();
+    // pRW->AddRenderer(renderMol_);
+    // renderMol_->Render();
+    pRW->Modified();
+    // pRW->Render();
 }
+//
+///////////////////////////////////////////////////////////////////////////////

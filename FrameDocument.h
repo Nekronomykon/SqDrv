@@ -27,6 +27,7 @@
 
 #include "TextSource.h"
 #include "ViewMolecule.h"
+#include "ViewSubstructures.h"
 
 typedef vtkSmartPointer<Molecule> AMolecule;
 typedef vtkNew<Molecule> NewMolecule;
@@ -133,7 +134,7 @@ protected:
         vtkNew<ImageWriter> write;
         write->SetFileName(bytes.data());
         // this->SetupImageWriter(write.Get());
-        this->getViewMolecule()->viewStructure()->exportImageTo(write);
+        this->getViewMolecule()->exportImageTo(write);
         return true; //
     }
     bool saveFileBMP(const QString & /*path*/);
@@ -156,6 +157,10 @@ private:
     /* view molecule */
     int idViewMol_ = -1;
     QPointer<ViewMolecule> viewMol_;
+    /* view geometry */
+    int idViewSubstr_ = -1;
+    QPointer<ViewSubstructures> viewSubstr_;
+    /* EOViews */
 
     // data itself by the essence
     QString title_ = QString();

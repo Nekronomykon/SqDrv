@@ -48,14 +48,7 @@ namespace vtk
         explicit AcquireFileEXTOUT();
         ~AcquireFileEXTOUT() override = default;
 
-        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-
     private:
-        enum
-        {
-            NumLinesHeader = 23
-        };
         AcquireFileEXTOUT(const AcquireFileEXTOUT &) = delete;
         void operator=(const AcquireFileEXTOUT &) = delete;
     };

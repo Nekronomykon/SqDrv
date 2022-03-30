@@ -6,7 +6,7 @@ using namespace vtk;
   Program:   Visualization Toolkit
   Module:    AcquireFileMGP.cxx
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -36,69 +36,10 @@ vtkStandardNewMacro(AcquireFileMGP);
 //------------------------------------------------------------------------------
 AcquireFileMGP::AcquireFileMGP() {}
 
-//------------------------------------------------------------------------------
-int AcquireFileMGP::_RequestData(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
-{
-    vtkInformation *outInfo = outputVector->GetInformationObject(0);
-    Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
-
-    if (!output)
-    {
-        vtkErrorMacro("AcquireFileMGP does not have a Molecule as output.");
-        return 1;
-    }
-
-    InputFile fileInput(this->GetFileName());
-
-    if (!fileInput.is_open())
-    {
-        vtkErrorMacro("AcquireFileMGP error opening file: " << this->GetFileName());
-        return 0;
-    }
-    if (ScrollStrings(fileInput, NumLinesHeader))
-    {
-        vtkErrorMacro("AcquireFileMGP signaled an unexpected EOF in file: " << this->GetFileName());
-        return 0;
-    }
-    vtkIdType idAtom = 0;
-
-    // construct vtkMolecule
-    output->Initialize();
-
-    std::string atom_line;
-    if (!GetLine(fileInput, atom_line) || !*atom_line.begin())
-        return 0;
-    do
-    {
-        if (fileInput.fail()) // checking we are at end of line
-        {
-            vtkErrorMacro("AcquireFileMGP error reading file: "
-                          << this->GetFileName() << " Problem reading atomic positions.");
-            break;
-        }
-        std::string atom_label;
-        double q, x, y, z;
-        std::istringstream inp(atom_line);
-        inp >> atom_label >> q >> x >> y >> z;
-        if (q <= 0.0)
-        {
-            vtkErrorMacro("AcquireFileMGP error reading file: "
-                          << this->GetFileName() << " Irregular values");
-            break;
-        }
-        output->AppendAtom((unsigned short)q, x, y, z);
-        ++idAtom;
-    } while (GetLine(fileInput, atom_line) && !atom_line.empty());
-    fileInput.close();
-
-    return 1;
-}
 
 //------------------------------------------------------------------------------
 void AcquireFileMGP::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "MGP parser:\n";
+    os << indent << "Actually it is an MGP parser:\n";
     this->Superclass::PrintSelf(os, indent);
 }

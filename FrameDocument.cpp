@@ -172,6 +172,7 @@ FrameDocument::FrameDocument(QWidget *parent)
     : QTabWidget(parent),               //
       textSrc_(new TextSource(this)),   // text source view
       viewMol_(new ViewMolecule(this)), // molecular structure view
+      viewSubstr_(new ViewSubstructures(this)), // view of the substructures and parameters
       molecule_(Molecule::New())        //
 {
     this->setTabPosition(QTabWidget::South);
@@ -180,6 +181,7 @@ FrameDocument::FrameDocument(QWidget *parent)
 
     idTextSrc_ = this->addTab(textSrc_, tr("Text source"));
     idViewMol_ = this->addTab(viewMol_, tr("View molecule"));
+    idViewSubstr_ = this->addTab(viewSubstr_, tr("Geometry"));
 
     textSrc_->showMolecule(molecule_, title_);
 }
@@ -202,9 +204,8 @@ bool FrameDocument::saveSourceFile(const QString &fullpath, QString fmt)
 //
 void FrameDocument::reviewMolecule(void)
 {
-    ViewStructure* pVS = viewMol_->viewStructure();
-    pVS->initRendering(molecule_);
-    pVS->renderWindow()->Render();
+    viewMol_->initRendering(molecule_);
+    viewMol_->renderWindow()->Render();
 }
 //
 //////////////////////////////////////////////////////////////////////////
@@ -370,7 +371,7 @@ bool FrameDocument::openSourceFilePath(const QString &path, QString fmt)
     if (bRes)
     { // whatever is to be done:
         textSrc_->showMolecule(molecule_, fmt);
-        viewMol_->resetMolecule(molecule_);
+        viewMol_->initRendering(molecule_);
     }
     return bRes;
 }

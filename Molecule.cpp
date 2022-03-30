@@ -42,8 +42,7 @@ vtkStandardNewMacro(Molecule);
 
 //------------------------------------------------------------------------------
 Molecule::Molecule()
-    : ElectronicData(nullptr), BondSpots_(ThePoints::New())
-    , AtomGhostArray(nullptr), BondGhostArray(nullptr), AtomicNumberArrayName(nullptr), BondOrdersArrayName(nullptr)
+    : ElectronicData(nullptr), BondSpots_(ThePoints::New()), AtomGhostArray(nullptr), BondGhostArray(nullptr), AtomicNumberArrayName(nullptr), BondOrdersArrayName(nullptr)
 {
   this->Initialize();
 }
@@ -693,4 +692,24 @@ unsigned long Molecule::GetActualMemorySize()
     size += this->BondGhostArray->GetActualMemorySize();
   }
   return size;
+}
+
+//------------------------------------------------------------------------------
+vtkIdType Molecule::AddCriticalPoint(CriticalPointType type, double x, double y, double z, vtkIdTypeArray *context)
+{
+  vtkIdType idCP(-1L);
+  if (type.real() == 3) // only full-rank CP are allowed...
+    return idCP;
+
+  return idCP;
+}
+
+//------------------------------------------------------------------------------
+void Molecule::resetUnits(short int units)
+{
+  if (units != idUnits_)
+  {
+    // onChangedUnits --> scale coordinates?
+  }
+  idUnits_ = (!units) ? Angstrom : Bohr;
 }
