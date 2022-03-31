@@ -21,10 +21,11 @@ class ModelWorkspace
 {
   Q_OBJECT
 public:
-
+/*
   typedef FrameDocument Child;
   typedef Child::FileFormat  FileFormat;
   typedef FileFormat::NameFormat NameFile;
+  */
   // typedef QVector<QPair<NameFormat, FileFormat> > Workspace;
   typedef QStringList Workspace;
 
