@@ -23,6 +23,8 @@
 
 #include <vtkObject.h>                // For macros, defines, etc
 
+#include "Elements.h"
+
 class vtkVector3d;
 class vtkVector3f;
 
@@ -40,7 +42,7 @@ namespace vtk
          */
         inline vtkIdType GetId() const
         {
-            return this->Id;
+            return this->Id_;
         }
 
         /**
@@ -78,7 +80,7 @@ namespace vtk
         explicit Atom(Molecule *parent, vtkIdType id);
 
         Molecule *molecule_ = nullptr;
-        vtkIdType Id = -1;
+        vtkIdType Id_ = -1;
     };
 
 };

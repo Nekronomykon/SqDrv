@@ -21,7 +21,7 @@
 #include <vtkActor2D.h>
 
 #include "Molecule.h"
-#include "MoleculeMapper.h"
+#include "MapMolecule.h"
 
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
@@ -31,8 +31,8 @@ using namespace vtk;
 typedef vtkNew<vtkLabeledDataMapper> ANewLabeledDataMapper;
 typedef vtkSmartPointer<vtkLabeledDataMapper> ALabeledDataMapper;
 
-typedef vtkNew<MoleculeMapper> ANewMoleculeMapper;
-typedef vtkSmartPointer<MoleculeMapper> AMoleculeMapper;
+typedef vtkNew<MapMolecule> ANewMapOfMolecule;
+typedef vtkSmartPointer<MapMolecule> AMapOfMolecule;
 
 typedef vtkNew<vtkRenderer> ANewRenderer;
 typedef vtkSmartPointer<vtkRenderer> ARenderer;
@@ -74,7 +74,7 @@ private:
     ANewRenderer renderMol_;
     // ANewLODActor actorMol_;
     ANewActor actorMol_;
-    AMoleculeMapper mapMol_;
+    AMapOfMolecule mapMol_;
 };
 
 #endif // !__View_Structure_h__

@@ -26,11 +26,11 @@ class vtkTrivialProducer;
 namespace vtk
 {
 
-    class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
+    class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapMolecule : public vtkMapper
     {
     public:
-        static MoleculeMapper *New();
-        vtkTypeMacro(MoleculeMapper, vtkMapper);
+        static MapMolecule *New();
+        vtkTypeMacro(MapMolecule, vtkMapper);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
         ///@{
@@ -281,8 +281,8 @@ namespace vtk
         vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
 
     protected:
-        MoleculeMapper();
-        ~MoleculeMapper() override;
+        MapMolecule();
+        ~MapMolecule() override;
 
         ///@{
         /**
@@ -347,8 +347,8 @@ namespace vtk
         vtkNew<vtkPeriodicTable> PeriodicTable;
 
     private:
-        MoleculeMapper(const MoleculeMapper &) = delete;
-        void operator=(const MoleculeMapper &) = delete;
+        MapMolecule(const MapMolecule &) = delete;
+        void operator=(const MapMolecule &) = delete;
     };
 
 }; // namespace vtk

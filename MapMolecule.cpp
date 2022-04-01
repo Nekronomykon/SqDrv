@@ -1,11 +1,11 @@
-#include "MoleculeMapper.h"
+#include "MapMolecule.h"
 using namespace vtk;
 
 /*=========================================================================
 
   Program:   Visualization Toolkit
   Namespace: vtk
-  Module:    MoleculeMapper.cxx
+  Module:    MapMolecule.cxx
 
   Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
@@ -59,24 +59,26 @@ using namespace vtk;
 ** 4. Prepare for the realization and visualization
 **    of 3D control spots for the bond in the structure (--> QTAIM View)
 */
-vtkObjectFactoryNewMacro(MoleculeMapper);
+vtkObjectFactoryNewMacro(MapMolecule);
 
 //------------------------------------------------------------------------------
-MoleculeMapper::MoleculeMapper() : AtomicRadiusType(VDWRadius) //
-                                   ,
-                                   AtomicRadiusScaleFactor(0.3) //
-                                   ,
-                                   AtomicRadiusArrayName(nullptr) //
-                                   ,
-                                   AtomColorMode(DiscreteByAtom) //
-                                   ,
-                                   RenderBonds(true) //
-                                   ,
-                                   BondColorMode(DiscreteByAtom) //
-                                   ,
-                                   UseMultiCylindersForBonds(true) //
-                                   ,
-                                   BondRadius(0.025) //
+MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
+                             ,
+                             AtomicRadiusScaleFactor(0.3) //
+                             ,
+                             AtomicRadiusArrayName(nullptr) //
+                             ,
+                             AtomColorMode(DiscreteByAtom) //
+                             ,
+                             RenderBonds(true) //
+                             ,
+                             BondColorMode(DiscreteByAtom) //
+                             ,
+                             UseMultiCylindersForBonds(true) //
+                             ,
+                             BondRadius(0.025) //
+                             ,
+                             style_(StyleMapMolecule::styleFast)
 {
     // Initialize ivars:
     this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 100;
@@ -150,26 +152,26 @@ MoleculeMapper::MoleculeMapper() : AtomicRadiusType(VDWRadius) //
 }
 
 //------------------------------------------------------------------------------
-MoleculeMapper::~MoleculeMapper()
+MapMolecule::~MapMolecule()
 {
     this->SetLookupTable(nullptr);
     this->SetAtomicRadiusArrayName(nullptr);
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::SetInputData(Molecule *input)
+void MapMolecule::SetInputData(Molecule *input)
 {
     this->SetInputDataInternal(0, input);
 }
 
 //------------------------------------------------------------------------------
-Molecule *MoleculeMapper::GetInput()
+Molecule *MapMolecule::GetInput()
 {
     return Molecule::SafeDownCast(this->GetExecutive()->GetInputData(0, 0));
 }
 
 //------------------------------------------------------------------------------
-const char *MoleculeMapper::GetAtomicRadiusTypeAsString()
+const char *MapMolecule::GetAtomicRadiusTypeAsString()
 {
     switch (this->AtomicRadiusType)
     {
@@ -187,7 +189,7 @@ const char *MoleculeMapper::GetAtomicRadiusTypeAsString()
 }
 
 //------------------------------------------------------------------------------
-const char *MoleculeMapper::GetBondColorModeAsString()
+const char *MapMolecule::GetBondColorModeAsString()
 {
     switch (this->BondColorMode)
     {
@@ -201,7 +203,7 @@ const char *MoleculeMapper::GetBondColorModeAsString()
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::GetSelectedAtomsAndBonds(
+void MapMolecule::GetSelectedAtomsAndBonds(
     vtkSelection *selection, vtkIdTypeArray *atomIds, vtkIdTypeArray *bondIds)
 {
     // Sanity check
@@ -230,7 +232,7 @@ void MoleculeMapper::GetSelectedAtomsAndBonds(
     {
         vtkSelectionNode *node = selection->GetNode(nodeId);
 
-        // Check if the mapper is this instance of MoleculeMapper
+        // Check if the mapper is this instance of MapMolecule
         vtkActor *selActor =
             vtkActor::SafeDownCast(node->GetProperties()->Get(vtkSelectionNode::PROP()));
         if (selActor && (selActor->GetMapper() == this))
@@ -260,14 +262,14 @@ void MoleculeMapper::GetSelectedAtomsAndBonds(
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::Render(vtkRenderer *ren, vtkActor *act)
+void MapMolecule::Render(vtkRenderer *ren, vtkActor *act)
 {
     // If we add more rendering backend (e.g. point sprites), add a switch here.
     this->GlyphRender(ren, act);
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::GlyphRender(vtkRenderer *ren, vtkActor *act)
+void MapMolecule::GlyphRender(vtkRenderer *ren, vtkActor *act)
 {
     // Update cached polydata if needed
     this->UpdateGlyphPolyData();
@@ -282,7 +284,7 @@ void MoleculeMapper::GlyphRender(vtkRenderer *ren, vtkActor *act)
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::UpdateGlyphPolyData()
+void MapMolecule::UpdateGlyphPolyData()
 {
     Molecule *molecule = this->GetInput();
 
@@ -308,7 +310,7 @@ void MoleculeMapper::UpdateGlyphPolyData()
 
 //------------------------------------------------------------------------------
 // Generate scale and position information for each atom sphere
-void MoleculeMapper::UpdateAtomGlyphPolyData()
+void MapMolecule::UpdateAtomGlyphPolyData()
 {
     this->AtomGlyphPolyData->Initialize();
 
@@ -464,7 +466,7 @@ void MoleculeMapper::UpdateAtomGlyphPolyData()
 
 //------------------------------------------------------------------------------
 // Generate position, scale, and orientation vectors for each bond cylinder
-void MoleculeMapper::UpdateBondGlyphPolyData()
+void MapMolecule::UpdateBondGlyphPolyData()
 {
     this->BondGlyphPolyData->Initialize();
 
@@ -481,7 +483,7 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     vtkNew<vtkFloatArray> cylScales;
     vtkNew<vtkFloatArray> orientationVectors;
     // Since vtkHardwareSelector won't distinguish between the internal instance
-    // mappers of MoleculeMapper, use a custom selection ID range. This also
+    // mappers of MapMolecule, use a custom selection ID range. This also
     // fixes the issue of bonds that are colored-by-atom, as these are rendered
     // as two glyphs.
     vtkNew<vtkIdTypeArray> selectionIds;
@@ -765,13 +767,13 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::ReleaseGraphicsResources(vtkWindow *w)
+void MapMolecule::ReleaseGraphicsResources(vtkWindow *w)
 {
     this->AtomGlyphMapper->ReleaseGraphicsResources(w);
     this->BondGlyphMapper->ReleaseGraphicsResources(w);
 }
 
-double *MoleculeMapper::GetBounds()
+double *MapMolecule::GetBounds()
 {
     Molecule *input = this->GetInput();
     if (!input)
@@ -797,7 +799,7 @@ double *MoleculeMapper::GetBounds()
 }
 
 //------------------------------------------------------------------------------
-int MoleculeMapper::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
+int MapMolecule::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
     // info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkMolecule");
     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "Molecule");
@@ -805,7 +807,7 @@ int MoleculeMapper::FillInputPortInformation(int vtkNotUsed(port), vtkInformatio
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::PrintSelf(ostream &os, vtkIndent indent)
+void MapMolecule::PrintSelf(ostream &os, vtkIndent indent)
 {
     this->Superclass::PrintSelf(os, indent);
 
@@ -822,7 +824,7 @@ void MoleculeMapper::PrintSelf(ostream &os, vtkIndent indent)
 }
 
 //------------------------------------------------------------------------------
-void MoleculeMapper::SetMapScalars(bool map)
+void MapMolecule::SetMapScalars(bool map)
 {
     this->AtomGlyphMapper->SetColorMode(
         map ? VTK_COLOR_MODE_MAP_SCALARS : VTK_COLOR_MODE_DIRECT_SCALARS);

@@ -6,6 +6,7 @@
 
 namespace vtk
 {
+  typedef unsigned short IndexElement;
 
   class Elements
   {
@@ -132,8 +133,7 @@ namespace vtk
       idTs = 117,
       idOg = 118,
       NumberOfKnownElements,
-      idUnknownYet = 255,
-      idAtomNumberMask = 0x0fff
+      idUnknownYet = 255
     };
 
     static const char *Symbol[NumberOfKnownElements];
@@ -145,8 +145,13 @@ namespace vtk
     static vtkIdType idDefaultNewAtom;
 
   public:
+    enum
+    {
+      idAtomNumberMaskLength = 16,
+      idAtomNumberMask = 0x0ffff
+    };
     static vtkIdType NumberOfElements() { return NumberOfKnownElements; }
-    static vtkIdType SymbolToNumber(const char * /* s */, char** save = nullptr);
+    static vtkIdType SymbolToNumber(const char * /* s */, char **save = nullptr);
     static bool IsValidAtomNumber(vtkIdType idAtomType)
     {
       return ((idAtomType & idAtomNumberMask) < idUnknownYet);
@@ -154,11 +159,20 @@ namespace vtk
     static vtkStdString GetElementSymbol(vtkIdType);
     static double GetMeanMass(long /* id */);
 
+    static inline vtkIdType MakeType(IndexElement elem, IndexElement aux = 0)
+    {
+      vtkIdType idRes(elem);
+      if (aux)
+        idRes |= (aux << idAtomNumberMaskLength);
+      return idRes;
+    }
+    static inline IndexElement ElementFromType(vtkIdType idType) { return (idAtomNumberMask & idType); }
+
     // default added atom:
-    static vtkIdType GetDefaultElement(); 
-    static bool ResetDefaultElement(vtkIdType /* id */ = Elements::id_C); 
+    static vtkIdType GetDefaultElement();
+    static bool ResetDefaultElement(vtkIdType /* id */ = Elements::id_C);
   };
 
-};     // namespace vtk
+}; // namespace vtk
 
 #endif //! Elements_h

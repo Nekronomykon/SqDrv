@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <utility>
 
-#include "MoleculeMapper.h"
+#include "MapMolecule.h"
 
 #include "StyleMapMolecule.h"
 using namespace vtk;
@@ -49,7 +49,7 @@ const char *StyleMapMolecule::AtomRadiusModeName(short mode)
     }
 }
 
-void StyleMapMolecule::SetupMapMolecule(MoleculeMapper *pmap) const
+void StyleMapMolecule::SetupMapMolecule(MapMolecule *pmap) const
 {
     assert(pmap);
     // atoms

@@ -24,10 +24,11 @@ typedef vtkSmartPointer<vtkRenderWindowInteractor> ARenderWindowInteractor;
 ViewMolecule::ViewMolecule(QWidget *parent)
     : QVTKOpenGLNativeWidget(parent),         //
       styleMol_(StyleMapMolecule::styleFast), //
-      mapMol_(MoleculeMapper::New())
+      mapMol_(AMapOfMolecule::New())
 // mapMol_(MapMoleculeOpenGL::New())          // is it constant?
 {
     actorMol_->SetMapper(mapMol_);
+    actorLabels_->SetMapper(mapLabels_);
 
     // initializing window mode:
     vtkRenderWindow *pRW = this->renderWindow();
@@ -95,6 +96,9 @@ bool ViewMolecule::initRendering(Molecule *pMol)
     renderMol_->SetLayer(1);
     renderMol_->AddActor(actorMol_);
     // renderMol_->SetBackground(colorBg_.GetData());
+    // 
+    // renderMol_->AddActor(actorLabels_);
+
     pRW->AddRenderer(renderMol_);
     return true;
 }

@@ -165,11 +165,11 @@ unsigned short Molecule::GetAtomAtomicNumber(vtkIdType id)
 
   vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
 
-  return atomicNums->GetValue(id);
+  return atomicNums->GetValue(id) & Elements::idAtomNumberMask;
 }
 
 //------------------------------------------------------------------------------
-void Molecule::SetAtomAtomicNumber(vtkIdType id, unsigned short atomicNum)
+void Molecule::SetAtomAtomicNumber(vtkIdType id, unsigned short atomicNum, unsigned short kAux)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
 

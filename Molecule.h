@@ -163,7 +163,7 @@ namespace vtk
         Bond AppendBond(vtkIdType atom1, vtkIdType atom2, unsigned short order = 1);
         Bond AppendBond(const Atom &atom1, const Atom &atom2, unsigned short order = 1)
         {
-            return this->AppendBond(atom1.Id, atom2.Id, order);
+            return this->AppendBond(atom1.Id_, atom2.Id_, order);
         }
         ///@}
 
@@ -185,7 +185,7 @@ namespace vtk
         /**
          * Set the atomic number of the atom with the specified id.
          */
-        void SetAtomAtomicNumber(vtkIdType atomId, unsigned short atomicNum);
+        void SetAtomAtomicNumber(vtkIdType atomId, unsigned short atomicNum, unsigned short kAux = 0);
 
         ///@{
         /**

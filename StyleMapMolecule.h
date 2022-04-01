@@ -13,7 +13,7 @@ namespace vtk
 
   // class StyleMapMolecule;
 
-  class MoleculeMapper;
+  class MapMolecule;
 
   // static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
   // static bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
@@ -157,7 +157,7 @@ namespace vtk
       pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
     }
     */
-    void SetupMapMolecule(MoleculeMapper * /*pmap*/) const;
+    void SetupMapMolecule(MapMolecule * /*pmap*/) const;
   }; // struct StyleMapMolecule
      //
      //////////////////////////////////////////////////////////////////////////
