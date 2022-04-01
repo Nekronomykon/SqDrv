@@ -79,7 +79,7 @@ const double Elements::MeanMass[] = {
     286.0, 289.0, 290.0, 293.0, 294.0, 294.0                        // Og
 };
 
-vtkIdType Elements::SymbolToNumber(const char *symbol, char **save)
+IndexElement Elements::SymbolToNumber(const char *symbol, char **save)
 {
   if (!symbol || !isalpha(*symbol))
   {
@@ -87,7 +87,7 @@ vtkIdType Elements::SymbolToNumber(const char *symbol, char **save)
       *save = nullptr;
     return 0L;
   }
-  vtkIdType number(id_Q);
+  IndexElement number(id_Q);
   int k0 = toupper(*symbol++);
   int k1 = isalpha(*symbol) ? tolower(*symbol++) : 0;
   int k2 = ((k0 == 'U') && k1 && isalpha(*symbol)) ? tolower(*symbol++) : 0;
@@ -435,7 +435,7 @@ vtkIdType Elements::SymbolToNumber(const char *symbol, char **save)
   return number;
 }
 
-vtkStdString Elements::GetElementSymbol(vtkIdType id)
+vtkStdString Elements::GetElementSymbol(IndexElement id)
 {
   vtkStdString res(*Symbol);
   if (id >= 0 && id < NumberOfKnownElements)
