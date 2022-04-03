@@ -42,7 +42,12 @@ vtkStandardNewMacro(Molecule);
 
 //------------------------------------------------------------------------------
 Molecule::Molecule()
-    : ElectronicData(nullptr), BondSpots_(ThePoints::New()), AtomGhostArray(nullptr), BondGhostArray(nullptr), AtomicNumberArrayName(nullptr), BondOrdersArrayName(nullptr)
+    : ElectronicData(nullptr)
+    , BondSpots_(ThePoints::New())
+    , AtomGhostArray(nullptr)
+    , BondGhostArray(nullptr)
+    , AtomicNumberArrayName(nullptr)
+    , BondOrdersArrayName(nullptr)
 {
   this->Initialize();
 }
@@ -59,7 +64,7 @@ void Molecule::Initialize()
 
   // Atomic numbers
   this->SetAtomicNumberArrayName("Atomic Numbers");
-  vtkNew<vtkUnsignedShortArray> atomicNums;
+  vtkNew<ArrayAtomTypes> atomicNums;
   atomicNums->SetNumberOfComponents(1);
   atomicNums->SetName(this->GetAtomicNumberArrayName());
   vertData->SetScalars(atomicNums);
@@ -74,7 +79,7 @@ void Molecule::Initialize()
   edgeData->AllocateArrays(1); // Bond orders
 
   this->SetBondOrdersArrayName("Bond Orders");
-  vtkNew<vtkUnsignedShortArray> bondOrders;
+  vtkNew<ArrayBondOrders> bondOrders;
   bondOrders->SetNumberOfComponents(1);
   bondOrders->SetName(this->GetBondOrdersArrayName());
   edgeData->SetScalars(bondOrders);
@@ -133,7 +138,7 @@ void Molecule::PrintSelf(ostream &os, vtkIndent indent)
 //------------------------------------------------------------------------------
 Atom Molecule::AppendAtom(unsigned short atomicNumber, double x, double y, double z)
 {
-  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
+  ArrayAtomTypes *atomicNums = this->GetAtomicNumberArray();
 
   assert(atomicNums);
 
@@ -163,7 +168,7 @@ unsigned short Molecule::GetAtomAtomicNumber(vtkIdType id)
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
 
-  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
+  ArrayAtomTypes *atomicNums = this->GetAtomicNumberArray();
 
   return atomicNums->GetValue(id) & Elements::idAtomNumberMask;
 }
@@ -173,7 +178,7 @@ void Molecule::SetAtomAtomicNumber(vtkIdType id, unsigned short atomicNum, unsig
 {
   assert(id >= 0 && id < this->GetNumberOfAtoms());
 
-  vtkUnsignedShortArray *atomicNums = this->GetAtomicNumberArray();
+  ArrayAtomTypes *atomicNums = this->GetAtomicNumberArray();
 
   atomicNums->SetValue(id, atomicNum);
   this->Modified();
@@ -235,7 +240,7 @@ vtkIdType Molecule::GetNumberOfAtoms()
 //------------------------------------------------------------------------------
 Bond Molecule::AppendBond(const vtkIdType atom1, const vtkIdType atom2, const unsigned short order)
 {
-  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
+  ArrayBondOrders *bondOrders = this->GetBondOrdersArray();
 
   assert(bondOrders);
 
@@ -265,7 +270,7 @@ void Molecule::SetBondOrder(vtkIdType bondId, unsigned short order)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
-  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
+  ArrayBondOrders *bondOrders = this->GetBondOrdersArray();
   assert(bondOrders);
 
   this->Modified();
@@ -277,7 +282,7 @@ unsigned short Molecule::GetBondOrder(vtkIdType bondId)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
-  vtkUnsignedShortArray *bondOrders = this->GetBondOrdersArray();
+  ArrayBondOrders *bondOrders = this->GetBondOrdersArray();
 
   return bondOrders ? bondOrders->GetValue(bondId) : 0;
 }
@@ -302,9 +307,9 @@ vtkPoints *Molecule::GetBondSpots()
 }
 
 //------------------------------------------------------------------------------
-vtkUnsignedShortArray *Molecule::GetAtomicNumberArray()
+ArrayAtomTypes *Molecule::GetAtomicNumberArray()
 {
-  vtkUnsignedShortArray *atomicNums = vtkArrayDownCast<vtkUnsignedShortArray>(
+  ArrayAtomTypes *atomicNums = vtkArrayDownCast<ArrayAtomTypes>(
       this->GetVertexData()->GetScalars(this->GetAtomicNumberArrayName()));
 
   assert(atomicNums);
@@ -313,9 +318,9 @@ vtkUnsignedShortArray *Molecule::GetAtomicNumberArray()
 }
 
 //------------------------------------------------------------------------------
-vtkUnsignedShortArray *Molecule::GetBondOrdersArray()
+ArrayBondOrders *Molecule::GetBondOrdersArray()
 {
-  return vtkArrayDownCast<vtkUnsignedShortArray>(
+  return vtkArrayDownCast<ArrayBondOrders>(
       this->GetBondData()->GetScalars(this->GetBondOrdersArrayName()));
 }
 
@@ -564,8 +569,8 @@ int Molecule::Initialize(
   }
 
   // ensure it is a short array
-  vtkNew<vtkUnsignedShortArray> newAtomicNumberShortArray;
-  if (vtkUnsignedShortArray::SafeDownCast(atomicNumberArray))
+  vtkNew<ArrayAtomTypes> newAtomicNumberShortArray;
+  if (ArrayAtomTypes::SafeDownCast(atomicNumberArray))
   {
     newAtomicNumberShortArray->ShallowCopy(atomicNumberArray);
   }
@@ -640,7 +645,7 @@ int Molecule::Initialize(
   }
   else
   {
-    vtkNew<vtkUnsignedShortArray> atomicNumberArrayCopy;
+    vtkNew<ArrayAtomTypes> atomicNumberArrayCopy;
     atomicNumberArrayCopy->ShallowCopy(newAtomicNumberShortArray);
     atomicNumberArrayCopy->SetName(atomicNumberName.c_str());
     this->GetVertexData()->AddArray(atomicNumberArrayCopy.Get());

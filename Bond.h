@@ -27,6 +27,7 @@
 
 namespace vtk
 {
+  typedef unsigned short BondOrder;
   class Molecule;
 
   class Bond
@@ -35,9 +36,9 @@ namespace vtk
     void PrintSelf(ostream &os, vtkIndent indent);
 
     /**
-     * Return the Id used to identify this bond in the parent molecule.
+     * Return the Id_ used to identify this bond in the parent molecule.
      */
-    vtkIdType GetId() const { return this->Id; }
+    vtkIdType GetId() const { return this->Id_; }
 
     /**
      * Return the parent molecule of this bond.
@@ -66,7 +67,7 @@ namespace vtk
     /**
      * Get the bond order for this bond.
      */
-    unsigned short GetOrder();
+    BondOrder GetOrder();
 
     /**
      * Get the distance between the bonded atoms.
@@ -84,7 +85,7 @@ namespace vtk
     explicit Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId, vtkIdType id_spot = -1);
 
     Molecule *molecule_ = nullptr;
-    vtkIdType Id = -1;
+    vtkIdType Id_ = -1;
     vtkIdType BeginAtomId = -1;
     vtkIdType EndAtomId = -1;
     vtkIdType IdSpot_ = -1;

@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notice for more information.
 
 //------------------------------------------------------------------------------
 Bond::Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId, vtkIdType idSpot)
-    : molecule_(parent), Id(id), BeginAtomId(beginAtomId), EndAtomId(endAtomId), IdSpot_(idSpot)
+    : molecule_(parent), Id_(id), BeginAtomId(beginAtomId), EndAtomId(endAtomId), IdSpot_(idSpot)
 {
     assert(parent != nullptr);
     assert(id < parent->GetNumberOfBonds());
@@ -37,7 +37,7 @@ Bond::Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endA
 //------------------------------------------------------------------------------
 void Bond::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "molecule_: " << this->molecule_ << " Id: " << this->Id
+    os << indent << "molecule_: " << this->molecule_ << " Id: " << this->Id_
        << " Order: " << this->GetOrder() << " Length: " << this->GetLength()
        << " BeginAtomId: " << this->BeginAtomId << " EndAtomId: " << this->EndAtomId << endl;
 }
@@ -75,4 +75,4 @@ Atom Bond::GetBeginAtom() const { return this->molecule_->GetAtom(this->BeginAto
 Atom Bond::GetEndAtom() const { return this->molecule_->GetAtom(this->EndAtomId); }
 
 //------------------------------------------------------------------------------
-unsigned short Bond::GetOrder() { return this->molecule_->GetBondOrder(this->Id); }
+BondOrder Bond::GetOrder() { return this->molecule_->GetBondOrder(this->Id_); }

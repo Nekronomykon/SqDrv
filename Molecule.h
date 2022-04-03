@@ -97,6 +97,8 @@ class vtkIdTypeArray;
 
 namespace vtk
 {
+    typedef vtkUnsignedShortArray ArrayAtomTypes;
+    typedef vtkUnsignedShortArray ArrayBondOrders;
 
     typedef vtkNew<vtkPoints> NewPoints;
     typedef vtkSmartPointer<vtkPoints> ThePoints;
@@ -253,9 +255,9 @@ namespace vtk
          * Access the raw arrays used in this Molecule instance
          */
         vtkPoints *GetAtomicPositionArray();
-        vtkUnsignedShortArray *GetAtomicNumberArray();
+        ArrayAtomTypes *GetAtomicNumberArray();
         //
-        vtkUnsignedShortArray *GetBondOrdersArray();
+        ArrayBondOrders *GetBondOrdersArray();
         vtkPoints *GetBondSpots();
         ///@}
 
