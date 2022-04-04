@@ -32,7 +32,6 @@
  */
 
 #include <vtkAlgorithm.h>
-// #include "vtkCommonExecutionModelModule.h" // For export macro
 
 class vtkDataSet;
 namespace vtk
