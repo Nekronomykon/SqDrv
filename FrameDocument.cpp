@@ -36,22 +36,24 @@ const QString FrameDocument::filterAll = tr("All files (*.*)");
 ///////////////////////////////////////////////////////////////////////////////
 //
 const FrameDocument::FileFormatMap FrameDocument::MapFileFormats = {
+    // Both read and write formats:
     {tr("sqdrv"), {tr("SqDrv Molecule"), &FrameDocument::loadDataFile, &FrameDocument::saveDataFile}}, // Not ready all
     {tr("xyz"), {tr("XMol XYZ"), &FrameDocument::loadFileXYZ, &FrameDocument::saveFileXYZ}},           // Not completely ready to save
-    //
-    {tr("cube"), {tr("Gaussian Cube"), &FrameDocument::loadFileCUBE, nullptr}},              //
-    {tr("extout"), {tr("AIMAll Extended Output"), &FrameDocument::loadFileEXTOUT, nullptr}}, //
-    {tr("mgp"), {tr("AIMAll Molecular Graph"), &FrameDocument::loadFileMGP, nullptr}},       //
-    {tr("sum"), {tr("AIMAll execution summary"), &FrameDocument::loadFileSUM, nullptr}},     //
+    // Read only (?, Import) formats:
+    {tr("cube"), {tr("Gaussian Cube"), &FrameDocument::loadFileCUBE, nullptr}},              // calcyulations are required
+    {tr("extout"), {tr("AIMAll Extended Output"), &FrameDocument::loadFileEXTOUT, nullptr}}, // ANXYZ + CP Summary
+    {tr("mgp"), {tr("AIMAll Molecular Graph"), &FrameDocument::loadFileMGP, nullptr}},       // ANXYZ + CP Summary
+    {tr("sum"), {tr("AIMAll execution summary"), &FrameDocument::loadFileSUM, nullptr}},     // ANQXYZ  + CP Summary
     {tr("wfn"), {tr("AIMPAC wavefunction file"), &FrameDocument::loadFileWFN, nullptr}},     // Almost ready
-    {tr("wfx"), {tr("Extended wavefunction file"), &FrameDocument::loadFileWFX, nullptr}},   // Not ready
-    //
+    {tr("wfx"), {tr("Extended wavefunction file"), &FrameDocument::loadFileWFX, nullptr}},   // Not yet ready: AN, EN, Q and XYZ parts
+                                                                                             // are separated in the XML manner in the file body
+    // Image file saving (Save only / Export):
     {tr("bmp"), {tr("Bitmap Image"), nullptr, &FrameDocument::saveFileBMP}},                       // Almost ready
     {tr("jpeg"), {tr("Joint Photographic Experts Group"), nullptr, &FrameDocument::saveFileJPEG}}, // Almost ready
     // {tr("pdf"), {tr("Portable Document Format"), nullptr, &FrameDocument::saveFilePDF}},         // Not yet clear how to get it ready
     {tr("png"), {tr("Portable Network Graphics"), nullptr, &FrameDocument::saveFilePNG}}, // Almost ready
-    // {tr("ps"), {tr("PostScript"), nullptr, &FrameDocument::saveFilePS}},               // Not yet definitely ready;
-    // It requires RGB instead of used RGBA... Huge files...
+    // {tr("ps"), {tr("Post Script"), nullptr, &FrameDocument::saveFilePS}}, // TODO: Check out is it ready
+    // It requires the RGB pixel format instead of the RGBA used... Huge files...
     {tr("tiff"), {tr("Tagged Image Format"), nullptr, &FrameDocument::saveFileTIFF}} // Almost ready
 };
 //
@@ -96,7 +98,7 @@ QString FrameDocument::filterForOpen(void)
 //
 QString FrameDocument::filterForSave(void)
 {
-    QString all_known(tr("All appropriate formats ("));
+    QString all_known(tr("All known formats ("));
     QString byformat;
 
     FileFormatMap::const_iterator fmt = MapFileFormats.begin();
@@ -133,7 +135,7 @@ QString FrameDocument::filterForSave(void)
 //
 QString FrameDocument::filterForExport(void)
 {
-    QString all_known(tr("All appropriate formats ("));
+    QString all_known(tr("All known formats ("));
     QString byformat;
 
     FileFormatMap::const_iterator fmt = MapFileFormats.begin();
@@ -169,11 +171,11 @@ QString FrameDocument::filterForExport(void)
 ///////////////////////////////////////////////////////////////////////
 //
 FrameDocument::FrameDocument(QWidget *parent)
-    : QTabWidget(parent),               //
-      textSrc_(new TextSource(this)),   // text source view
-      viewMol_(new ViewMolecule(this)), // molecular structure view
+    : QTabWidget(parent),                       //
+      textSrc_(new TextSource(this)),           // text source view
+      viewMol_(new ViewMolecule(this)),         // molecular structure view
       viewSubstr_(new ViewSubstructures(this)), // view of the substructures and parameters
-      molecule_(Molecule::New())        //
+      molecule_(Molecule::New())                //
 {
     this->setTabPosition(QTabWidget::South);
     this->setDocumentMode(true);
@@ -210,21 +212,9 @@ void FrameDocument::reviewMolecule(void)
 //
 //////////////////////////////////////////////////////////////////////////
 //
-void FrameDocument::setLinearAngstrom()
-{
-}
-//
-//////////////////////////////////////////////////////////////////////////
-//
-void FrameDocument::setLinearBohr()
-{
-}
-//
-//////////////////////////////////////////////////////////////////////////
-//
-void FrameDocument::setLinearPicometer()
-{
-}
+void FrameDocument::setLinearAngstrom() {}
+void FrameDocument::setLinearBohr() {}
+void FrameDocument::setLinearPicometer() {}
 //
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief FrameDocument::saveSource
@@ -246,15 +236,8 @@ bool FrameDocument::saveSource(QIODevice *pDev)
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-void FrameDocument::setSourceModified(bool b)
-{
-    return textSrc_->setModified(b);
-}
-//
-bool FrameDocument::isSourceModified() const
-{
-    return textSrc_->isModified();
-}
+void FrameDocument::setSourceModified(bool b) { return textSrc_->setModified(b); }
+bool FrameDocument::isSourceModified() const { return textSrc_->isModified(); }
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -276,11 +259,7 @@ ViewMolecule *FrameDocument::viewMolecule()
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-QTextDocument *FrameDocument::documentAtoms()
-{
-    return !textSrc_ ? nullptr
-                     : textSrc_->sourceAtomsDocument();
-}
+QTextDocument *FrameDocument::documentAtoms() { return !textSrc_ ? nullptr : textSrc_->sourceAtomsDocument(); }
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -292,74 +271,22 @@ bool FrameDocument::loadDataFile(const QString & /*path*/)
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-bool FrameDocument::loadFileCUBE(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from CUBE:\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileCUBE>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::loadFileMGP(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from MGP:\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileMGP>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::loadFileEXTOUT(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from EXTOUT:\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileEXTOUT>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::loadFileSUM(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from SUM:\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileSUM>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::loadFileWFN(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from WFN:\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileWFN>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
+bool FrameDocument::loadFileCUBE(const QString &path) { return this->loadMoleculeFile<AcquireFileCUBE>(path); }
+bool FrameDocument::loadFileMGP(const QString &path) { return this->loadMoleculeFile<AcquireFileMGP>(path); }
+bool FrameDocument::loadFileEXTOUT(const QString &path) { return this->loadMoleculeFile<AcquireFileEXTOUT>(path); }
+bool FrameDocument::loadFileSUM(const QString &path) { return this->loadMoleculeFile<AcquireFileSUM>(path); }
+bool FrameDocument::loadFileWFN(const QString &path) { return this->loadMoleculeFile<AcquireFileWFN>(path); }
 bool FrameDocument::loadFileWFX(const QString &path)
 {
+    // Not yet ready!!!
 #ifndef VTK_DEBUG_QT_MESSAGE_BOX
     QMessageBox::information(this, tr("Import information"), tr("Importing from WFX:\n%1\n[not yet ready; stubbed]").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    // Not yet ready!!!
     return false;
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::loadFileXYZ(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Import information"), tr("Importing from XYZ:\n%1").arg(path));
+#else
+    return this->loadMoleculeFile<AcquireFileWFN>(path);
 #endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->loadMoleculeFile<AcquireFileXYZ>(path);
 }
+bool FrameDocument::loadFileXYZ(const QString &path) { return this->loadMoleculeFile<AcquireFileXYZ>(path); }
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -396,53 +323,11 @@ bool FrameDocument::saveFileXYZ(const QString &path)
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-bool FrameDocument::saveFileBMP(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Export information"), tr("Exporting to\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->saveImageFile<vtkBMPWriter>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::saveFileJPEG(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Export information"), tr("Exporting to\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->saveImageFile<vtkJPEGWriter>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::saveFilePNG(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Export information"), tr("Exporting to\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->saveImageFile<vtkPNGWriter>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::saveFilePS(const QString &path)
-{
-#ifndef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Export information"), tr("Exporting to\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->saveImageFile<vtkPostScriptWriter>(path);
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool FrameDocument::saveFileTIFF(const QString &path)
-{
-#ifdef VTK_DEBUG_QT_MESSAGE_BOX
-    QMessageBox::information(this, tr("Export information"), tr("Exporting to\n%1").arg(path));
-#endif // VTK_DEBUG_QT_MESSAGE_BOX
-    return this->saveImageFile<vtkTIFFWriter>(path);
-}
+bool FrameDocument::saveFileBMP(const QString &path) { return this->saveImageFile<vtkBMPWriter>(path); }
+bool FrameDocument::saveFileJPEG(const QString &path) { return this->saveImageFile<vtkJPEGWriter>(path); }
+bool FrameDocument::saveFilePNG(const QString &path) { return this->saveImageFile<vtkPNGWriter>(path); }
+bool FrameDocument::saveFilePS(const QString &path) { return this->saveImageFile<vtkPostScriptWriter>(path); }
+bool FrameDocument::saveFileTIFF(const QString &path) { return this->saveImageFile<vtkTIFFWriter>(path); }
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -499,7 +384,7 @@ int FrameDocument::readAtomsFromSource(int nBlocks)
                 nThisFrg = 0;
             }
         }
-        else // not empty --> try to read nex atom
+        else // not empty --> try to read next atom
         {
             QByteArray src_txt = txt.toLatin1();
             string buffer_in(src_txt.data());

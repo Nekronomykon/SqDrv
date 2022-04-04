@@ -1,5 +1,5 @@
-#ifndef Acquire_File_WFN_h__
-#define Acquire_File_WFN_h__
+#ifndef Acquire_File_WFX_h__
+#define Acquire_File_WFX_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -8,7 +8,7 @@
 
 /*=========================================================================
   Program:   Visualization Toolkit
-  Module:    AcquireFileWFN.h
+  Module:    AcquireFileWFX.h
 
   Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
   All rights reserved.
@@ -19,10 +19,10 @@
      PURPOSE.  See the above copyright notice for more information.
 =========================================================================*/
 /**
- * @class   AcquireFileWFN
+ * @class   AcquireFileWFX
  * @brief   read Molecular Data files
  *
- * AcquireFileWFN is a source object that reads Molecule files
+ * AcquireFileWFX is a source object that reads Molecule files
  * The reader will detect multiple timesteps in an WFN molecule file.
  *
  * @par Thanks:
@@ -36,17 +36,17 @@
 namespace vtk
 {
 
-    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileWFN 
+    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileWFX 
     : public AcquireMoleculeFile
     {
     public:
-        static AcquireFileWFN *New();
-        vtkTypeMacro(AcquireFileWFN, AcquireMoleculeFile);
+        static AcquireFileWFX *New();
+        vtkTypeMacro(AcquireFileWFX, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
     protected:
-        explicit AcquireFileWFN();
-        ~AcquireFileWFN() override = default;
+        explicit AcquireFileWFX();
+        ~AcquireFileWFX() override = default;
 
         // ----------------------------------------------------------------------------------------------------
         // To be overriden to read information stored in the (file) stream
@@ -60,10 +60,10 @@ namespace vtk
         // ----------------------------------------------------------------------------------------------------
 
     private:
-        AcquireFileWFN(const AcquireFileWFN &) = delete;
-        void operator=(const AcquireFileWFN &) = delete;
+        AcquireFileWFX(const AcquireFileWFX &) = delete;
+        void operator=(const AcquireFileWFX &) = delete;
     };
 
 }; // namespace vtk
 
-#endif // !Acquire_File_WFN_h__
+#endif // !Acquire_File_WFX_h__

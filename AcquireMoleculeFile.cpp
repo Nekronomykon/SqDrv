@@ -107,14 +107,14 @@ int AcquireMoleculeFile::RequestData(vtkInformation *vtkNotUsed(request),
 
     fileInput.close();
 
-    if(nRes)
-    nRes = this->OnReadDataComplete(ptrMol);
+    if (nRes)
+        nRes = this->OnReadDataComplete(ptrMol);
 
     return nRes;
 }
 
 int AcquireMoleculeFile::ReadSizesFrom(InputFile & /*inp*/) { return 1; }
-int AcquireMoleculeFile::OnReadDataComplete(Molecule *ptrMol) {return ptrMol->GetNumberOfAtoms() > 0 ? 1 : 0;}
+int AcquireMoleculeFile::OnReadDataComplete(Molecule *ptrMol) { return ptrMol->GetNumberOfAtoms() > 0 ? 1 : 0; }
 int AcquireMoleculeFile::ReadDataFrom(InputFile & /*inp*/, Molecule *ptrMol)
 {
     ptrMol->Initialize();

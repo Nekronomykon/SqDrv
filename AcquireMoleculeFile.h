@@ -99,13 +99,16 @@ namespace vtk
         }
         String &NameOfStructure(void) { return nameStructure_; }
 
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-
+        // ----------------------------------------------------------------------------------------------------
         // To be overriden to read information stored in the (file) stream
+        // ----------------------------------------------------------------------------------------------------
+        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         virtual int ReadSizesFrom(InputFile & /*inp*/);
+        // ----------------------------------------------------------------------------------------------------
+        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
         virtual int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/);
         virtual int OnReadDataComplete(Molecule* /* ptrMol */);
+        // ----------------------------------------------------------------------------------------------------
 
     private:
         vtkIdType NumberOfAtoms_ = 0;
