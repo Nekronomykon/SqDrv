@@ -795,6 +795,7 @@ double *MapMolecule::GetBounds()
         }
         input->GetBounds(this->Bounds);
         // Pad bounds by 3 Angstrom to contain spheres, etc
+        // TODO: Insert this padding in the cycle?
         this->Bounds[0] -= 3.0;
         this->Bounds[1] += 3.0;
         this->Bounds[2] -= 3.0;
@@ -823,11 +824,6 @@ void MapMolecule::PrintSelf(ostream &os, vtkIndent indent)
 
     os << indent << "BondGlyphMapper:\n";
     this->BondGlyphMapper->PrintSelf(os, indent.GetNextIndent());
-
-    /*
-    os << indent << "LatticeMapper:\n";
-    this->LatticeMapper->PrintSelf(os, indent.GetNextIndent());
-    */
 }
 
 //------------------------------------------------------------------------------
