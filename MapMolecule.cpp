@@ -307,7 +307,14 @@ void MapMolecule::UpdateGlyphPolyData()
 
     this->GlyphDataInitialized = true;
 }
-
+void MapMolecule::SetStyle(StyleMapMolecule newstyle)
+{
+    if (style_ != newstyle)
+    {
+        style_ = newstyle;
+        this->GlyphDataInitialized = false;
+    }
+}
 //------------------------------------------------------------------------------
 // Generate scale and position information for each atom sphere
 void MapMolecule::UpdateAtomGlyphPolyData()
