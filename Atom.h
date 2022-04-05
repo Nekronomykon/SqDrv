@@ -21,7 +21,7 @@
  *
  */
 
-#include <vtkObject.h>                // For macros, defines, etc
+#include <vtkObject.h> // For macros, defines, etc
 
 #include "Elements.h"
 
@@ -48,7 +48,7 @@ namespace vtk
         /**
          * Return the parent molecule of this atom.
          */
-        inline Molecule *GetMolecule()
+        inline Molecule &GetMolecule()
         {
             return this->molecule_;
         }
@@ -77,13 +77,12 @@ namespace vtk
     protected:
         friend class Molecule;
 
-        explicit Atom(Molecule *parent, vtkIdType id);
+        explicit Atom(Molecule &parent, vtkIdType id);
 
-        Molecule *molecule_ = nullptr;
+        Molecule &molecule_;
         vtkIdType Id_ = -1;
     };
 
-};
-    // namespace vtk
+}; // namespace vtk
 
 #endif // !Atom_h

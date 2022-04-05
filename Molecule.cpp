@@ -151,7 +151,7 @@ Atom Molecule::AppendAtom(unsigned short atomicNumber, double x, double y, doubl
   assert("point ids synced with vertex ids" && coordID == id);
 
   this->Modified();
-  return Atom(this, id);
+  return Atom(*this, id);
 }
 
 //------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ Atom Molecule::GetAtom(vtkIdType atomId)
 {
   assert(atomId >= 0 && atomId < this->GetNumberOfAtoms());
 
-  Atom atom(this, atomId);
+  Atom atom(*this, atomId);
   return atom;
 }
 
@@ -251,7 +251,7 @@ Bond Molecule::AppendBond(const vtkIdType atom1, const vtkIdType atom2, const un
   vtkIdType id = edgeType.Id;
   bondOrders->InsertValue(id, order);
   this->Modified();
-  return Bond(this, id, atom1, atom2);
+  return Bond(*this, id, atom1, atom2);
 }
 
 //------------------------------------------------------------------------------
@@ -262,11 +262,11 @@ Bond Molecule::GetBond(vtkIdType bondId)
   vtkIdTypeArray *bonds = this->GetBondList();
   // An array with two components holding the bonded atom's ids
   vtkIdType *ids = bonds->GetPointer(2 * bondId);
-  return Bond(this, bondId, ids[0], ids[1]);
+  return Bond(*this, bondId, ids[0], ids[1]);
 }
 
 //------------------------------------------------------------------------------
-void Molecule::SetBondOrder(vtkIdType bondId, unsigned short order)
+void Molecule::SetBondOrder(vtkIdType bondId, BondOrder order)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 
@@ -278,7 +278,7 @@ void Molecule::SetBondOrder(vtkIdType bondId, unsigned short order)
 }
 
 //------------------------------------------------------------------------------
-unsigned short Molecule::GetBondOrder(vtkIdType bondId)
+BondOrder Molecule::GetBondOrder(vtkIdType bondId)
 {
   assert(bondId >= 0 && bondId < this->GetNumberOfBonds());
 

@@ -43,7 +43,7 @@ namespace vtk
     /**
      * Return the parent molecule of this bond.
      */
-    Molecule *GetMolecule() { return this->molecule_; }
+    Molecule &GetMolecule() { return this->molecule_; }
 
     ///@{
     /**
@@ -82,9 +82,9 @@ namespace vtk
   protected:
     friend class Molecule;
 
-    explicit Bond(Molecule *parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId, vtkIdType id_spot = -1);
+    explicit Bond(Molecule &parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId);
 
-    Molecule *molecule_ = nullptr;
+    Molecule &molecule_;
     vtkIdType Id_ = -1;
     vtkIdType BeginAtomId = -1;
     vtkIdType EndAtomId = -1;

@@ -214,8 +214,8 @@ namespace vtk
         /**
          * Get/Set the bond order of the bond with the specified id
          */
-        void SetBondOrder(vtkIdType bondId, unsigned short order);
-        unsigned short GetBondOrder(vtkIdType bondId);
+        void SetBondOrder(vtkIdType bondId, BondOrder order);
+        BondOrder GetBondOrder(vtkIdType bondId);
         ///@}
 
         /**
