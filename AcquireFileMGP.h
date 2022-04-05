@@ -48,6 +48,17 @@ namespace vtk
         explicit AcquireFileMGP();
         ~AcquireFileMGP() override = default;
 
+        // ----------------------------------------------------------------------------------------------------
+        // To be overriden to read information stored in the (file) stream
+        // ----------------------------------------------------------------------------------------------------
+        // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int ReadSizesFrom(InputFile & /*inp*/) override;
+        // ----------------------------------------------------------------------------------------------------
+        // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
+        // int OnReadDataComplete(Molecule* /* ptrMol */) override;
+        // ----------------------------------------------------------------------------------------------------
+
     private:
         AcquireFileMGP(const AcquireFileMGP &) = delete;
         void operator=(const AcquireFileMGP &) = delete;

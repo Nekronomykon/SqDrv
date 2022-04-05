@@ -1,5 +1,5 @@
-#ifndef Acquire_File_SUM_h__
-#define Acquire_File_SUM_h__
+#ifndef Acquire_File_WFX_h__
+#define Acquire_File_WFX_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -8,7 +8,7 @@
 
 /*=========================================================================
   Program:   Visualization Toolkit
-  Module:    AcquireFileSUM.h
+  Module:    AcquireFileWFX.h
 
   Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
   All rights reserved.
@@ -19,16 +19,16 @@
      PURPOSE.  See the above copyright notice for more information.
 =========================================================================*/
 /**
- * @class   AcquireFileSUM
+ * @class   AcquireFileWFX
  * @brief   read Molecular Data files
  *
- * AcquireFileSUM is a source object that reads Molecule files
- * The reader will detect multiple timesteps in an SUM molecule file.
+ * AcquireFileWFX is a source object that reads Molecule files
+ * The reader will detect multiple timesteps in an WFN molecule file.
  *
  * @par Thanks:
  * Dr. Jean M. Favre who developed and contributed this class
  */
-#include "AcquireQTAIMFile.h"
+#include "AcquireMoleculeFile.h"
 
 #include <istream> // for std::istream
 #include <vector>  // for std::vector
@@ -36,38 +36,34 @@
 namespace vtk
 {
 
-    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileSUM
-        : public AcquireQTAIMFile
+    class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileWFX 
+    : public AcquireMoleculeFile
     {
     public:
-        static AcquireFileSUM *New();
-        vtkTypeMacro(AcquireFileSUM, AcquireQTAIMFile);
+        static AcquireFileWFX *New();
+        vtkTypeMacro(AcquireFileWFX, AcquireMoleculeFile);
         void PrintSelf(ostream &os, vtkIndent indent) override;
 
     protected:
-        explicit AcquireFileSUM();
-        ~AcquireFileSUM() override = default;
+        explicit AcquireFileWFX();
+        ~AcquireFileWFX() override = default;
 
         // ----------------------------------------------------------------------------------------------------
         // To be overriden to read information stored in the (file) stream
         // ----------------------------------------------------------------------------------------------------
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        // int ReadSizesFrom(InputFile & /*inp*/) override;
+        // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        int ReadSizesFrom(InputFile& /*inp*/) override;
         // ----------------------------------------------------------------------------------------------------
         int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-        // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
+        // int ReadDataFrom(InputFile& /*inp*/) override; // 
         // int OnReadDataComplete(Molecule* /* ptrMol */) override;
         // ----------------------------------------------------------------------------------------------------
 
     private:
-        enum
-        {
-            NumLinesHeader = 33
-        };
-        AcquireFileSUM(const AcquireFileSUM &) = delete;
-        void operator=(const AcquireFileSUM &) = delete;
+        AcquireFileWFX(const AcquireFileWFX &) = delete;
+        void operator=(const AcquireFileWFX &) = delete;
     };
 
 }; // namespace vtk
 
-#endif // !Acquire_File_SUM_h__
+#endif // !Acquire_File_WFX_h__

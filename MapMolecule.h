@@ -280,6 +280,9 @@ namespace vtk
          */
         vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
 
+        StyleMapMolecule GetStyle() const { return style_; }
+        void SetStyle(StyleMapMolecule /*newstyle*/);
+
     protected:
         MapMolecule();
         ~MapMolecule() override;
