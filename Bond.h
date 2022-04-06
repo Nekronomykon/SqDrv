@@ -5,7 +5,7 @@
   Program:   Visualization Toolkit
   Module:    Bond.h
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -16,18 +16,19 @@
 =========================================================================*/
 
 /**
- * @class   Bond
+ * @class   Bond class
  * @brief   convenience proxy for Molecule
  *
  */
 
-#include "Atom.h" // For Atom
-// #include "vtkCommonDataModelModule.h" // For export macro
 #include <vtkObject.h> // For macros, etc
+
+#include "Atom.h" // For Atom
 
 namespace vtk
 {
   typedef unsigned short BondOrder;
+  
   class Molecule;
 
   class Bond
