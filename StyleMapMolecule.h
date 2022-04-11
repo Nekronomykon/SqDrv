@@ -11,8 +11,6 @@
 namespace vtk
 {
 
-  // class StyleMapMolecule;
-
   class MapMolecule;
 
   // static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
@@ -88,11 +86,13 @@ namespace vtk
     }
     //
     bool HasToRenderBonds() const { return bRenderBonds_; }
+    void SetRenderBonds(bool bYes = true) { bRenderBonds_ = bYes; }
     void RenderBondsOn() { bRenderBonds_ = true; }
     void RenderBondsOff() { bRenderBonds_ = false; }
     void ToggleRenderBonds() { bRenderBonds_ = !bRenderBonds_; }
     //
     bool IsMultiBonds() const { return bRenderMulti_; }
+    void SetMultiBonds(bool bYes = true) { bRenderMulti_ = bYes; }
     void MultiBondsOn() { bRenderMulti_ = true; }
     void MultiBondsOff() { bRenderMulti_ = false; }
     bool ToggleMultiBonds()
@@ -100,6 +100,7 @@ namespace vtk
       bRenderMulti_ = !bRenderMulti_;
       return bRenderMulti_;
     }
+
     //
     short GetTypeBondsColor() const { return styleBondColor_; }
     short ResetTypeBondsColor(short int col_type)
@@ -157,11 +158,10 @@ namespace vtk
       pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
     }
     */
-    void SetupMapMolecule(MapMolecule * /*pmap*/) const;
+    void SetupMapMolecule(MapMolecule * /*pMap*/) const;
   }; // struct StyleMapMolecule
-     //
-     //////////////////////////////////////////////////////////////////////////
-
-} // namespace vtk
+  //
+  //////////////////////////////////////////////////////////////////////////
+};// namespace vtk
 
 #endif // Style_MapMolecule_h
