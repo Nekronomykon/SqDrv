@@ -43,7 +43,6 @@ vtkStandardNewMacro(Molecule);
 //------------------------------------------------------------------------------
 Molecule::Molecule()
     : ElectronicData(nullptr)
-    , BondSpots_(ThePoints::New())
     , AtomGhostArray(nullptr)
     , BondGhostArray(nullptr)
     , AtomicNumberArrayName(nullptr)
@@ -84,7 +83,6 @@ void Molecule::Initialize()
   bondOrders->SetName(this->GetBondOrdersArrayName());
   edgeData->SetScalars(bondOrders);
 
-  BondSpots_->Initialize();
   this->UpdateBondList();
 
   // Electronic data
@@ -298,12 +296,6 @@ double Molecule::GetBondLength(vtkIdType bondId)
 vtkPoints *Molecule::GetAtomicPositionArray()
 {
   return this->Points;
-}
-
-//------------------------------------------------------------------------------
-vtkPoints *Molecule::GetBondSpots()
-{
-  return this->BondSpots_;
 }
 
 //------------------------------------------------------------------------------

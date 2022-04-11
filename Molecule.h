@@ -258,7 +258,6 @@ namespace vtk
         ArrayAtomTypes *GetAtomicNumberArray();
         //
         ArrayBondOrders *GetBondOrdersArray();
-        vtkPoints *GetBondSpots();
         ///@}
 
         ///@{
@@ -473,13 +472,6 @@ namespace vtk
         void SetBondListDirty() { this->BondListIsDirty = true; }
         void UpdateBondList();
         vtkIdTypeArray *GetBondList();
-        ///@}
-
-        ///@{
-        /**
-         * The edge spots locations.
-         */
-        ThePoints BondSpots_;
         ///@}
 
         friend class Atom;
