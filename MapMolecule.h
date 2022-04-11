@@ -44,7 +44,6 @@ namespace vtk
         /**
          * Set ivars to default ball-and-stick settings. This is equivalent
          * to the following:
-         * - SetRenderAtoms( true )
          * - SetRenderBonds( true )
          * - SetAtomicRadiusType( VDWRadius )
          * - SetAtomicRadiusScaleFactor( 0.3 )
@@ -57,20 +56,16 @@ namespace vtk
         /**
          * Set ivars to default van der Waals spheres settings. This is
          * equivalent to the following:
-         * - SetRenderAtoms( true )
-         * - SetRenderBonds( true )
+         * - SetRenderBonds( false )
          * - SetAtomicRadiusType( VDWRadius )
          * - SetAtomicRadiusScaleFactor( 1.0 )
          * - SetBondColorMode( DiscreteByAtom )
-         * - SetUseMultiCylindersForBonds( true )
-         * - SetBondRadius( 0.075 )
          */
         void UseVDWSpheresSettings();
 
         /**
          * Set ivars to default liquorice stick settings. This is
          * equivalent to the following:
-         * - SetRenderAtoms( true )
          * - SetRenderBonds( true )
          * - SetAtomicRadiusType( UnitRadius )
          * - SetAtomicRadiusScaleFactor( 0.1 )
@@ -85,7 +80,6 @@ namespace vtk
          * extremely large molecules where the overall shape is more
          * important than the details of the atoms/bond. This is equivalent
          * to the following:
-         * - SetRenderAtoms( true )
          * - SetRenderBonds( true )
          * - SetAtomicRadiusType( UnitRadius )
          * - SetAtomicRadiusScaleFactor( 0.60 )
