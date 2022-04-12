@@ -73,8 +73,8 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
                              // RenderBonds(true) //
                              ,
                              BondColorMode(DiscreteByAtom) //
-                             ,
-                             UseMultiCylindersForBonds(true) //
+                             // ,
+                             // UseMultiCylindersForBonds(true) //
                              ,
                              BondRadius(0.025) //
                              ,
@@ -510,7 +510,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
     // Allocate memory -- find out how many cylinders are needed
     vtkIdType numCylinders = numBonds;
     // Up to three cylinders per bond if multicylinders are enabled:
-    if (this->UseMultiCylindersForBonds)
+    if (style_.AreBondsMulticylinder())
     {
         numCylinders *= 3;
     }
@@ -625,7 +625,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
         // end vtkVector TODO
 
         // Set up delta step vector and bond radius from bond order:
-        if (this->UseMultiCylindersForBonds)
+        if ( style_.AreBondsMulticylinder() )
         {
             switch (bondOrder)
             {
@@ -671,7 +671,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
             break;
         }
 
-        if (this->UseMultiCylindersForBonds)
+        if (style_.AreBondsMulticylinder())
         {
             cylinderCenter = bondCenter + initialDisp;
         }
@@ -745,7 +745,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
             }
 
             // Prepare for next multicylinder
-            if (this->UseMultiCylindersForBonds && bondOrder != 1)
+            if (style_.AreBondsMulticylinder() && bondOrder != 1)
             {
                 // TODO vtkVector in-place addition
                 // cylinderCenter += delta;

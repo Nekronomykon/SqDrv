@@ -147,9 +147,9 @@ namespace vtk
          * Get/Set whether multicylinders will be used to represent multiple
          * bonds. Default: On.
          */
-        vtkGetMacro(UseMultiCylindersForBonds, bool);
-        vtkSetMacro(UseMultiCylindersForBonds, bool);
-        vtkBooleanMacro(UseMultiCylindersForBonds, bool);
+        // vtkGetMacro(UseMultiCylindersForBonds, bool);
+        // vtkSetMacro(UseMultiCylindersForBonds, bool);
+        // vtkBooleanMacro(UseMultiCylindersForBonds, bool);
         ///@}
 
         enum
@@ -214,15 +214,6 @@ namespace vtk
          */
         vtkGetMacro(BondRadius, float);
         vtkSetMacro(BondRadius, float);
-        ///@}
-
-        ///@{
-        /**
-         * Get/Set the color of the bonds as an rgb tuple.
-         * Default: {255, 255, 255} (white)
-         */
-        // vtkGetVector3Macro(LatticeColor, unsigned char);
-        // vtkSetVector3Macro(LatticeColor, unsigned char);
         ///@}
 
         ///@{
@@ -296,15 +287,13 @@ namespace vtk
         /**
          * Customize bond rendering
          */
-        // bool RenderBonds = true;
         int BondColorMode;
-        bool UseMultiCylindersForBonds;
         float BondRadius;
         unsigned char BondColor[3];
         ///@}
 
-        // bool RenderLattice;
         StyleMapMolecule style_;
+        // may it be the vtkNew<vtk::StyleMapMolecule>?
 
         /**
          * Internal render methods
@@ -333,15 +322,12 @@ namespace vtk
         vtkNew<vtkGlyph3DMapper> BondGlyphMapper;
         ///@}
 
-        // unsigned char LatticeColor[3];
-        // vtkNew<vtkPolyData> LatticePolyData;
-        // vtkNew<vtkPolyDataMapper> LatticeMapper;
-        // virtual void UpdateLatticePolyData();
-
         /**
          * Periodic table for lookups
          */
         vtkNew<vtkPeriodicTable> PeriodicTable;
+        // TODO: Change class to use vtk::Elements instead of vtkPeriodicTable
+        // :TODO
 
     private:
         MapMolecule(const MapMolecule &) = delete;

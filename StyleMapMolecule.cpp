@@ -19,7 +19,7 @@ bool StyleMapMolecule::operator==(const StyleMapMolecule &v) const
     return bool((styleAtomRadius_ == v.styleAtomRadius_)  //
                 && (radAtomsScale_ == v.radAtomsScale_)   //
                 && (styleBondColor_ == v.styleBondColor_) //
-                && (bRenderMulti_ == v.bRenderMulti_)     //
+                && (bBondsMulticylinder_ == v.bBondsMulticylinder_)     //
                 && (radBonds_ == v.radBonds_)             //
                 && (colorBond_[0] == v.colorBond_[0])     //
                 && (colorBond_[1] == v.colorBond_[1])     //
@@ -58,7 +58,7 @@ void StyleMapMolecule::SetupMapMolecule(MapMolecule *pmap) const
     // bonds
     // pmap->SetRenderBonds(bRenderBonds_);
     pmap->SetBondColorMode(styleBondColor_);
-    pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
+    // pmap->SetUseMultiCylindersForBonds(bBondsMulticylinder_);
     pmap->SetBondRadius(radBonds_);
     pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
 }

@@ -25,7 +25,7 @@ namespace vtk
     float radAtomsScale_;
     // bonds
     bool bRenderBonds_;
-    bool bRenderMulti_;
+    bool bBondsMulticylinder_;
     short styleBondColor_;
     float radBonds_;
     unsigned char colorBond_[3]; // transform to color4?
@@ -91,14 +91,14 @@ namespace vtk
     void RenderBondsOff() { bRenderBonds_ = false; }
     void ToggleRenderBonds() { bRenderBonds_ = !bRenderBonds_; }
     //
-    bool IsMultiBonds() const { return bRenderMulti_; }
-    void SetMultiBonds(bool bYes = true) { bRenderMulti_ = bYes; }
-    void MultiBondsOn() { bRenderMulti_ = true; }
-    void MultiBondsOff() { bRenderMulti_ = false; }
-    bool ToggleMultiBonds()
+    bool AreBondsMulticylinder() const { return bBondsMulticylinder_; }
+    void SetBondsMulticylinder(bool bYes = true) { bBondsMulticylinder_ = bYes; }
+    void BondsMulticylinderOn() { bBondsMulticylinder_ = true; }
+    void BondsMulticylinderOff() { bBondsMulticylinder_ = false; }
+    bool ToggleBondsMulticylinder()
     {
-      bRenderMulti_ = !bRenderMulti_;
-      return bRenderMulti_;
+      bBondsMulticylinder_ = !bBondsMulticylinder_;
+      return bBondsMulticylinder_;
     }
 
     //
