@@ -80,7 +80,7 @@ void MapMoleculeOpenGL::Render(vtkRenderer *ren, vtkActor *act)
   // Pass rendering call on
   this->FastAtomMapper->Render(ren, act);
 
-  if (this->RenderBonds)
+  if ( style_.HasToRenderBonds() )
   {
     this->FastBondMapper->Render(ren, act);
   }
@@ -97,7 +97,7 @@ void MapMoleculeOpenGL::ProcessSelectorPixelBuffers(
   // forward to helper
   this->FastAtomMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
 
-  if (this->RenderBonds)
+  if ( style_.HasToRenderBonds() )
   {
     this->FastBondMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
   }

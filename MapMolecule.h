@@ -94,9 +94,9 @@ namespace vtk
         /**
          * Get/Set whether or not to render bonds. Default: On.
          */
-        vtkGetMacro(RenderBonds, bool);
-        vtkSetMacro(RenderBonds, bool);
-        vtkBooleanMacro(RenderBonds, bool);
+        // vtkGetMacro(RenderBonds, bool);
+        // vtkSetMacro(RenderBonds, bool);
+        // vtkBooleanMacro(RenderBonds, bool);
         ///@}
 
         ///@{
@@ -296,7 +296,7 @@ namespace vtk
         /**
          * Customize bond rendering
          */
-        bool RenderBonds = true;
+        // bool RenderBonds = true;
         int BondColorMode;
         bool UseMultiCylindersForBonds;
         float BondRadius;

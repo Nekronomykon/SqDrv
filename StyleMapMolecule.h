@@ -138,26 +138,6 @@ namespace vtk
     //
     //////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////////////////////
-    // Just in case the application of the external style upon the VTK class
-    // vtkMoleculeMapper
-    //
-    /*
-    template <class MMapper>
-    void SetupMoleculeMapper(MMapper *pmap) const
-    {
-      // atoms
-      pmap->SetRenderAtoms(true);
-      pmap->SetAtomicRadiusType(styleAtomRadius_);
-      pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
-      // bonds
-      pmap->SetRenderBonds(bRenderBonds_);
-      pmap->SetBondColorMode(styleBondColor_);
-      pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
-      pmap->SetBondRadius(radBonds_);
-      pmap->SetBondColor(colorBond_[0], colorBond_[1], colorBond_[2]);
-    }
-    */
     void SetupMapMolecule(MapMolecule * /*pMap*/) const;
   }; // struct StyleMapMolecule
   //

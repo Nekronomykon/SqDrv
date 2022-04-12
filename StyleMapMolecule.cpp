@@ -56,7 +56,7 @@ void StyleMapMolecule::SetupMapMolecule(MapMolecule *pmap) const
     pmap->SetAtomicRadiusType(styleAtomRadius_);
     pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
     // bonds
-    pmap->SetRenderBonds(bRenderBonds_);
+    // pmap->SetRenderBonds(bRenderBonds_);
     pmap->SetBondColorMode(styleBondColor_);
     pmap->SetUseMultiCylindersForBonds(bRenderMulti_);
     pmap->SetBondRadius(radBonds_);

@@ -69,8 +69,8 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
                              AtomicRadiusArrayName(nullptr) //
                              ,
                              AtomColorMode(DiscreteByAtom) //
-                             ,
-                             RenderBonds(true) //
+                             // ,
+                             // RenderBonds(true) //
                              ,
                              BondColorMode(DiscreteByAtom) //
                              ,
@@ -277,7 +277,7 @@ void MapMolecule::GlyphRender(vtkRenderer *ren, vtkActor *act)
     // Pass rendering call on
     this->AtomGlyphMapper->Render(ren, act);
 
-    if (this->RenderBonds)
+    if ( style_.HasToRenderBonds() )
     {
         this->BondGlyphMapper->Render(ren, act);
     }
@@ -300,7 +300,7 @@ void MapMolecule::UpdateGlyphPolyData()
         ((molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() ||
           this->GetMTime() > this->BondGlyphPolyData->GetMTime() ||
           this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()) &&
-         this->RenderBonds))
+          style_.HasToRenderBonds() ))
     {
         this->UpdateBondGlyphPolyData();
     }
