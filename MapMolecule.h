@@ -7,7 +7,10 @@
 #endif //  _MSC_VER
 
 #include "StyleMapMolecule.h"
+
 #include "Molecule.h"
+
+#include "Elements.h"
 
 #include <vtkMapper.h>
 
@@ -326,6 +329,7 @@ namespace vtk
          * Periodic table for lookups
          */
         vtkNew<vtkPeriodicTable> PeriodicTable;
+        Elements elements_; 
         // TODO: Change class to use vtk::Elements instead of vtkPeriodicTable
         // :TODO
 

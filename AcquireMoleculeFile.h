@@ -27,7 +27,6 @@ class vtkInformationVector;
 
 namespace vtk
 {
-    typedef std::string String;
     typedef vtksys::ifstream InputFile;
     typedef std::istringstream InputString;
 

@@ -4,8 +4,11 @@
 #include <vtkStdString.h>
 #include <vtkType.h>
 
+#include <string>
+
 namespace vtk
 {
+  typedef std::string String;
   typedef unsigned short IndexElement;
   typedef vtkIdType IdAtomType;
 

@@ -33,6 +33,8 @@
 
 #include <vtkAlgorithm.h>
 
+#include "Elements.h"
+
 class vtkDataSet;
 namespace vtk
 {

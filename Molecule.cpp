@@ -33,6 +33,7 @@ PURPOSE.  See the above copyright notice for more information.
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
 
+#include "Elements.h"
 using namespace vtk;
 
 #include <cassert>
@@ -45,8 +46,8 @@ Molecule::Molecule()
     : ElectronicData(nullptr)
     , AtomGhostArray(nullptr)
     , BondGhostArray(nullptr)
-    , AtomicNumberArrayName(nullptr)
-    , BondOrdersArrayName(nullptr)
+    //, AtomicNumberArrayName(nullptr)
+    // , BondOrdersArrayName(nullptr)
 {
   this->Initialize();
 }
@@ -95,8 +96,8 @@ void Molecule::Initialize()
 Molecule::~Molecule()
 {
   this->SetElectronicData(nullptr);
-  delete[] this->AtomicNumberArrayName;
-  delete[] this->BondOrdersArrayName;
+  // delete[] this->AtomicNumberArrayName;
+  // delete[] this->BondOrdersArrayName;
 }
 
 //------------------------------------------------------------------------------

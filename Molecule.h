@@ -84,6 +84,8 @@
 
 #include <vtkVector.h> // Small templated vector convenience class
 
+#include <string>
+
 class vtkAbstractElectronicData;
 class vtkDataArray;
 class vtkInformation;
@@ -417,21 +419,15 @@ namespace vtk
          */
         vtkIdType GetBondId(vtkIdType a, vtkIdType b) { return this->GetEdgeId(a, b); }
 
-        ///@{
-        /**
-         * Get/Set the atomic number array name.
-         */
-        vtkSetStringMacro(AtomicNumberArrayName);
-        vtkGetStringMacro(AtomicNumberArrayName);
-        ///@}
+        /*virtual*/ 
+        void SetAtomicNumberArrayName(const char *name) { AtomicNumberArrayName.assign(name); }
+        /*virtual*/
+        const char* GetAtomicNumberArrayName() const { return AtomicNumberArrayName.c_str(); }
 
-        ///@{
-        /**
-         * Get/Set the bond orders array name.
-         */
-        vtkSetStringMacro(BondOrdersArrayName);
-        vtkGetStringMacro(BondOrdersArrayName);
-        ///@}
+        /*virtual*/ 
+        void SetBondOrdersArrayName(const char *name) { BondOrdersArrayName.assign(name); }
+        /*virtual*/
+        const char* GetBondOrdersArrayName() const { return BondOrdersArrayName.c_str(); }
 
         /**
          * Return the actual size of the data in kibibytes (1024 bytes). This number
@@ -482,8 +478,8 @@ namespace vtk
         vtkUnsignedCharArray *AtomGhostArray;
         vtkUnsignedCharArray *BondGhostArray;
 
-        char *AtomicNumberArrayName;
-        char *BondOrdersArrayName;
+        String AtomicNumberArrayName;
+        String BondOrdersArrayName;
 
     private:
         Molecule(const Molecule &) = delete;
