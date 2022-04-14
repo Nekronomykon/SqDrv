@@ -95,6 +95,7 @@ const double Elements::RadiiRHA0[] = {
     ,
     0.00 /* [*] */
 };
+// Not yet finished --> take to the paper and run there again:
 // ----------------------------------------------------------------------------
 
 IndexElement Elements::SymbolToNumber(const char *symbol, char **save)
