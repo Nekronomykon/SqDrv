@@ -146,6 +146,14 @@ namespace vtk
 
     static const double MeanMass[NumberOfKnownElements];
 
+    // ----------------------------------------------------------------------------
+    // Martin Rahm, Roald Hoffman, N. W. Ashkroft (2016):
+    // "Atomic and Ionic Radii of Elements 1–96" Chem Eur J 22(41), 14625-14632:
+    // ----------------------------------------------------------------------------
+    // Neutral atoms:
+    static const double RadiiRHA0[NumberOfKnownElements];
+    // ----------------------------------------------------------------------------
+
     static vtkIdType idDefaultNewAtom;
 
   public:

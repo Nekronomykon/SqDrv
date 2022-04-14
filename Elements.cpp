@@ -79,6 +79,24 @@ const double Elements::MeanMass[] = {
     286.0, 289.0, 290.0, 293.0, 294.0, 294.0                        // Og
 };
 
+// ----------------------------------------------------------------------------
+// Martin Rahm, Roald Hoffman, N. W. Ashkroft (2016):
+// "Atomic and Ionic Radii of Elements 1–96" Chem. Eur. J. 22(41), 14625-14632:
+// ----------------------------------------------------------------------------
+// Neutral atoms:
+const double Elements::RadiiRHA0[] = {
+    1.00 /* [0] */
+    /* H  */,
+    1.54, 1.34 /* He*/
+    /* Li */,
+    2.20, 2.19, 2.05, 1.90, 1.79, 1.71, 1.63, 1.56 /* Ne */
+    /* Na */,
+    2.25, 2.40, 2.39, 2.32, 2.23, 2.14, 2.06, 1.97 /* Ar */
+    ,
+    0.00 /* [*] */
+};
+// ----------------------------------------------------------------------------
+
 IndexElement Elements::SymbolToNumber(const char *symbol, char **save)
 {
   if (!symbol || !isalpha(*symbol))

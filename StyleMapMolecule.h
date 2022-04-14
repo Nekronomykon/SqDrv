@@ -69,24 +69,24 @@ namespace vtk
     }
     static inline const char *AtomRadiusModeName(short mode)
     {
-    switch (mode)
-    {
-    case CovalentRadius:
+      switch (mode)
+      {
+      case CovalentRadius:
         return "CovalentRadius";
-    case VDWRadius:
+      case VDWRadius:
         return "VDWRadius";
-    case UnitRadius:
+      case UnitRadius:
         return "UnitRadius";
-    case CustomArrayRadius:
+      case CustomArrayRadius:
         return "CustomArrayRadius";
-    default:
+      default:
         return nullptr;
+      }
     }
-}
 
     const char *GetAtomicRadiusTypeAsString() const
     {
-      const char *res = AtomRadiusModeName( this->GetAtomicRadiusType() );
+      const char *res = AtomRadiusModeName(this->GetAtomicRadiusType());
       return (!res) ? "InvalidType" : res;
     }
     //
@@ -137,12 +137,11 @@ namespace vtk
       default:
         return nullptr;
       }
-}
-
+    }
 
     const char *GetBondColorModeAsString() const
     {
-      const char *res = BondColorModeName( this->GetTypeBondsColor() );
+      const char *res = BondColorModeName(this->GetTypeBondsColor());
       return (!res) ? "InvalidType" : res;
     }
     //
@@ -160,6 +159,6 @@ namespace vtk
   }; // struct StyleMapMolecule
   //
   //////////////////////////////////////////////////////////////////////////
-};// namespace vtk
+}; // namespace vtk
 
 #endif // Style_MapMolecule_h
