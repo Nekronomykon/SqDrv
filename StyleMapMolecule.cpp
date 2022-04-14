@@ -1,11 +1,11 @@
-#include <vtkMoleculeMapper.h>
+#include "StyleMapMolecule.h"
 
 #include <algorithm>
 #include <utility>
 
 #include "MapMolecule.h"
 
-#include "StyleMapMolecule.h"
+#include "Elements.h"
 using namespace vtk;
 
 const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
@@ -32,22 +32,6 @@ bool StyleMapMolecule::operator!=(const StyleMapMolecule &v) const
     return !this->operator==(v); // auto cast?
 }
 
-const char *StyleMapMolecule::AtomRadiusModeName(short mode)
-{
-    switch (mode)
-    {
-    case CovalentRadius:
-        return "CovalentRadius";
-    case VDWRadius:
-        return "VDWRadius";
-    case UnitRadius:
-        return "UnitRadius";
-    case CustomArrayRadius:
-        return "CustomArrayRadius";
-    default:
-        return nullptr;
-    }
-}
 
 void StyleMapMolecule::SetupMapMolecule(MapMolecule *pmap) const
 {

@@ -6,7 +6,7 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-// #include <vtkColor.h>
+#include "Elements.h"
 
 namespace vtk
 {
@@ -67,10 +67,26 @@ namespace vtk
       styleAtomRadius_ = rad_type;
       return res;
     }
-    static const char *AtomRadiusModeName(short mode);
+    static inline const char *AtomRadiusModeName(short mode)
+    {
+    switch (mode)
+    {
+    case CovalentRadius:
+        return "CovalentRadius";
+    case VDWRadius:
+        return "VDWRadius";
+    case UnitRadius:
+        return "UnitRadius";
+    case CustomArrayRadius:
+        return "CustomArrayRadius";
+    default:
+        return nullptr;
+    }
+}
+
     const char *GetAtomicRadiusTypeAsString() const
     {
-      const char *res = AtomRadiusModeName(this->GetAtomicRadiusType());
+      const char *res = AtomRadiusModeName( this->GetAtomicRadiusType() );
       return (!res) ? "InvalidType" : res;
     }
     //
@@ -110,7 +126,7 @@ namespace vtk
       return res;
     }
 
-    static const char *BondColorModeName(short mode)
+    static inline const char *BondColorModeName(short mode)
     {
       switch (mode)
       {
@@ -121,10 +137,12 @@ namespace vtk
       default:
         return nullptr;
       }
-    }
+}
+
+
     const char *GetBondColorModeAsString() const
     {
-      const char *res = BondColorModeName(this->GetTypeBondsColor());
+      const char *res = BondColorModeName( this->GetTypeBondsColor() );
       return (!res) ? "InvalidType" : res;
     }
     //
