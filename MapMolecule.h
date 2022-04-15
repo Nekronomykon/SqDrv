@@ -325,12 +325,13 @@ namespace vtk
         vtkNew<vtkGlyph3DMapper> BondGlyphMapper;
         ///@}
 
-        /**
-         * Periodic table for lookups
+        /**/**
+         * @brief 
+         * 
          */
         vtkNew<vtkPeriodicTable> PeriodicTable;
         Elements elements_; 
-        // TODO: Change class to use vtk::Elements instead of vtkPeriodicTable
+        // TODO: Changing the class to use vtk::Elements instead of vtkPeriodicTable
         // :TODO
 
     private:

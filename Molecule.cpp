@@ -43,11 +43,9 @@ vtkStandardNewMacro(Molecule);
 
 //------------------------------------------------------------------------------
 Molecule::Molecule()
-    : ElectronicData(nullptr)
-    , AtomGhostArray(nullptr)
-    , BondGhostArray(nullptr)
-    //, AtomicNumberArrayName(nullptr)
-    // , BondOrdersArrayName(nullptr)
+    : ElectronicData(nullptr), AtomGhostArray(nullptr), BondGhostArray(nullptr)
+//, AtomicNumberArrayName(nullptr)
+// , BondOrdersArrayName(nullptr)
 {
   this->Initialize();
 }
@@ -697,8 +695,25 @@ vtkIdType Molecule::AddCriticalPoint(CriticalPointType type, double x, double y,
 {
   vtkIdType idCP(-1L);
   if (type.real() == 3) // only full-rank CP are allowed...
-    return idCP;
+  {
+    switch (type.imag())
+    {
+    case FullRankTypeMaximum:
+      break;
 
+    case FullRankTypeSaddleB:
+      break;
+
+    case FullRankTypeSaddleR:
+      break;
+
+    case FullRankTypeMinimum:
+      break;
+
+    default:
+      break;
+    }
+  }
   return idCP;
 }
 

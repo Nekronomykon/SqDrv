@@ -201,7 +201,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         else if (!skip.find("CCP"))
         {
             // -> AtomType1 AtomType2 -> should be greater than 3 atoms
-            if (type == cpTypeMininum)
+            if (type == cpTypeMinimum)
                 idElementAdd = 2; // fictituous He; local minimum
             else
             {
