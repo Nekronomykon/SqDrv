@@ -18,9 +18,7 @@ namespace vtk
 
   struct StyleMapMolecule
   {
-    // private:
-    // atoms
-    // bool bRenderAtoms_; // --> always render if available
+  public:
     short styleAtomRadius_;
     float radAtomsScale_;
     // bonds
@@ -34,6 +32,10 @@ namespace vtk
     bool operator==(const StyleMapMolecule &) const;
     bool operator!=(const StyleMapMolecule &) const;
 
+  private:
+    static const float DefaultElementColors[][3];
+
+  public:
     enum
     {
       CovalentRadius = 0,
@@ -53,13 +55,6 @@ namespace vtk
     static const StyleMapMolecule styleFast;
     static const StyleMapMolecule styleStyx;
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // bool HasToRenderAtoms() const { return bRenderAtoms_; }
-    // void RenderAtomsOn() { bRenderAtoms_ = true; }
-    // void RenderAtomsOff() { bRenderAtoms_ = false; }
-    // bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; return bRenderAtoms_; }
-    //
     short GetAtomicRadiusType() const { return styleAtomRadius_; }
     short ResetAtomicRadiusType(short rad_type)
     {

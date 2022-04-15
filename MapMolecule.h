@@ -325,7 +325,7 @@ namespace vtk
         vtkNew<vtkGlyph3DMapper> BondGlyphMapper;
         ///@}
 
-        /**/**
+        /***
          * @brief 
          * 
          */
