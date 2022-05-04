@@ -464,8 +464,8 @@ namespace vtk
          * table that must be rebuilt periodically. These allow for lazy
          * building of the lookup table
          */
-        bool BondListIsDirty;
-        void SetBondListDirty() { this->BondListIsDirty = true; }
+        void SetBondListDirty(bool bYes = true) { this->isBondListDirty_ = bYes; }
+        bool IsBondListDirty() const { return this->isBondListDirty_; }
         void UpdateBondList();
         vtkIdTypeArray *GetBondList();
         ///@}
@@ -482,6 +482,9 @@ namespace vtk
         String BondOrdersArrayName;
 
     private:
+        bool isBondListDirty_ = false;
+
+
         Molecule(const Molecule &) = delete;
         void operator=(const Molecule &) = delete;
     };

@@ -354,7 +354,7 @@ void Molecule::DeepCopy(vtkDataObject *obj)
 bool Molecule::CheckedShallowCopy(vtkGraph *g)
 {
   bool result = this->Superclass::CheckedShallowCopy(g);
-  this->BondListIsDirty = true;
+  this->SetBondListDirty(true);
   return result;
 }
 
@@ -362,7 +362,7 @@ bool Molecule::CheckedShallowCopy(vtkGraph *g)
 bool Molecule::CheckedDeepCopy(vtkGraph *g)
 {
   bool result = this->Superclass::CheckedDeepCopy(g);
-  this->BondListIsDirty = true;
+  this->SetBondListDirty(true);
   return result;
 }
 
@@ -403,7 +403,7 @@ void Molecule::CopyStructureInternal(Molecule *m, bool deep)
     this->Superclass::ShallowCopy(m);
   }
 
-  this->BondListIsDirty = true;
+  this->SetBondListDirty(true);
 }
 
 //------------------------------------------------------------------------------
@@ -424,14 +424,14 @@ void Molecule::CopyAttributesInternal(Molecule *m, bool deep)
 void Molecule::UpdateBondList()
 {
   this->BuildEdgeList();
-  this->BondListIsDirty = false;
+  this->SetBondListDirty(false);
 }
 
 //------------------------------------------------------------------------------
 vtkIdTypeArray *Molecule::GetBondList()
 {
   // Create the edge list if it doesn't exist, or is marked as dirty.
-  vtkIdTypeArray *edgeList = this->BondListIsDirty ? nullptr : this->GetEdgeList();
+  vtkIdTypeArray *edgeList = this->IsBondListDirty() ? nullptr : this->GetEdgeList();
   if (!edgeList)
   {
     this->UpdateBondList();
