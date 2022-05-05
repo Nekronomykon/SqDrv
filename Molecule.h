@@ -111,7 +111,9 @@ namespace vtk
     public:
         static Molecule *New();
         vtkTypeMacro(Molecule, vtkUndirectedGraph);
-        void PrintSelf(ostream &os, vtkIndent indent) override;
+        void PrintSelf(ostream & /* os */, vtkIndent /*indent*/) override;
+
+        // Interface
         void Initialize() override;
 
         enum
