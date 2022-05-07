@@ -138,16 +138,20 @@ namespace vtk
          * Add new atom with the specified atomic number and position. Return a
          * Atom that refers to the new atom.
          */
-        Atom AppendAtom(unsigned short atomicNumber, double x, double y, double z);
-        Atom AppendAtom(unsigned short atomicNumber, const vtkVector3f &pos)
+        Atom AppendAtom(IdAtomType /* idAtomType */, double x, double y, double z);
+        //
+        Atom AppendAtom(IdAtomType idAtomType, const vtkVector3f &pos)
         {
-            return this->AppendAtom(atomicNumber, pos[0], pos[1], pos[2]);
+            return this->AppendAtom(idAtomType, pos[0], pos[1], pos[2]);
         }
 
-        Atom AppendAtom(unsigned short atomicNumber, double pos[3])
+        Atom AppendAtom(IdAtomType idAtomType, double pos[3])
         {
-            return this->AppendAtom(atomicNumber, pos[0], pos[1], pos[2]);
+            return this->AppendAtom(idAtomType, pos[0], pos[1], pos[2]);
         }
+        Atom AppendAtom(IdAtomType /* idAtomType */,
+                        const vtkVector3f & /* ZRef   = (length, angle, dihedral) */,
+                        const vtkVector3i & /* ZFrame = (idLengthTo, idAngleWithL, idDihedralWithLA) */);
         ///@}
 
         /**
@@ -421,15 +425,15 @@ namespace vtk
          */
         vtkIdType GetBondId(vtkIdType a, vtkIdType b) { return this->GetEdgeId(a, b); }
 
-        /*virtual*/ 
+        /*virtual*/
         void SetAtomicNumberArrayName(const char *name) { AtomicNumberArrayName.assign(name); }
         /*virtual*/
-        const char* GetAtomicNumberArrayName() const { return AtomicNumberArrayName.c_str(); }
+        const char *GetAtomicNumberArrayName() const { return AtomicNumberArrayName.c_str(); }
 
-        /*virtual*/ 
+        /*virtual*/
         void SetBondOrdersArrayName(const char *name) { BondOrdersArrayName.assign(name); }
         /*virtual*/
-        const char* GetBondOrdersArrayName() const { return BondOrdersArrayName.c_str(); }
+        const char *GetBondOrdersArrayName() const { return BondOrdersArrayName.c_str(); }
 
         /**
          * Return the actual size of the data in kibibytes (1024 bytes). This number
@@ -485,7 +489,6 @@ namespace vtk
 
     private:
         bool isBondListDirty_ = false;
-
 
         Molecule(const Molecule &) = delete;
         void operator=(const Molecule &) = delete;
