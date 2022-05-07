@@ -128,7 +128,7 @@ void MakeBondsDistances::ComputeBonds(Molecule *molecule)
   for (vtkIdType i = 0; i < nbAtoms; i++)
   {
     bool isGhostAtom = (ghostAtoms ? (ghostAtoms->GetTuple1(i) != 0) : false);
-    vtkIdType atomicNumber = molecule->GetAtomAtomicNumber(i);
+    vtkIdType atomicNumber = molecule->GetAtomTypeId(i);
 
     if (atomicNumber < 1 || atomicNumber > nbElementsPeriodicTable)
     {
@@ -147,7 +147,7 @@ void MakeBondsDistances::ComputeBonds(Molecule *molecule)
     {
       vtkIdType neighId = neighborsPtr[j];
       bool isGhostNeigh = (ghostAtoms ? (ghostAtoms->GetTuple1(neighId) != 0) : false);
-      vtkIdType atomicNumberNeigh = molecule->GetAtomAtomicNumber(neighId);
+      vtkIdType atomicNumberNeigh = molecule->GetAtomTypeId(neighId);
 
       if (atomicNumberNeigh < 1 || (atomicNumberNeigh > nbElementsPeriodicTable) ||
           (isGhostAtom && isGhostNeigh))

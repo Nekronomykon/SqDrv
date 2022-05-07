@@ -57,8 +57,8 @@ namespace vtk
         /**
          * Get/Set the atomic number of this atom
          */
-        unsigned short GetAtomicNumber() const;
-        void SetAtomicNumber(unsigned short atomicNum, short subtype = 0);
+        IdAtomType GetAtomTypeId() const;
+        void SetAtomTypeId(IdAtomType /*id*/);
         ///@}
 
         ///@{

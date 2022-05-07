@@ -109,7 +109,7 @@ void TextSource::showMolecule(Molecule *pMol, const QString &title)
     {
         const Atom ai = pMol->GetAtom(i);
 
-        long idElem = ai.GetAtomicNumber();
+        long idElem = ai.GetAtomTypeId();
         idTypeNum[i] = ++mapFormula[idElem];
 
         vtkStdString sElem = Elements::GetElementSymbol(idElem);

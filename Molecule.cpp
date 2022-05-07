@@ -173,7 +173,7 @@ Atom Molecule::GetAtom(vtkIdType atomId)
 }
 
 //------------------------------------------------------------------------------
-unsigned short Molecule::GetAtomAtomicNumber(vtkIdType id)
+unsigned short Molecule::GetAtomTypeId(vtkIdType id)
 {
     assert(id >= 0 && id < this->GetNumberOfAtoms());
 
@@ -183,7 +183,7 @@ unsigned short Molecule::GetAtomAtomicNumber(vtkIdType id)
 }
 
 //------------------------------------------------------------------------------
-void Molecule::SetAtomAtomicNumber(vtkIdType id, unsigned short atomicNum, unsigned short kAux)
+void Molecule::SetAtomTypeId(vtkIdType id, unsigned short atomicNum, unsigned short kAux)
 {
     assert(id >= 0 && id < this->GetNumberOfAtoms());
 

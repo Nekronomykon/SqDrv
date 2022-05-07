@@ -190,12 +190,12 @@ namespace vtk
         /**
          * Return the atomic number of the atom with the specified id.
          */
-        unsigned short GetAtomAtomicNumber(vtkIdType atomId);
+        unsigned short GetAtomTypeId(vtkIdType atomId);
 
         /**
          * Set the atomic number of the atom with the specified id.
          */
-        void SetAtomAtomicNumber(vtkIdType atomId, unsigned short atomicNum, unsigned short kAux = 0);
+        void SetAtomTypeId(vtkIdType atomId, unsigned short atomicNum, unsigned short kAux = 0);
 
         ///@{
         /**

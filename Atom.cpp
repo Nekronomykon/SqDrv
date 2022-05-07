@@ -33,20 +33,20 @@ Atom::Atom(Molecule& parent, vtkIdType id)
 void Atom::PrintSelf(ostream& os, vtkIndent indent)
 {
   os << indent << "Molecule Id: " << this->Id_
-     << " Element: " << this->GetAtomicNumber() 
+     << " Element: " << this->GetAtomTypeId() 
      << " Position: " << this->GetPosition() << endl;
 }
 
 //------------------------------------------------------------------------------
-unsigned short Atom::GetAtomicNumber() const
+IdAtomType Atom::GetAtomTypeId() const
 {
-  return molecule_.GetAtomAtomicNumber(this->Id_);
+  return molecule_.GetAtomTypeId(this->Id_);
 }
 
 //------------------------------------------------------------------------------
-void Atom::SetAtomicNumber(unsigned short atomicNum, short subtype)
+void Atom::SetAtomTypeId(IdAtomType idType)
 {
-  molecule_.SetAtomAtomicNumber(this->Id_, atomicNum);
+  molecule_.SetAtomTypeId(this->Id_, idType);
 }
 
 //------------------------------------------------------------------------------

@@ -161,8 +161,9 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         {
             // -> AtomType1 // exactly the only
             if (type == cpTypeSaddleB)
-                idElementAdd = 18; // ??? fictituous Ar
-                                   // pMol->AppendBond(idCP)
+                idElementAdd = 0;
+            // idElementAdd = 18; // ??? fictituous Ar
+            // pMol->AppendBond(idCP)
             else
             {
                 vtkErrorMacro("AcquireQTAIMFile error: CP record #"
@@ -229,7 +230,8 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
          // below is the simplest case of skipping this info:
          // ScrollToEmpty(inp); */
         if (idElementAdd)
-            atom_new.SetAtomicNumber(idElementAdd);
+            atom_new.SetAtomTypeId(idElementAdd);
+            // atom_new.MakeAuxiliaryPoint(idPointType);
         ++nReadCP;
     } while (ScrollToPrefix(inp, "CP#", one_line));
 
