@@ -585,8 +585,8 @@ bool FrameBrowser::navigateTo(const QString &namefull, QString context)
         context = fi.suffix();  // of whatever similar...
     }
     // is the file
-    bool bKnown = frameDoc_->openSourceFilePath(namefull, context); // transfer
-    if (bKnown)
+    bool bSuccess = frameDoc_->openSourceFilePath(namefull, context); // transfer
+    if (bSuccess)
     {
         path_bound_ = namefull;
         // update window title
@@ -596,8 +596,9 @@ bool FrameBrowser::navigateTo(const QString &namefull, QString context)
         //
         this->setWindowModified(false);
         //    frameDoc_->castSource();
+        workspace_->addFilePath(namefull);
     }
-    return bKnown;
+    return bSuccess;
 }
 //
 ///////////////////////////////////////////////////////////////////////

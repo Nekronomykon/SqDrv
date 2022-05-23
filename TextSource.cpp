@@ -114,13 +114,15 @@ void TextSource::showMolecule(Molecule *pMol, const QString &title)
 
         vtkStdString sElem = Elements::GetElementSymbol(idElem);
 
-        out_atom // << showpoint
-            << setw(5) << sElem.c_str()
-            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetX()
-            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetY()
-            << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetZ() << std::endl;
+        if (!sElem.empty())
+            out_atom // << showpoint
+                << setw(7) << sElem.c_str()
+                << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetX()
+                << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetY()
+                << fixed << setw(15) << setprecision(8) << ai.GetPosition().GetZ() << std::endl;
     }
     editAtoms_->setPlainText(tr(out_atom.str().c_str()));
+    editAtoms_->setReadOnly(true);
 
     // Molecular properties computed 'as a whole chunk' (no bonds yet)
     // FORMULA
@@ -137,6 +139,8 @@ void TextSource::showMolecule(Molecule *pMol, const QString &title)
             continue;
 
         long idElem = map_key.key();
+        if (!idElem)
+            continue;
 
         out_frm << Elements::GetElementSymbol(idElem).c_str();
 
