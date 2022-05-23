@@ -51,10 +51,10 @@ namespace vtk
         // ----------------------------------------------------------------------------------------------------
         // To be overriden to read information stored in the (file) stream
         // ----------------------------------------------------------------------------------------------------
-        int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) /*override*/;
         // int ReadSizesFrom(InputFile & /*inp*/) override;
         // ----------------------------------------------------------------------------------------------------
-        int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+        // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) /*override*/;
         // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
         // int OnReadDataComplete(Molecule* /* ptrMol */) override;
         // ----------------------------------------------------------------------------------------------------

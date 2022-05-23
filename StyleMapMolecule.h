@@ -32,6 +32,8 @@ namespace vtk
     bool operator==(const StyleMapMolecule &) const;
     bool operator!=(const StyleMapMolecule &) const;
 
+       void PrintSelf(ostream &os, vtkIndent indent);
+
   private:
     static const float DefaultElementColors[][3];
 
@@ -78,6 +80,8 @@ namespace vtk
         return nullptr;
       }
     }
+
+    void Reset(const StyleMapMolecule &other) { *this = other; }
 
     const char *GetAtomicRadiusTypeAsString() const
     {

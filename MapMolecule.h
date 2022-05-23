@@ -12,7 +12,12 @@
 
 #include "Elements.h"
 
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+
 #include <vtkMapper.h>
+
+#include <memory>
 
 class vtkActor;
 class vtkGlyph3DMapper;
@@ -268,7 +273,7 @@ namespace vtk
          */
         vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
 
-        StyleMapMolecule GetStyle() const { return style_; }
+        StyleMapMolecule* GetStyle() const { return style_.get(); }
         void SetStyle(StyleMapMolecule /*newstyle*/);
 
     protected:
@@ -295,7 +300,7 @@ namespace vtk
         unsigned char BondColor[3];
         ///@}
 
-        StyleMapMolecule style_;
+        std::unique_ptr<StyleMapMolecule> style_;
         // may it be the vtkNew<vtk::StyleMapMolecule>?
 
         /**

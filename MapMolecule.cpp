@@ -78,8 +78,9 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
                              ,
                              BondRadius(0.025) //
                              ,
-                             style_(StyleMapMolecule::styleFast)
+                             style_(new StyleMapMolecule)
 {
+    style_->Reset(StyleMapMolecule::styleFast);
     // Initialize ivars:
     this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 100;
     this->BondColor[0] = 200;
@@ -277,7 +278,7 @@ void MapMolecule::GlyphRender(vtkRenderer *ren, vtkActor *act)
     // Pass rendering call on
     this->AtomGlyphMapper->Render(ren, act);
 
-    if ( style_.HasToRenderBonds() )
+    if (style_->HasToRenderBonds())
     {
         this->BondGlyphMapper->Render(ren, act);
     }
@@ -300,7 +301,7 @@ void MapMolecule::UpdateGlyphPolyData()
         ((molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() ||
           this->GetMTime() > this->BondGlyphPolyData->GetMTime() ||
           this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()) &&
-          style_.HasToRenderBonds() ))
+         style_->HasToRenderBonds()))
     {
         this->UpdateBondGlyphPolyData();
     }
@@ -309,11 +310,8 @@ void MapMolecule::UpdateGlyphPolyData()
 }
 void MapMolecule::SetStyle(StyleMapMolecule newstyle)
 {
-    if (style_ != newstyle)
-    {
-        style_ = newstyle;
-        this->GlyphDataInitialized = false;
-    }
+    style_->Reset(newstyle);
+    this->GlyphDataInitialized = false;
 }
 //------------------------------------------------------------------------------
 // Generate scale and position information for each atom sphere
@@ -510,7 +508,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
     // Allocate memory -- find out how many cylinders are needed
     vtkIdType numCylinders = numBonds;
     // Up to three cylinders per bond if multicylinders are enabled:
-    if (style_.AreBondsMulticylinder())
+    if (style_->AreBondsMulticylinder())
     {
         numCylinders *= 3;
     }
@@ -625,7 +623,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
         // end vtkVector TODO
 
         // Set up delta step vector and bond radius from bond order:
-        if ( style_.AreBondsMulticylinder() )
+        if (style_->AreBondsMulticylinder())
         {
             switch (bondOrder)
             {
@@ -671,7 +669,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
             break;
         }
 
-        if (style_.AreBondsMulticylinder())
+        if (style_->AreBondsMulticylinder())
         {
             cylinderCenter = bondCenter + initialDisp;
         }
@@ -745,7 +743,7 @@ void MapMolecule::UpdateBondGlyphPolyData()
             }
 
             // Prepare for next multicylinder
-            if (style_.AreBondsMulticylinder() && bondOrder != 1)
+            if (style_->AreBondsMulticylinder() && bondOrder != 1)
             {
                 // TODO vtkVector in-place addition
                 // cylinderCenter += delta;
@@ -819,11 +817,15 @@ void MapMolecule::PrintSelf(ostream &os, vtkIndent indent)
 {
     this->Superclass::PrintSelf(os, indent);
 
+    os << indent << "Molecule Map Style:\n";
+    style_->PrintSelf(os, indent.GetNextIndent());
+
     os << indent << "AtomGlyphMapper:\n";
     this->AtomGlyphMapper->PrintSelf(os, indent.GetNextIndent());
 
     os << indent << "BondGlyphMapper:\n";
     this->BondGlyphMapper->PrintSelf(os, indent.GetNextIndent());
+
 }
 
 //------------------------------------------------------------------------------

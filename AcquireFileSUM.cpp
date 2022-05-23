@@ -35,8 +35,9 @@ vtkStandardNewMacro(AcquireFileSUM);
 //------------------------------------------------------------------------------
 AcquireFileSUM::AcquireFileSUM() {}
 
+/*
 //------------------------------------------------------------------------------
-int AcquireFileSUM::RequestInformation(vtkInformation *vtkNotUsed(request),
+int AcquireFileSUM::_RequestInformation(vtkInformation *vtkNotUsed(request),
                                        vtkInformationVector **vtkNotUsed(inputVector),
                                        vtkInformationVector *outputVector)
 {
@@ -70,9 +71,10 @@ int AcquireFileSUM::RequestInformation(vtkInformation *vtkNotUsed(request),
 
     return 1;
 }
+*/
 
 //------------------------------------------------------------------------------
-int AcquireFileSUM::RequestData(vtkInformation *vtkNotUsed(request),
+/* int AcquireFileSUM::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
@@ -137,6 +139,7 @@ int AcquireFileSUM::RequestData(vtkInformation *vtkNotUsed(request),
 
     return 1;
 }
+*/
 
 //------------------------------------------------------------------------------
 void AcquireFileSUM::PrintSelf(ostream &os, vtkIndent indent)
