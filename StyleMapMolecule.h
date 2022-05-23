@@ -16,6 +16,12 @@ namespace vtk
   // static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
   // static bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
 
+  ///////////////////////////////////////////////////////////////////////////////
+  // TODO: Increase the load of this class, e. g.,
+  // as the sphere / cylinder generator for the Mapper.
+  // So the virtual interface may be thought about
+  ///////////////////////////////////////////////////////////////////////////////
+
   struct StyleMapMolecule
   {
   public:
@@ -32,7 +38,7 @@ namespace vtk
     bool operator==(const StyleMapMolecule &) const;
     bool operator!=(const StyleMapMolecule &) const;
 
-       void PrintSelf(ostream &os, vtkIndent indent);
+    void PrintSelf(ostream &os, vtkIndent indent);
 
   private:
     static const float DefaultElementColors[][3];
