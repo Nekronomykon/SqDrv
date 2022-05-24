@@ -272,6 +272,7 @@ namespace vtk
          * Accessor to internal structure. This is exposed to make it available for ray tracers.
          */
         vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
+        // Elements* GetElements()
 
         StyleMapMolecule* GetStyle() const { return style_.get(); }
         void SetStyle(StyleMapMolecule /*newstyle*/);

@@ -115,11 +115,25 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
 
     // Configure default LookupTable
     vtkNew<vtkLookupTable> lut;
-    this->PeriodicTable->GetDefaultLUT(lut);
+    // this->PeriodicTable->GetDefaultLUT(lut);
+    //
+    const unsigned short numColors = Elements::NumberOfElements() + 1;
+    // vtkFloatArray *colors = vtkPeriodicTable::BlueObeliskData->GetDefaultColors();
+    lut->SetNumberOfColors(numColors);
+    lut->SetIndexedLookup(true);
+    float rgb[3];
+    for (vtkIdType i = 0; static_cast<unsigned int>(i) < numColors; ++i)
+    {
+        // colors->GetTypedTuple(i, rgb);
+        StyleMapMolecule::DefaultColor(i,rgb); 
+        lut->SetTableValue(i, rgb[0], rgb[1], rgb[2]);
+        lut->SetAnnotation(i, Elements::GetElementSymbol(static_cast<unsigned short>(i)));
+    }
+    //
     this->SetLookupTable(lut);
 
     // Setup glyph mappers
-    this->AtomGlyphMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
+    this->AtomGlyphMapper->SetScalarRange(0, Elements::NumberOfElements());
     this->AtomGlyphMapper->SetColorModeToMapScalars();
     this->AtomGlyphMapper->SetScalarModeToUsePointFieldData();
     this->AtomGlyphMapper->SetScaleModeToScaleByMagnitude();
@@ -308,11 +322,14 @@ void MapMolecule::UpdateGlyphPolyData()
 
     this->GlyphDataInitialized = true;
 }
+
+//------------------------------------------------------------------------------
 void MapMolecule::SetStyle(StyleMapMolecule newstyle)
 {
     style_->Reset(newstyle);
     this->GlyphDataInitialized = false;
 }
+
 //------------------------------------------------------------------------------
 // Generate scale and position information for each atom sphere
 void MapMolecule::UpdateAtomGlyphPolyData()
@@ -825,7 +842,6 @@ void MapMolecule::PrintSelf(ostream &os, vtkIndent indent)
 
     os << indent << "BondGlyphMapper:\n";
     this->BondGlyphMapper->PrintSelf(os, indent.GetNextIndent());
-
 }
 
 //------------------------------------------------------------------------------

@@ -146,6 +146,15 @@ namespace vtk
 
     static const double MeanMass[NumberOfKnownElements];
 
+    static const float VDWRadii[NumberOfKnownElements][1];
+
+    static const float CovalentRadii[NumberOfKnownElements][1];
+
+    // QTAIM identifiers:
+    enum  {ID_ACP = 200, ID_BCP, ID_RCP, ID_CCP};
+    // static const char* namesCP[] = {"ACP", "BCP", "RCP", "CCP", nullptr};
+
+
     // ----------------------------------------------------------------------------
     // Martin Rahm, Roald Hoffman, N. W. Ashkroft (2016):
     // "Atomic and Ionic Radii of Elements 1–96" Chem Eur J 22(41), 14625-14632:

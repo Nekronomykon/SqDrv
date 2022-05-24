@@ -41,6 +41,7 @@ namespace vtk
     void PrintSelf(ostream &os, vtkIndent indent);
 
   private:
+    static const float ColorsModal[][3];
     static const float DefaultElementColors[][3];
 
   public:
@@ -88,6 +89,13 @@ namespace vtk
     }
 
     void Reset(const StyleMapMolecule &other) { *this = other; }
+
+    static void DefaultColor(IndexElement ie, float *rgb) 
+    {
+      rgb[0] = DefaultElementColors[ie][0];
+      rgb[1] = DefaultElementColors[ie][1];
+      rgb[2] = DefaultElementColors[ie][2];
+    }
 
     const char *GetAtomicRadiusTypeAsString() const
     {
