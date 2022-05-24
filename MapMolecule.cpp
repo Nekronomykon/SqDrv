@@ -117,7 +117,7 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
     vtkNew<vtkLookupTable> lut;
     // this->PeriodicTable->GetDefaultLUT(lut);
     //
-    const unsigned short numColors = Elements::NumberOfElements() + 1;
+    const unsigned short numColors = Elements::NumberOfKnownElements;
     // vtkFloatArray *colors = vtkPeriodicTable::BlueObeliskData->GetDefaultColors();
     lut->SetNumberOfColors(numColors);
     lut->SetIndexedLookup(true);
@@ -125,7 +125,7 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
     for (vtkIdType i = 0; static_cast<unsigned int>(i) < numColors; ++i)
     {
         // colors->GetTypedTuple(i, rgb);
-        StyleMapMolecule::DefaultColor(i,rgb); 
+        StyleMapMolecule::DefaultColor(i, rgb);
         lut->SetTableValue(i, rgb[0], rgb[1], rgb[2]);
         lut->SetAnnotation(i, Elements::GetElementSymbol(static_cast<unsigned short>(i)));
     }
@@ -429,14 +429,14 @@ void MapMolecule::UpdateAtomGlyphPolyData()
         for (vtkIdType i = 0; i < numAtoms; ++i)
         {
             scaleFactors->InsertNextValue(this->AtomicRadiusScaleFactor *
-                                          this->PeriodicTable->GetVDWRadius(atomicNbWithoutGhostArray->GetValue(i)));
+                                          Elements::VDWRadius(atomicNbWithoutGhostArray->GetValue(i)));
         }
         break;
     case CovalentRadius:
         for (vtkIdType i = 0; i < numAtoms; ++i)
         {
             scaleFactors->InsertNextValue(this->AtomicRadiusScaleFactor *
-                                          this->PeriodicTable->GetCovalentRadius(atomicNbWithoutGhostArray->GetValue(i)));
+                                          Elements::CovalentRadius(atomicNbWithoutGhostArray->GetValue(i)));
         }
         break;
     case UnitRadius:

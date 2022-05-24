@@ -42,7 +42,7 @@ namespace vtk
 
   private:
     static const float ColorsModal[][3];
-    static const float DefaultElementColors[][3];
+    static const float DefaultElementColors[Elements::NumberOfKnownElements][3];
 
   public:
     enum

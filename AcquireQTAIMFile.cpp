@@ -189,7 +189,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
         {
             // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
             if (type == cpTypeSaddleR)
-                idElementAdd = 10; // fictituous Ne
+                idElementAdd = Elements::idNone; // fictituous point
             else
             {
                 vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP

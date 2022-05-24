@@ -14,7 +14,7 @@ namespace vtk
 
   class Elements
   {
-  private:
+  public:
     enum
     {
       id_Q = 0,
@@ -136,10 +136,12 @@ namespace vtk
       idLv = 116,
       idTs = 117,
       idOg = 118,
-      NumberOfKnownElements,
+      idNone = 119,
+      NumberOfKnownElements = 120,
       idUnknownYet = 255
     };
 
+  private:
     static const char *Symbol[NumberOfKnownElements];
 
     static const char *Name[NumberOfKnownElements];
@@ -151,9 +153,14 @@ namespace vtk
     static const float CovalentRadii[NumberOfKnownElements][1];
 
     // QTAIM identifiers:
-    enum  {ID_ACP = 200, ID_BCP, ID_RCP, ID_CCP};
+    enum
+    {
+      ID_ACP = 200,
+      ID_BCP,
+      ID_RCP,
+      ID_CCP
+    };
     // static const char* namesCP[] = {"ACP", "BCP", "RCP", "CCP", nullptr};
-
 
     // ----------------------------------------------------------------------------
     // Martin Rahm, Roald Hoffman, N. W. Ashkroft (2016):
@@ -189,6 +196,9 @@ namespace vtk
       return idRes;
     }
     static inline IndexElement ElementFromType(IdAtomType idType) { return (idAtomNumberMask & idType); }
+
+    static float VDWRadius(IndexElement i) { return VDWRadii[i][0]; }
+    static float CovalentRadius(IndexElement i) { return CovalentRadii[i][0]; }
 
     // default added atom:
     static vtkIdType GetDefaultElement();
