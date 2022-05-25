@@ -37,9 +37,9 @@ namespace vtk
     void PrintSelf(ostream &os, vtkIndent indent);
 
     /**
-     * Return the Id_ used to identify this bond in the parent molecule.
+     * Return the IdBond_ used to identify this bond in the parent molecule.
      */
-    vtkIdType GetId() const { return this->Id_; }
+    vtkIdType GetId() const { return this->IdBond_; }
 
     /**
      * Return the parent molecule of this bond.
@@ -83,12 +83,13 @@ namespace vtk
   protected:
     friend class Molecule;
 
-    explicit Bond(Molecule &parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId);
+    explicit Bond(Molecule &parent, vtkIdType /*idBond*/,
+     vtkIdType /* idAtomBegin */, vtkIdType /* idAtomEnd */);
 
     Molecule &molecule_;
-    vtkIdType Id_ = -1;
-    vtkIdType BeginAtomId = -1;
-    vtkIdType EndAtomId = -1;
+    vtkIdType IdBond_ = -1;
+    vtkIdType IdAtomBegin_ = -1;
+    vtkIdType IdAtomEnd_ = -1;
     vtkIdType IdSpot_ = -1;
   };
 

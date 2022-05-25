@@ -42,7 +42,7 @@ namespace vtk
          */
         inline vtkIdType GetId() const
         {
-            return this->Id_;
+            return this->IdAtom_;
         }
 
         /**
@@ -77,10 +77,10 @@ namespace vtk
     protected:
         friend class Molecule;
 
-        explicit Atom(Molecule &parent, vtkIdType id);
+        explicit Atom(Molecule &parent, vtkIdType /* idAtom */);
 
         Molecule &molecule_;
-        vtkIdType Id_ = -1;
+        vtkIdType IdAtom_ = -1;
     };
 
 }; // namespace vtk

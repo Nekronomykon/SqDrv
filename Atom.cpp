@@ -22,17 +22,17 @@ PURPOSE.  See the above copyright notice for more information.
 #include <cassert>
 
 //------------------------------------------------------------------------------
-Atom::Atom(Molecule& parent, vtkIdType id)
+Atom::Atom(Molecule& parent, vtkIdType idAtom)
   : molecule_(parent)
-  , Id_(id)
+  , IdAtom_(idAtom)
 {
-  assert(id < parent.GetNumberOfAtoms());
+  assert(idAtom < parent.GetNumberOfAtoms());
 }
 
 //------------------------------------------------------------------------------
 void Atom::PrintSelf(ostream& os, vtkIndent indent)
 {
-  os << indent << "Molecule Id: " << this->Id_
+  os << indent << "Molecule Id: " << this->IdAtom_
      << " Element: " << this->GetAtomTypeId() 
      << " Position: " << this->GetPosition() << endl;
 }
@@ -40,49 +40,49 @@ void Atom::PrintSelf(ostream& os, vtkIndent indent)
 //------------------------------------------------------------------------------
 IdAtomType Atom::GetAtomTypeId() const
 {
-  return molecule_.GetAtomTypeId(this->Id_);
+  return molecule_.GetAtomTypeId(this->IdAtom_);
 }
 
 //------------------------------------------------------------------------------
 void Atom::SetAtomTypeId(IdAtomType idType)
 {
-  molecule_.SetAtomTypeId(this->Id_, idType);
+  molecule_.SetAtomTypeId(this->IdAtom_, idType);
 }
 
 //------------------------------------------------------------------------------
 void Atom::GetPosition(float pos[3]) const
 {
-  molecule_.GetAtomPosition(this->Id_, pos);
+  molecule_.GetAtomPosition(this->IdAtom_, pos);
 }
 
 //------------------------------------------------------------------------------
 void Atom::GetPosition(double pos[3]) const
 {
-  molecule_.GetAtomPosition(this->Id_, pos);
+  molecule_.GetAtomPosition(this->IdAtom_, pos);
 }
 
 //------------------------------------------------------------------------------
 void Atom::SetPosition(const float pos[3])
 {
-  molecule_.SetAtomPosition(this->Id_, vtkVector3f(pos));
+  molecule_.SetAtomPosition(this->IdAtom_, vtkVector3f(pos));
 }
 
 //------------------------------------------------------------------------------
 void Atom::SetPosition(float x, float y, float z)
 {
-  molecule_.SetAtomPosition(this->Id_, x, y, z);
+  molecule_.SetAtomPosition(this->IdAtom_, x, y, z);
 }
 
 //------------------------------------------------------------------------------
 vtkVector3f Atom::GetPosition() const
 {
-  return molecule_.GetAtomPosition(this->Id_);
+  return molecule_.GetAtomPosition(this->IdAtom_);
 }
 
 //------------------------------------------------------------------------------
 void Atom::SetPosition(const vtkVector3f& pos)
 {
-  molecule_.SetAtomPosition(this->Id_, pos);
+  molecule_.SetAtomPosition(this->IdAtom_, pos);
 }
 
 //------------------------------------------------------------------------------

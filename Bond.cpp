@@ -24,23 +24,25 @@ PURPOSE.  See the above copyright notice for more information.
 #include <cassert>
 
 //------------------------------------------------------------------------------
-Bond::Bond(Molecule &parent, vtkIdType id, vtkIdType beginAtomId, vtkIdType endAtomId)
-    : molecule_(parent), Id_(id), BeginAtomId(beginAtomId), EndAtomId(endAtomId), IdSpot_(id + parent.GetNumberOfAtoms())
+Bond::Bond(Molecule &parent, vtkIdType idBond, vtkIdType idBegin, vtkIdType idEnd)
+    : molecule_(parent), IdBond_(idBond), IdAtomBegin_(idBegin), IdAtomEnd_(idEnd), IdSpot_(-1)
 {
-    assert(id < parent.GetNumberOfBonds());
-    assert(beginAtomId < parent.GetNumberOfAtoms());
-    assert(endAtomId < parent.GetNumberOfAtoms());
-    assert(beginAtomId != endAtomId);
+    assert(idBond < parent.GetNumberOfBonds());
+    assert(idBegin < parent.GetNumberOfAtoms());
+    assert(idEnd < parent.GetNumberOfAtoms());
+    assert(idBegin != idEnd);
 }
 
 //------------------------------------------------------------------------------
 void Bond::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "Molecule Id: " << this->Id_
+    os << indent << "Molecule Id: " << this->IdBond_
        << " Order: " << this->GetOrder() 
        << " Length: " << this->GetLength()
-       << " BeginAtomId: " << this->BeginAtomId 
-       << " EndAtomId: " << this->EndAtomId << endl;
+       << " IdAtom: Begin = " << this->IdAtomBegin_ 
+       << " End = " << this->IdAtomEnd_ 
+       << " Id Total: " << this->IdSpot_
+       << endl;
 }
 
 //------------------------------------------------------------------------------
@@ -49,31 +51,31 @@ double Bond::GetLength() const
     // Reimplement here to avoid the potential cost of building the EdgeList
     // (We already know the atomIds, no need to look them up)
     double pos1[3], pos2[3];
-    molecule_.GetAtomPosition(this->BeginAtomId, pos1);
-    molecule_.GetAtomPosition(this->EndAtomId, pos2);
+    molecule_.GetAtomPosition(this->IdAtomBegin_, pos1);
+    molecule_.GetAtomPosition(this->IdAtomEnd_, pos2);
     return std::sqrt(vtkMath::Distance2BetweenPoints(pos1, pos2));
 }
 
 //------------------------------------------------------------------------------
-vtkIdType Bond::GetBeginAtomId() const { return this->BeginAtomId; }
+vtkIdType Bond::GetBeginAtomId() const { return this->IdAtomBegin_; }
 
 //------------------------------------------------------------------------------
-vtkIdType Bond::GetEndAtomId() const { return this->EndAtomId; }
+vtkIdType Bond::GetEndAtomId() const { return this->IdAtomEnd_; }
 
 //------------------------------------------------------------------------------
 vtkIdType Bond::GetSpotId() const { return this->IdSpot_; }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetBeginAtom() { return molecule_.GetAtom(this->BeginAtomId); }
+Atom Bond::GetBeginAtom() { return molecule_.GetAtom(this->IdAtomBegin_); }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetEndAtom() { return molecule_.GetAtom(this->EndAtomId); }
+Atom Bond::GetEndAtom() { return molecule_.GetAtom(this->IdAtomEnd_); }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetBeginAtom() const { return molecule_.GetAtom(this->BeginAtomId); }
+Atom Bond::GetBeginAtom() const { return molecule_.GetAtom(this->IdAtomBegin_); }
 
 //------------------------------------------------------------------------------
-Atom Bond::GetEndAtom() const { return molecule_.GetAtom(this->EndAtomId); }
+Atom Bond::GetEndAtom() const { return molecule_.GetAtom(this->IdAtomEnd_); }
 
 //------------------------------------------------------------------------------
-BondOrder Bond::GetOrder() { return molecule_.GetBondOrder(this->Id_); }
+BondOrder Bond::GetOrder() { return molecule_.GetBondOrder(this->IdBond_); }
