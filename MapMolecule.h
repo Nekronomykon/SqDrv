@@ -98,25 +98,6 @@ namespace vtk
          */
         void UseFastSettings();
 
-        ///@{
-        /**
-         * Get/Set whether or not to render bonds. Default: On.
-         */
-        // vtkGetMacro(RenderBonds, bool);
-        // vtkSetMacro(RenderBonds, bool);
-        // vtkBooleanMacro(RenderBonds, bool);
-        ///@}
-
-        ///@{
-        /**
-         * Get/Set whether or not to render the unit cell lattice, if present.
-         * Default: On.
-         */
-        // vtkGetMacro(RenderLattice, bool);
-        // vtkSetMacro(RenderLattice, bool);
-        // vtkBooleanMacro(RenderLattice, bool);
-        ///@}
-
         enum
         {
             CovalentRadius = 0,
@@ -268,12 +249,7 @@ namespace vtk
          */
         virtual void SetMapScalars(bool map);
 
-        /**
-         * Accessor to internal structure. This is exposed to make it available for ray tracers.
-         */
-        vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
-        // Elements* GetElements()
-
+        // 
         StyleMapMolecule* GetStyle() const { return style_.get(); }
         void SetStyle(StyleMapMolecule /*newstyle*/);
 
@@ -302,7 +278,7 @@ namespace vtk
         ///@}
 
         std::unique_ptr<StyleMapMolecule> style_;
-        // may it be the vtkNew<vtk::StyleMapMolecule>?
+        // may it be the vtkNew<vtk::StyleMapMolecule>? Suppose no :(
 
         /**
          * Internal render methods
@@ -335,10 +311,7 @@ namespace vtk
          * @brief 
          * 
          */
-        vtkNew<vtkPeriodicTable> PeriodicTable;
         Elements elements_; 
-        // TODO: Changing the class to use vtk::Elements instead of vtkPeriodicTable
-        // :TODO
 
     private:
         MapMolecule(const MapMolecule &) = delete;

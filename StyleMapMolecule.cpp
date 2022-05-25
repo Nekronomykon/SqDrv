@@ -1,22 +1,22 @@
 #include "StyleMapMolecule.h"
+
 #include <algorithm>
 #include <utility>
+
+#include <vtkMapper.h>
 
 #include "MapMolecule.h"
 #include "Elements.h"
 using namespace vtk;
 
-const float StyleMapMolecule::ColorsModal[][3] = {
-    {0.0f, 0.0f, 0.0f}, // [0] black
-    {1.0f, 0.0f, 0.0f}, // [1] red
-    {0.0f, 1.0f, 0.0f}, // [2] green
-    {0.0f, 0.0f, 1.0f}, // [3] blue
-    {1.0f, 1.0f, 0.0f}, // [4] ~blue,  yellow
-    {1.0f, 0.0f, 1.0f}, // [5] ~green, magenta
-    {0.0f, 1.0f, 1.0f}, // [3] ~red,   cyan
-    {1.0f, 1.0f, 1.0f}  // [*] white
-};
+// instances --> different classes?
+const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
 
+const StyleMapMolecule StyleMapMolecule::styleStyx = {UnitRadius, 0.250f, true, true, DiscreteByAtom, 0.250f, {75, 75, 75}};
+const StyleMapMolecule StyleMapMolecule::styleCPK = {VDWRadius, 1.000f, false, false, SingleColor, 0.125f, {75, 75, 75}};
+const StyleMapMolecule StyleMapMolecule::styleBnS = {VDWRadius, 0.250f, true, true, DiscreteByAtom, 0.125f, {75, 75, 75}};
+
+// Variables
 const float StyleMapMolecule::DefaultElementColors[][3] = {
     {5.000000e-01f, 2.500000e-01f, 5.000000e-01f}, // [ 0 ]  Xx
     {1.000000e+00f, 1.000000e+00f, 1.000000e+00f}, // [ 1 ]  H
@@ -71,7 +71,7 @@ const float StyleMapMolecule::DefaultElementColors[][3] = {
     {4.000000e-01f, 5.000000e-01f, 5.000000e-01f}, // [ 50]  Sn
     {6.200000e-01f, 3.900000e-01f, 7.100000e-01f}, // [ 51]  Sb
     {8.300000e-01f, 4.800000e-01f, 0.000000e+00f}, // [ 52]  Te
-    {5.800000e-01f, 0.000000e+00f, 5.800000e-01f}, // [ 53]  I 
+    {5.800000e-01f, 0.000000e+00f, 5.800000e-01f}, // [ 53]  I
     {2.600000e-01f, 6.200000e-01f, 6.900000e-01f}, // [ 54]  Xe
     {3.400000e-01f, 9.000000e-02f, 5.600000e-01f}, // [ 55]  Cs
     {0.000000e+00f, 7.900000e-01f, 0.000000e+00f}, // [ 56]  Ba
@@ -137,16 +137,21 @@ const float StyleMapMolecule::DefaultElementColors[][3] = {
     {9.800000e-01f, 0.000000e+00f, 8.000000e-02f}, // [116]  Lv
     {9.900000e-01f, 0.000000e+00f, 7.000000e-02f}, // [117]  Ts
     {1.000000e+00f, 0.000000e+00f, 6.000000e-02f}, // [118]  Og
-    {0.000000e+00f, 0.000000e+00f, 0.000000e+00f}  // [119] -> special point
+    {1.000000e-01f, 1.000000e-00f, 1.000000e-00f}  // [119] -> special point
     //  Uue, Ubn, Ubu, Ubb, Ubt, Ubq, Ubp, Ubh, Ubs, Ubo, Ube, ...
     //  119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, ...
 };
-
-const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
-
-const StyleMapMolecule StyleMapMolecule::styleStyx = {UnitRadius, 0.250f, true, true, DiscreteByAtom, 0.250f, {75, 75, 75}};
-const StyleMapMolecule StyleMapMolecule::styleCPK = {VDWRadius, 1.000f, false, false, SingleColor, 0.125f, {75, 75, 75}};
-const StyleMapMolecule StyleMapMolecule::styleBnS = {VDWRadius, 0.250f, true, true, DiscreteByAtom, 0.125f, {75, 75, 75}};
+// special colors:
+const float StyleMapMolecule::ColorsModal[][3] = {
+    {0.0f, 0.0f, 0.0f}, // [0] black
+    {1.0f, 0.0f, 0.0f}, // [1] red
+    {0.0f, 1.0f, 0.0f}, // [2] green
+    {0.0f, 0.0f, 1.0f}, // [3] blue
+    {1.0f, 1.0f, 0.0f}, // [4] ~blue  == yellow
+    {1.0f, 0.0f, 1.0f}, // [5] ~green == magenta
+    {0.0f, 1.0f, 1.0f}, // [6] ~red   == cyan
+    {1.0f, 1.0f, 1.0f}  // [7] ~black == white
+};
 
 bool StyleMapMolecule::operator==(const StyleMapMolecule &v) const
 {
@@ -181,4 +186,9 @@ void StyleMapMolecule::SetupMapMolecule(MapMolecule *pmap) const
 void StyleMapMolecule::PrintSelf(ostream &os, vtkIndent indent)
 {
     // type of it:
+}
+
+void StyleMapMolecule::SetupMapElements(vtkMapper* pMap)
+{
+    pMap->SetScalarRange(0, Elements::NumberOfElements());
 }

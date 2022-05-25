@@ -8,6 +8,8 @@
 
 #include "Elements.h"
 
+class vtkMapper;
+
 namespace vtk
 {
 
@@ -90,11 +92,14 @@ namespace vtk
 
     void Reset(const StyleMapMolecule &other) { *this = other; }
 
-    static void DefaultColor(IndexElement ie, float *rgb) 
+    static bool ExportDefaultElementColor(IndexElement ie, float *rgb)
     {
+      if (ie >= Elements::NumberOfKnownElements)
+        return false;
       rgb[0] = DefaultElementColors[ie][0];
       rgb[1] = DefaultElementColors[ie][1];
       rgb[2] = DefaultElementColors[ie][2];
+      return true;
     }
 
     const char *GetAtomicRadiusTypeAsString() const
@@ -169,6 +174,8 @@ namespace vtk
     //////////////////////////////////////////////////////////////////////////
 
     void SetupMapMolecule(MapMolecule * /*pMap*/) const;
+
+    static void SetupMapElements(vtkMapper * /*pMap*/);
   }; // struct StyleMapMolecule
   //
   //////////////////////////////////////////////////////////////////////////

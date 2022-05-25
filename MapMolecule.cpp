@@ -69,24 +69,21 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
                              AtomicRadiusArrayName(nullptr) //
                              ,
                              AtomColorMode(DiscreteByAtom) //
-                             // ,
-                             // RenderBonds(true) //
                              ,
                              BondColorMode(DiscreteByAtom) //
-                             // ,
-                             // UseMultiCylindersForBonds(true) //
                              ,
                              BondRadius(0.025) //
                              ,
                              style_(new StyleMapMolecule)
 {
     style_->Reset(StyleMapMolecule::styleFast);
+
     // Initialize ivars:
     this->AtomColor[0] = this->AtomColor[1] = this->AtomColor[2] = 100;
     this->BondColor[0] = 200;
     this->BondColor[1] = 200;
     this->BondColor[2] = 0;
-    // this->LatticeColor[0] = this->LatticeColor[1] = this->LatticeColor[2] = 255;
+
     this->SetAtomicRadiusArrayName("radii");
 
     // Setup glyph sources
@@ -113,27 +110,28 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
     cylXformFilter->Update();
     this->BondGlyphMapper->SetSourceConnection(cylXformFilter->GetOutputPort());
 
-    // Configure default LookupTable
-    vtkNew<vtkLookupTable> lut;
-    // this->PeriodicTable->GetDefaultLUT(lut);
+    // Configure default color LookupTable
+    vtkNew<vtkLookupTable> init_colors;
+    // this->PeriodicTable->GetDefaultLUT(init_colors);
     //
     const unsigned short numColors = Elements::NumberOfKnownElements;
     // vtkFloatArray *colors = vtkPeriodicTable::BlueObeliskData->GetDefaultColors();
-    lut->SetNumberOfColors(numColors);
-    lut->SetIndexedLookup(true);
+    init_colors->SetNumberOfColors(numColors);
+    init_colors->SetIndexedLookup(true);
     float rgb[3];
-    for (vtkIdType i = 0; static_cast<unsigned int>(i) < numColors; ++i)
+    vtkIdType i = 0;
+    while (StyleMapMolecule::ExportDefaultElementColor(i, rgb))
     {
-        // colors->GetTypedTuple(i, rgb);
-        StyleMapMolecule::DefaultColor(i, rgb);
-        lut->SetTableValue(i, rgb[0], rgb[1], rgb[2]);
-        lut->SetAnnotation(i, Elements::GetElementSymbol(static_cast<unsigned short>(i)));
+        init_colors->SetTableValue(i, rgb[0], rgb[1], rgb[2]);
+        init_colors->SetAnnotation(i, Elements::GetElementSymbol(static_cast<unsigned short>(i)));
+        ++i;
     }
     //
-    this->SetLookupTable(lut);
+    this->SetLookupTable(init_colors);
 
     // Setup glyph mappers
-    this->AtomGlyphMapper->SetScalarRange(0, Elements::NumberOfElements());
+    // this->AtomGlyphMapper->SetScalarRange(0, Elements::NumberOfElements());
+    StyleMapMolecule::SetupMapElements(this->AtomGlyphMapper);
     this->AtomGlyphMapper->SetColorModeToMapScalars();
     this->AtomGlyphMapper->SetScalarModeToUsePointFieldData();
     this->AtomGlyphMapper->SetScaleModeToScaleByMagnitude();
@@ -564,9 +562,12 @@ void MapMolecule::UpdateBondGlyphPolyData()
         cylColors->SetNumberOfComponents(atomColorArray->GetNumberOfComponents());
         cylColors->Allocate(atomColorArray->GetNumberOfComponents() * numCylinders);
         cylColors->SetName("Colors");
-        this->BondGlyphMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
+
+        // this->BondGlyphMapper->SetScalarRange(0, Elements::NumberOfElements());
+        StyleMapMolecule::SetupMapElements(this->BondGlyphMapper);
         this->BondGlyphMapper->SetColorMode(this->AtomGlyphMapper->GetColorMode());
         this->BondGlyphMapper->SetScalarModeToUsePointFieldData();
+
         this->BondGlyphMapper->SetLookupTable(this->LookupTable);
     }
     // Otherwise an unique color will be used, so we fill a 3-components unsigned char array with
@@ -631,13 +632,20 @@ void MapMolecule::UpdateBondGlyphPolyData()
         // - Normalized vector in direction of bond
         bondVec = pos2 - pos1;
         bondLength = bondVec.Normalize();
-        // - Center of bond for translation
-        // TODO vtkVector scalar multiplication
-        // bondCenter = (pos1 + pos2) * 0.5;
+        // vtkIdType idBondSpot = bond.GetSpotId();
+        // if (bond.GetSpotId() >= 0) // spot is not yet defined:
+        //{
+        // * Center of bond for translation;
+        // * vtkVector scalar multiplication -->
+        // * bondCenter = (pos1 + pos2) * 0.5;
         bondCenter[0] = (pos1[0] + pos2[0]) * 0.5;
         bondCenter[1] = (pos1[1] + pos2[1]) * 0.5;
         bondCenter[2] = (pos1[2] + pos2[2]) * 0.5;
-        // end vtkVector TODO
+        //}
+        // else
+        //{
+        //    molecule->GetPoint(idBondSpot, bondCenter);
+        //}
 
         // Set up delta step vector and bond radius from bond order:
         if (style_->AreBondsMulticylinder())

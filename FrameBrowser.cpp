@@ -1141,9 +1141,10 @@ void FrameBrowser::on_actionTextSource__triggered(void)
 ///
 void FrameBrowser::on_actionElements__triggered(void)
 {
+    QMessageBox::information(this, tr("Danger!!"), tr("This is an undebugged stuff, so is not ready"));
     QPointer<TableElements> table(new TableElements(this));
     table->setFont(frameDoc_->font());
-    table->setGeometry(this->geometry());
+    // table->setGeometry(this->geometry());
     table->show();
 }
 //

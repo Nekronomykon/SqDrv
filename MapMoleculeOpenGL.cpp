@@ -46,11 +46,13 @@ void MapMoleculeOpenGL::PrintSelf(ostream &os, vtkIndent indent)
 MapMoleculeOpenGL::MapMoleculeOpenGL()
 {
   // Setup glyph mappers
-  this->FastAtomMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
+  // this->FastAtomMapper->SetScalarRange(0, Elements::NumberOfElements());
+  StyleMapMolecule::SetupMapElements(this->FastAtomMapper);
   this->FastAtomMapper->SetColorModeToMapScalars();
   this->FastAtomMapper->SetScalarModeToUsePointFieldData();
 
-  this->FastBondMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
+  // this->FastBondMapper->SetScalarRange(0, Elements::NumberOfElements());
+  StyleMapMolecule::SetupMapElements(this->FastBondMapper);
 
   // Forward commands to instance mappers
   vtkNew<vtkEventForwarderCommand> cb;

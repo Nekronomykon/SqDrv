@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
 
     QVTKApplication app(argc, argv);
 
+    QApplication::setQuitOnLastWindowClosed(true); // false if one would make use of
+                                                   // the tray activation system
+                                                   // ----------------------------------
+
     QCoreApplication::setApplicationName("SqDrv Browser");
     QCoreApplication::setOrganizationName("Nekronomykon");
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
