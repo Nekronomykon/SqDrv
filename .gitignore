@@ -4,3 +4,11 @@ Build/
 Build/*
 *.o
 *.d
+*.tiff
+*.png
+*.jpeg
+*.jpg
+*.bmp
+*.pdf
+*.ps
+*.eps
