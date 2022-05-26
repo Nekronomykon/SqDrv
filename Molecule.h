@@ -178,7 +178,7 @@ namespace vtk
         ///@}
 
         /**
-         * Return a Atom that refers to the bond with the specified id.
+         * Return a Bond manipulator that refers to the bond with the specified id.
          */
         Bond GetBond(vtkIdType bondId);
 
@@ -195,7 +195,7 @@ namespace vtk
         /**
          * Set the atomic number of the atom with the specified id.
          */
-        void SetAtomTypeId(vtkIdType atomId, unsigned short atomicNum, unsigned short kAux = 0);
+        void SetAtomTypeId(vtkIdType atomId, IndexElement atomicNum, unsigned short kAux = 0);
 
         ///@{
         /**
