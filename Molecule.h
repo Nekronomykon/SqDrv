@@ -173,7 +173,7 @@ namespace vtk
         Bond AppendBond(vtkIdType atom1, vtkIdType atom2, unsigned short order = 1);
         Bond AppendBond(const Atom &atom1, const Atom &atom2, unsigned short order = 1)
         {
-            return this->AppendBond(atom1.Id_, atom2.Id_, order);
+            return this->AppendBond(atom1.GetId(), atom2.GetId(), order);
         }
         ///@}
 
