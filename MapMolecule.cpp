@@ -119,12 +119,12 @@ MapMolecule::MapMolecule() : AtomicRadiusType(VDWRadius) //
     init_colors->SetNumberOfColors(numColors);
     init_colors->SetIndexedLookup(true);
     float rgb[3];
-    vtkIdType i = 0;
-    while (StyleMapMolecule::ExportDefaultElementColor(i, rgb))
+    vtkIdType i = -1;
+    while (StyleMapMolecule::ExportDefaultElementColor(++i, rgb))
     {
         init_colors->SetTableValue(i, rgb[0], rgb[1], rgb[2]);
         init_colors->SetAnnotation(i, Elements::GetElementSymbol(static_cast<unsigned short>(i)));
-        ++i;
+        // ++i;
     }
     //
     this->SetLookupTable(init_colors);
