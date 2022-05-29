@@ -10,11 +10,11 @@
 using namespace vtk;
 
 // instances --> different classes?
-const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.125f, {75, 75, 75}};
+const StyleMapMolecule StyleMapMolecule::styleFast = {UnitRadius, 0.375f, true, false, SingleColor, 0.100f, {75, 75, 75}};
 
 const StyleMapMolecule StyleMapMolecule::styleStyx = {UnitRadius, 0.250f, true, true, DiscreteByAtom, 0.250f, {75, 75, 75}};
 const StyleMapMolecule StyleMapMolecule::styleCPK = {VDWRadius, 1.000f, false, false, SingleColor, 0.125f, {75, 75, 75}};
-const StyleMapMolecule StyleMapMolecule::styleBnS = {VDWRadius, 0.250f, true, true, DiscreteByAtom, 0.125f, {75, 75, 75}};
+const StyleMapMolecule StyleMapMolecule::styleBnS = {VDWRadius, 0.250f, true, true, DiscreteByAtom, 0.075f, {75, 75, 75}};
 
 // Variables
 const float StyleMapMolecule::DefaultElementColors[][3] = {
@@ -143,10 +143,10 @@ const float StyleMapMolecule::DefaultElementColors[][3] = {
 };
 // special colors:
 const float StyleMapMolecule::ColorsModal[][3] = {
-    {0.0f, 0.0f, 0.0f}, // [0] black
-    {1.0f, 0.0f, 0.0f}, // [1] red
-    {0.0f, 1.0f, 0.0f}, // [2] green
-    {0.0f, 0.0f, 1.0f}, // [3] blue
+    {0.0f, 0.0f, 0.0f}, // [0]  black
+    {1.0f, 0.0f, 0.0f}, // [1]  red
+    {0.0f, 1.0f, 0.0f}, // [2]  green
+    {0.0f, 0.0f, 1.0f}, // [3]  blue
     {1.0f, 1.0f, 0.0f}, // [4] ~blue  == yellow
     {1.0f, 0.0f, 1.0f}, // [5] ~green == magenta
     {0.0f, 1.0f, 1.0f}, // [6] ~red   == cyan
