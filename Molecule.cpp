@@ -282,8 +282,9 @@ void Molecule::SetBondOrder(vtkIdType bondId, BondOrder order)
     ArrayBondOrders *bondOrders = this->GetBondOrdersArray();
     assert(bondOrders);
 
-    this->Modified();
+    /* bool bRes = */
     bondOrders->InsertValue(bondId, order);
+    this->Modified(/* bRes */);
 }
 
 //------------------------------------------------------------------------------
@@ -547,8 +548,9 @@ void Molecule::AllocateBondGhostArray()
 }
 
 //------------------------------------------------------------------------------
-int Molecule::Initialize(
-    vtkPoints *atomPositions, vtkDataArray *atomicNumberArray, vtkDataSetAttributes *atomData)
+int Molecule::Initialize(vtkPoints *atomPositions,
+                         vtkDataArray *atomicNumberArray,
+                         vtkDataSetAttributes *atomData)
 {
     // Start with default initialization the molecule
     this->Initialize();
