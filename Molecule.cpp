@@ -464,10 +464,8 @@ bool Molecule::GetPlaneFromBond(const Bond &bond, const vtkVector3f &normal, vtk
 bool Molecule::GetPlaneFromBond(
     const Atom &atom1, const Atom &atom2, const vtkVector3f &normal, vtkPlane *plane)
 {
-    if (plane == nullptr)
-    {
+    if (!plane)
         return false;
-    }
 
     vtkVector3f v(atom1.GetPosition() - atom2.GetPosition());
 
@@ -476,9 +474,7 @@ bool Molecule::GetPlaneFromBond(
 
     // Check if vectors are (nearly) parallel
     if (unitV.Compare(n_i.Normalized(), 1e-7))
-    {
         return false;
-    }
 
     // calculate projection of n_i onto v
     // TODO Remove or restore this when scalar mult. is supported again
