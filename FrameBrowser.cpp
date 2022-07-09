@@ -595,8 +595,8 @@ bool FrameBrowser::navigateTo(const QString &namefull, QString context)
         this->setWindowTitle(title);
         //
         this->setWindowModified(false);
-        //    frameDoc_->castSource();
-        workspace_->addFilePath(namefull);
+        // ---======---
+        workspace_->addFile(namefull);
     }
     return bSuccess;
 }

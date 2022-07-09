@@ -14,6 +14,9 @@ class ViewFileList
     Q_OBJECT
 public:
     ViewFileList(QWidget * /*parent*/ = nullptr);
+    
+    // bool addFilePath(const QString & /* path */);
+    //void listDir(const QString & /*dir_path*/, bool /*bRecurse*/ = false);
 };
 
 #endif // !View_FileList_h__

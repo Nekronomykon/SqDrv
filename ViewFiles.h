@@ -21,8 +21,9 @@ class ViewFiles
     Q_OBJECT
 public:
     ViewFiles(QWidget * /* parent */ = nullptr);
+    ViewFileList *getList() const { return list_; }
 
-    private:
+private:
     QPointer<QFileSystemModel> model_;
     QPointer<ViewFileTree> tree_;
     QPointer<ViewFileList> list_;
