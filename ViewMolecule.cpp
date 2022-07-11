@@ -15,6 +15,8 @@
 
 #include "ResetCursor.h"
 
+#include <vtkIdFilter.h>
+
 typedef vtkNew<vtkRenderWindowInteractor> NewRenderWindowInteractor;
 typedef vtkSmartPointer<vtkRenderWindowInteractor> ARenderWindowInteractor;
 
@@ -58,55 +60,6 @@ vtkColor3d ViewMolecule::getBgColor() const
 vtkColor3d &ViewMolecule::BgColor()
 {
     return colorBg_;
-}
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-bool ViewMolecule::initRendering(Molecule *pMol)
-{
-    vtkRenderWindow *pRW = this->renderWindow();
-
-    vtkRenderWindowInteractor *pRWI = this->interactor();
-
-    vtkSmartPointer<vtkInteractorStyleTrackballCamera>
-        istyle_rb(vtkInteractorStyleRubberBandPick::New()); // see the song...
-    // The InteractorStyle mechanism is the 3D GUI mechanism to be used in editing,
-    // So we would try to override it by our own mechanism...
-    if (!pRWI)
-    {
-        NewRenderWindowInteractor new_rwi;
-        pRW->SetInteractor(new_rwi);
-        pRWI = new_rwi.Get();
-    }
-    pRWI->SetInteractorStyle(istyle_rb);
-
-    // [0] BACKGROUND
-    renderBg_->SetLayer(0);
-    renderBg_->SetBackground(colorBg_.GetData());
-    pRW->AddRenderer(renderBg_);
-
-    // [1] MOLECULE
-    // reset molecular rendering:
-    renderMol_->RemoveActor(actorMol_);
-    pRW->RemoveRenderer(renderMol_); // detached:
-
-    if (pMol)
-    { // if molecule is valid to render (nullptr is to clear most of parameters)
-        styleMol_.SetupMapMolecule(mapMol_.Get());
-        // mapLabels_->SetInputData(pMol);
-    }
-    mapMol_->SetInputData(pMol);
-
-    // rebuilding:
-    renderMol_->SetLayer(1);
-    renderMol_->AddActor(actorMol_);
-    // renderMol_->AddActor2D(actorLabels_);
-    // renderMol_->SetBackground(colorBg_.GetData());
-    //
-    // renderMol_->AddActor(actorLabels_);
-
-    pRW->AddRenderer(renderMol_);
-    return true;
 }
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -169,6 +122,63 @@ void ViewMolecule::ProjectPerspective()
     vtkRenderWindow *pRW = this->renderWindow();
     renderMol_->GetActiveCamera()->ParallelProjectionOff();
     pRW->Modified();
+}
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+bool ViewMolecule::initRendering(Molecule *pMol)
+{
+    vtkRenderWindow *pRW = this->renderWindow();
+
+    vtkRenderWindowInteractor *pRWI = this->interactor();
+
+    vtkSmartPointer<vtkInteractorStyleTrackballCamera>
+        istyle_rb(vtkInteractorStyleRubberBandPick::New()); // see the song...
+    // The InteractorStyle mechanism is the 3D GUI mechanism to be used in editing,
+    // So we would try to override it by our own mechanism...
+    if (!pRWI)
+    {
+        NewRenderWindowInteractor new_rwi;
+        pRW->SetInteractor(new_rwi);
+        pRWI = new_rwi.Get();
+    }
+    pRWI->SetInteractorStyle(istyle_rb);
+
+    // [0] BACKGROUND
+    renderBg_->SetLayer(0);
+    renderBg_->SetBackground(colorBg_.GetData());
+    pRW->AddRenderer(renderBg_);
+
+    // [1] MOLECULE
+    // reset molecular rendering:
+    renderMol_->RemoveActor(actorMol_);
+    pRW->RemoveRenderer(renderMol_); // detached:
+
+    if (pMol)
+    { // if molecule is valid to render (nullptr is to clear most of parameters)
+        mapLabels_->SetLabelModeToLabelIds();
+        // attempt //
+        vtkNew<vtkIdFilter> ids;
+        ids->SetInputData(pMol);
+        ids->PointIdsOn();
+        ids->CellIdsOn();
+        ids->FieldDataOn();
+        mapLabels_->SetInputConnection(ids->GetOutputPort());
+        // mapLabels_->SetFieldDataName("Atomic Numbers");
+        styleMol_.SetupMapMolecule(mapMol_.Get());
+    }
+    mapMol_->SetInputData(pMol);
+
+    // rebuilding:
+    renderMol_->SetLayer(1);
+    renderMol_->AddActor(actorMol_);
+    renderMol_->AddActor2D(actorLabels_);
+    // renderMol_->SetBackground(colorBg_.GetData());
+    //
+    // renderMol_->AddActor(actorLabels_);
+
+    pRW->AddRenderer(renderMol_);
+    return true;
 }
 //
 ///////////////////////////////////////////////////////////////////////////////
