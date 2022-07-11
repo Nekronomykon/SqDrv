@@ -30,6 +30,9 @@ ViewMolecule::ViewMolecule(QWidget *parent)
     actorMol_->SetMapper(mapMol_);
     actorLabels_->SetMapper(mapLabels_);
 
+    // initial
+    mapLabels_->SetLabelModeToLabelIds();
+
     // initializing window mode:
     vtkRenderWindow *pRW = this->renderWindow();
     pRW->SetNumberOfLayers(2);
@@ -86,17 +89,21 @@ bool ViewMolecule::initRendering(Molecule *pMol)
     renderMol_->RemoveActor(actorMol_);
     pRW->RemoveRenderer(renderMol_); // detached:
 
+    ANewStringArray labels;
+
     if (pMol)
     { // if molecule is valid to render (nullptr is to clear most of parameters)
         styleMol_.SetupMapMolecule(mapMol_.Get());
+        // mapLabels_->SetInputData(pMol);
     }
     mapMol_->SetInputData(pMol);
 
     // rebuilding:
     renderMol_->SetLayer(1);
     renderMol_->AddActor(actorMol_);
+    // renderMol_->AddActor2D(actorLabels_);
     // renderMol_->SetBackground(colorBg_.GetData());
-    // 
+    //
     // renderMol_->AddActor(actorLabels_);
 
     pRW->AddRenderer(renderMol_);
@@ -152,12 +159,8 @@ bool ViewMolecule::exportImageTo(vtkImageWriter *pIW, bool bAlpha)
 void ViewMolecule::ProjectParallel()
 {
     vtkRenderWindow *pRW = this->renderWindow();
-    // pRW->RemoveRenderer(renderMol_);
     renderMol_->GetActiveCamera()->ParallelProjectionOn();
-    // pRW->AddRenderer(renderMol_);
-    // renderMol_->Render();
     pRW->Modified();
-    // pRW->Render();
 }
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,12 +168,8 @@ void ViewMolecule::ProjectParallel()
 void ViewMolecule::ProjectPerspective()
 {
     vtkRenderWindow *pRW = this->renderWindow();
-    // pRW->RemoveRenderer(renderMol_);
     renderMol_->GetActiveCamera()->ParallelProjectionOff();
-    // pRW->AddRenderer(renderMol_);
-    // renderMol_->Render();
     pRW->Modified();
-    // pRW->Render();
 }
 //
 ///////////////////////////////////////////////////////////////////////////////

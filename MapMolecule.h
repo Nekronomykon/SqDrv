@@ -30,9 +30,12 @@ class vtkRenderer;
 class vtkSelection;
 class vtkSphereSource;
 class vtkTrivialProducer;
+class vtkStringArray;
 
 namespace vtk
 {
+    typedef vtkNew<vtkStringArray> ANewStringArray;
+    typedef vtkSmartPointer<vtkStringArray> AStringArray;
 
     class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapMolecule : public vtkMapper
     {
