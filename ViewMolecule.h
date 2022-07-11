@@ -23,16 +23,10 @@
 #include "Molecule.h"
 #include "MapMolecule.h"
 
+#include <vtkStringArray.h>
+
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
-
-using namespace vtk;
-
-typedef vtkNew<vtkLabeledDataMapper> ANewLabeledDataMapper;
-typedef vtkSmartPointer<vtkLabeledDataMapper> ALabeledDataMapper;
-
-typedef vtkNew<MapMolecule> ANewMapOfMolecule;
-typedef vtkSmartPointer<MapMolecule> AMapOfMolecule;
 
 typedef vtkNew<vtkRenderer> ANewRenderer;
 typedef vtkSmartPointer<vtkRenderer> ARenderer;
@@ -45,6 +39,17 @@ typedef vtkSmartPointer<vtkLODActor> ALODActor;
 
 typedef vtkNew<vtkActor2D> ANewActor2D;
 typedef vtkSmartPointer<vtkActor2D> AnActor2D;
+
+typedef vtkNew<vtkLabeledDataMapper> ANewLabeledDataMapper;
+typedef vtkSmartPointer<vtkLabeledDataMapper> ALabeledDataMapper;
+
+typedef vtkNew<vtkStringArray> ANewStringArray;
+typedef vtkSmartPointer<vtkStringArray> AStringArray;
+
+using namespace vtk;
+
+typedef vtkNew<MapMolecule> ANewMapOfMolecule;
+typedef vtkSmartPointer<MapMolecule> AMapOfMolecule;
 
 class ViewMolecule : public QVTKOpenGLNativeWidget
 {
@@ -67,6 +72,7 @@ private:
     ANewRenderer renderBg_;
     vtkColor3d colorBg_;
 
+    ANewStringArray labels_;
     ANewLabeledDataMapper mapLabels_;
     ANewActor2D actorLabels_;
 

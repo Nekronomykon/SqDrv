@@ -31,6 +31,7 @@ ViewMolecule::ViewMolecule(QWidget *parent)
     actorLabels_->SetMapper(mapLabels_);
 
     // initial
+    labels_->SetName("labels");
     mapLabels_->SetLabelModeToLabelIds();
 
     // initializing window mode:
@@ -88,8 +89,6 @@ bool ViewMolecule::initRendering(Molecule *pMol)
     // reset molecular rendering:
     renderMol_->RemoveActor(actorMol_);
     pRW->RemoveRenderer(renderMol_); // detached:
-
-    ANewStringArray labels;
 
     if (pMol)
     { // if molecule is valid to render (nullptr is to clear most of parameters)
