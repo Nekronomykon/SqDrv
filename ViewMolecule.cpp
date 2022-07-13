@@ -29,12 +29,13 @@ ViewMolecule::ViewMolecule(QWidget *parent)
       mapMol_(AMapOfMolecule::New())
 // mapMol_(MapMoleculeOpenGL::New())          // is it constant?
 {
+    // initial pipe for molecule
     actorMol_->SetMapper(mapMol_);
-    actorLabels_->SetMapper(mapLabels_);
 
-    // initial
-    labels_->SetName("labels");
-    mapLabels_->SetLabelModeToLabelIds();
+    // initial pipe for labels in molecule 
+    // labels_->SetName("labels");
+    // mapLabels_->SetLabelModeToLabelIds();
+    // actorLabels_->SetMapper(mapLabels_);
 
     // initializing window mode:
     vtkRenderWindow *pRW = this->renderWindow();
@@ -154,30 +155,29 @@ bool ViewMolecule::initRendering(Molecule *pMol)
     renderMol_->RemoveActor(actorMol_);
     pRW->RemoveRenderer(renderMol_); // detached:
 
-    if (pMol)
-    { // if molecule is valid to render (nullptr is to clear most of parameters)
-        mapLabels_->SetLabelModeToLabelIds();
-        // attempt //
-        vtkNew<vtkIdFilter> ids;
-        ids->SetInputData(pMol);
-        ids->PointIdsOn();
-        ids->CellIdsOn();
-        ids->FieldDataOn();
-        mapLabels_->SetInputConnection(ids->GetOutputPort());
-        // mapLabels_->SetFieldDataName("Atomic Numbers");
-        styleMol_.SetupMapMolecule(mapMol_.Get());
-    }
+    styleMol_.SetupMapMolecule(mapMol_);
     mapMol_->SetInputData(pMol);
 
-    // rebuilding:
+    // [2] LABELS
+    if (pMol)
+    { // if molecule is valid to render (nullptr is to clear most of parameters)
+      // mapLabels_->SetLabelModeToLabelIds();
+      // attempt //
+      // vtkNew<vtkIdFilter> ids;
+      // ids->SetInputData(pMol);
+      // ids->PointIdsOn();
+      // ids->CellIdsOn();
+      // ids->FieldDataOn();
+      // mapLabels_->SetInputConnection(ids->GetOutputPort());
+      // mapLabels_->SetFieldDataName("Atomic Numbers");
+    }
+
+    // rebuilding: is it required, or the statement following after "* * *"":
     renderMol_->SetLayer(1);
     renderMol_->AddActor(actorMol_);
-    renderMol_->AddActor2D(actorLabels_);
-    // renderMol_->SetBackground(colorBg_.GetData());
-    //
-    // renderMol_->AddActor(actorLabels_);
-
     pRW->AddRenderer(renderMol_);
+    // * * * --- is it enough?
+    pRW->Modified();
     return true;
 }
 //

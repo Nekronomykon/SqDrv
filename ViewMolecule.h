@@ -72,9 +72,9 @@ private:
     ANewRenderer renderBg_;
     vtkColor3d colorBg_;
 
-    ANewStringArray labels_;
-    ANewLabeledDataMapper mapLabels_;
-    ANewActor2D actorLabels_;
+    // ANewStringArray labels_;
+    // ANewLabeledDataMapper mapLabels_;
+    // ANewActor2D actorLabels_;
 
     StyleMapMolecule styleMol_;
     ANewRenderer renderMol_;
