@@ -80,6 +80,7 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionOptions_"/>
+    <addaction name="actionElements_"/>
    </widget>
    <widget class="QMenu" name="menuView_">
     <property name="title">
@@ -340,6 +341,11 @@
   <action name="actionProjectPerspective_">
    <property name="text">
     <string>&amp;Perspective</string>
+   </property>
+  </action>
+  <action name="actionElements_">
+   <property name="text">
+    <string>Tabl&amp;e of elements..</string>
    </property>
   </action>
  </widget>
