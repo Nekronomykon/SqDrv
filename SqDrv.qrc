@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/SqDrv.png</file>
+        <file>images/Exit.png</file>
+        <file>images/NewWindow.png</file>
+        <file>images/NewDocument.png</file>
+        <file>images/CloseWindow.png</file>
+        <file>images/FullScreen.png</file>
+        <file>images/Save.png</file>
+        <file>images/SaveAs.png</file>
+        <file>images/About.png</file>
+        <file>images/AboutKit.png</file>
+        <file>images/ProjectReset.png</file>
+        <file>images/ProjectOrthogonal.png</file>
+        <file>images/ProjectPerspective.png</file>
+        <file>images/LabelAtom.png</file>
+        <file>images/LabelBond.png</file>
+        <file>images/StyleBall.png</file>
+        <file>images/StyleFast.png</file>
+        <file>images/StyleStick.png</file>
+        <file>images/StyleSpace.png</file>
+        <file>images/ViewBond.png</file>
+    </qresource>
+</RCC>
