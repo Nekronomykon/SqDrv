@@ -49,6 +49,17 @@ public:
   vtkSetMacro(MotionFactor, double);
   vtkGetMacro(MotionFactor, double);
   ///@}
+  enum
+  {
+    InteractionModeOrient = 0,
+    InteractionModeSelect = 1,
+    InteractionModeChange = 2
+  };
+  int CurrentMode = InteractionModeOrient;
+
+  int GetCurrentMode(void)const;
+  int SetCurrentMode(int mode);
+
 
 protected:
   StyleInteractionCamera();

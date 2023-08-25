@@ -13,7 +13,7 @@ vtkStandardNewMacro(StyleInteractionCamera);
 
 //------------------------------------------------------------------------------
 StyleInteractionCamera::StyleInteractionCamera()
-    : MotionFactor(10)
+    : CurrentMode(InteractionModeOrient), MotionFactor(10)
 {
 }
 
@@ -446,6 +446,17 @@ void StyleInteractionCamera::EnvironmentRotate()
       mat->GetElement(0, 0), mat->GetElement(1, 0), mat->GetElement(2, 0));
 
   rwi->Render();
+}
+
+int StyleInteractionCamera::GetCurrentMode() const
+{
+  return CurrentMode;
+}
+
+int StyleInteractionCamera::SetCurrentMode(int mode)
+{
+  std::swap(mode, CurrentMode);
+  return mode;
 }
 
 //------------------------------------------------------------------------------

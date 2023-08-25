@@ -57,6 +57,8 @@ typedef vtkSmartPointer<Molecule> AMolecule;
 typedef vtkNew<MapMolecule> NewMolMap;
 typedef vtkSmartPointer<MapMolecule> AMolMap;
 #include "StyleMapMolecule.h"
+#include "StyleInteractionStructure.h"
+typedef vtkNew<StyleInteractionStructure> NewInStyleStructure;
 //
 //
 ///////////////////////////////////////////////////////////////////////////
@@ -105,7 +107,9 @@ public:
   ViewMolecule *setStyleStick(void);
 
 protected:
+  //
 private:
+  NewInStyleStructure insStr_;
   // bg
   vtkColor3d colorBackground_;
   NewRenderer renderBg_;
@@ -113,7 +117,6 @@ private:
   NewActor actorMol_;
   NewRenderer renderMol_;
   AMolMap mapMol_;
-  // NewMolecule molecule_;
 };
 
 #endif // !View_Molecule_h__

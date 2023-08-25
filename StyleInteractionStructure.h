@@ -9,6 +9,8 @@
 // #include "vtkInteractionStyleModule.h" // For export macro
 #include "StyleInteractionCamera.h"
 
+#include <vtkNew.h>
+
 class vtkUnsignedCharArray;
 
 class /* VTKINTERACTIONSTYLE_EXPORT */ StyleInteractionStructure
@@ -38,14 +40,12 @@ protected:
   virtual void Pick();
   void RedrawRubberBand();
 
-  int StartPosition[2];
-  int EndPosition[2];
+  int StartPosition[2] = {0, 0};
+  int EndPosition[2] = {0, 0};
 
-  int Moving;
+  int Moving = 0;
 
-  vtkUnsignedCharArray *PixelArray;
-
-  int CurrentMode;
+  vtkNew<vtkUnsignedCharArray> PixelArray;
 
 private:
   StyleInteractionStructure(const StyleInteractionStructure &) = delete;

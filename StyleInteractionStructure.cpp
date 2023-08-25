@@ -11,29 +11,19 @@
 
 vtkStandardNewMacro(StyleInteractionStructure);
 
-#define VTKISRBP_ORIENT 0
-#define VTKISRBP_SELECT 1
-
 //------------------------------------------------------------------------------
 StyleInteractionStructure::StyleInteractionStructure()
+    : Moving(0)
 {
-  this->CurrentMode = VTKISRBP_ORIENT;
-  this->StartPosition[0] = this->StartPosition[1] = 0;
-  this->EndPosition[0] = this->EndPosition[1] = 0;
-  this->Moving = 0;
-  this->PixelArray = vtkUnsignedCharArray::New();
 }
 
 //------------------------------------------------------------------------------
-StyleInteractionStructure::~StyleInteractionStructure()
-{
-  this->PixelArray->Delete();
-}
+StyleInteractionStructure::~StyleInteractionStructure() = default;
 
 //------------------------------------------------------------------------------
 void StyleInteractionStructure::StartSelect()
 {
-  this->CurrentMode = VTKISRBP_SELECT;
+  this->CurrentMode = InteractionModeSelect;
 }
 
 //------------------------------------------------------------------------------
@@ -44,13 +34,13 @@ void StyleInteractionStructure::OnChar()
   case 'r':
   case 'R':
     // r toggles the rubber band selection mode for mouse button 1
-    if (this->CurrentMode == VTKISRBP_ORIENT)
+    if (this->CurrentMode == InteractionModeOrient)
     {
-      this->CurrentMode = VTKISRBP_SELECT;
+      this->CurrentMode = InteractionModeSelect;
     }
     else
     {
-      this->CurrentMode = VTKISRBP_ORIENT;
+      this->CurrentMode = InteractionModeOrient;
     }
     break;
   case 'p':
@@ -74,99 +64,100 @@ void StyleInteractionStructure::OnChar()
 //------------------------------------------------------------------------------
 void StyleInteractionStructure::OnLeftButtonDown()
 {
-  if (this->CurrentMode != VTKISRBP_SELECT)
+  if (this->CurrentMode == InteractionModeOrient)
   {
-    // if not in rubber band mode, let the parent class handle it
+    // the base class is responsible for the orientation
     this->Superclass::OnLeftButtonDown();
     return;
   }
 
   if (!this->Interactor)
-  {
     return;
-  }
 
   // otherwise record the rubber band starting coordinate
 
-  this->Moving = 1;
+  if (this->CurrentMode == InteractionModeSelect)
+  {
+    this->Moving = 1;
 
-  vtkRenderWindow *renWin = this->Interactor->GetRenderWindow();
+    vtkRenderWindow *renWin = this->Interactor->GetRenderWindow();
 
-  this->StartPosition[0] = this->Interactor->GetEventPosition()[0];
-  this->StartPosition[1] = this->Interactor->GetEventPosition()[1];
-  this->EndPosition[0] = this->StartPosition[0];
-  this->EndPosition[1] = this->StartPosition[1];
+    this->StartPosition[0] = this->Interactor->GetEventPosition()[0];
+    this->StartPosition[1] = this->Interactor->GetEventPosition()[1];
+    this->EndPosition[0] = this->StartPosition[0];
+    this->EndPosition[1] = this->StartPosition[1];
 
-  this->PixelArray->Initialize();
-  this->PixelArray->SetNumberOfComponents(4);
-  const int *size = renWin->GetSize();
-  this->PixelArray->SetNumberOfTuples(size[0] * size[1]);
+    this->PixelArray->Initialize();
+    this->PixelArray->SetNumberOfComponents(4);
+    const int *size = renWin->GetSize();
+    this->PixelArray->SetNumberOfTuples(size[0] * size[1]);
 
-  renWin->GetRGBACharPixelData(0, 0, size[0] - 1, size[1] - 1, 1, this->PixelArray);
+    renWin->GetRGBACharPixelData(0, 0, size[0] - 1, size[1] - 1, 1, this->PixelArray);
 
-  this->FindPokedRenderer(this->StartPosition[0], this->StartPosition[1]);
+    this->FindPokedRenderer(this->StartPosition[0], this->StartPosition[1]);
+  }
 }
 
 //------------------------------------------------------------------------------
 void StyleInteractionStructure::OnMouseMove()
 {
-  if (this->CurrentMode != VTKISRBP_SELECT)
+  if (this->CurrentMode == InteractionModeOrient)
   {
-    // if not in rubber band mode,  let the parent class handle it
+    // the base class is responsible for the orientation
     this->Superclass::OnMouseMove();
     return;
   }
 
   if (!this->Interactor || !this->Moving)
-  {
     return;
-  }
 
-  this->EndPosition[0] = this->Interactor->GetEventPosition()[0];
-  this->EndPosition[1] = this->Interactor->GetEventPosition()[1];
-  const int *size = this->Interactor->GetRenderWindow()->GetSize();
-  if (this->EndPosition[0] > (size[0] - 1))
+  if (this->CurrentMode == InteractionModeSelect)
   {
-    this->EndPosition[0] = size[0] - 1;
+    this->EndPosition[0] = this->Interactor->GetEventPosition()[0];
+    this->EndPosition[1] = this->Interactor->GetEventPosition()[1];
+    const int *size = this->Interactor->GetRenderWindow()->GetSize();
+    if (this->EndPosition[0] > (size[0] - 1))
+    {
+      this->EndPosition[0] = size[0] - 1;
+    }
+    if (this->EndPosition[0] < 0)
+    {
+      this->EndPosition[0] = 0;
+    }
+    if (this->EndPosition[1] > (size[1] - 1))
+    {
+      this->EndPosition[1] = size[1] - 1;
+    }
+    if (this->EndPosition[1] < 0)
+    {
+      this->EndPosition[1] = 0;
+    }
+    this->RedrawRubberBand();
   }
-  if (this->EndPosition[0] < 0)
-  {
-    this->EndPosition[0] = 0;
-  }
-  if (this->EndPosition[1] > (size[1] - 1))
-  {
-    this->EndPosition[1] = size[1] - 1;
-  }
-  if (this->EndPosition[1] < 0)
-  {
-    this->EndPosition[1] = 0;
-  }
-  this->RedrawRubberBand();
 }
 
 //------------------------------------------------------------------------------
 void StyleInteractionStructure::OnLeftButtonUp()
 {
-  if (this->CurrentMode != VTKISRBP_SELECT)
+  if (this->CurrentMode == InteractionModeOrient)
   {
-    // if not in rubber band mode,  let the parent class handle it
+    // the base class is responsible for the orientation
     this->Superclass::OnLeftButtonUp();
     return;
   }
 
   if (!this->Interactor || !this->Moving)
-  {
     return;
-  }
 
-  // otherwise record the rubber band end coordinate and then fire off a pick
-  if ((this->StartPosition[0] != this->EndPosition[0]) ||
-      (this->StartPosition[1] != this->EndPosition[1]))
-  {
-    this->Pick();
-  }
-  this->Moving = 0;
-  // this->CurrentMode = VTKISRBP_ORIENT;
+  if (this->CurrentMode == InteractionModeSelect)
+  { // otherwise record the rubber band end coordinate and then fire off a pick
+    if ((this->StartPosition[0] != this->EndPosition[0]) ||
+        (this->StartPosition[1] != this->EndPosition[1]))
+    {
+      this->Pick();
+    }
+    this->Moving = 0;
+  } // this->CurrentMode = VTKISRBP_ORIENT;
 }
 
 //------------------------------------------------------------------------------

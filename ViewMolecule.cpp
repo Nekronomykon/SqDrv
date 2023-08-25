@@ -9,8 +9,6 @@
 
 #include <vtkNamedColors.h>
 
-#include "StyleInteractionStructure.h"
-
 #include "RenderVTKWindow.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,8 +34,8 @@ ViewMolecule::ViewMolecule(QWidget *parent)
     pRW->SetInteractor(new_rwi);
     pRWI = this->interactor();
   }
-  // pRWI->SetInteractorStyle(StyleInteractionStructure::New());
-  pRWI->SetInteractorStyle(StyleInteractionCamera::New());
+  pRWI->SetInteractorStyle(insStr_);
+  // pRWI->SetInteractorStyle(StyleInteractionCamera::New());
   // The InteractorStyle mechanism is the 3D GUI mechanism to be used in editing,
   // So we would try to override it by our own mechanism... yet not now.
   // In progress. Under the development.
