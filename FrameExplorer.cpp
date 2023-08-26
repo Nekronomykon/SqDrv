@@ -115,12 +115,27 @@ FrameExplorer *FrameExplorer::setupActions(void)
   const QIcon iconReload = QIcon::fromTheme("document-revert", QIcon(":/images/Reload.png"));
   actionReload_->setIcon(iconReload);
   actionReload_->setShortcuts(QKeySequence::Refresh);
-  actionReload_->setStatusTip(tr("Reload content from opened file"));
+  actionReload_->setStatusTip(tr("Reload content from the currently loaded file"));
+
+  const QIcon iconDetach = QIcon(":/images/Detach.png");
+  // QIcon::fromTheme("document-detach", QIcon(":/images/Detach.png"));
+  actionDetach_->setIcon(iconDetach);
+  actionReload_->setStatusTip(tr("Reload content from the currently loaded file"));
 
   const QIcon iconSave = QIcon::fromTheme("document-save", QIcon(":/images/Save.png"));
   actionSave_->setIcon(iconSave);
   actionSave_->setShortcuts(QKeySequence::Save);
   actionSave_->setStatusTip(tr("Save the document to disk"));
+
+  const QIcon iconExport = QIcon::fromTheme("document-export", QIcon(":/images/Export.png"));
+  actionExport_->setIcon(iconExport);
+  // actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
+  actionSaveAs_->setStatusTip(tr("Export a file to disk based on the current data"));
+
+  const QIcon iconImport = QIcon::fromTheme("document-import", QIcon(":/images/Import.png"));
+  actionImport_->setIcon(iconImport);
+  // actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
+  actionSaveAs_->setStatusTip(tr("Load data from a disk file"));
 
   const QIcon iconSaveAs = QIcon::fromTheme("document-save-as", QIcon(":/images/SaveAs.png"));
   actionSaveAs_->setIcon(iconSaveAs);
