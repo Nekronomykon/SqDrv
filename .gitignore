@@ -36,11 +36,11 @@ Build/
 Build/*
 *.user
 
-# Image files
-*.png
-*.tif
-*.tiff
-*.jpg
-*.jpeg
-*.jfif
-*.jpe
+# Image files in tests
+tests/*.png
+tests/*.tif
+tests/*.tiff
+tests/*.jpg
+tests/*.jpeg
+tests/*.jfif
+tests/*.jpe
