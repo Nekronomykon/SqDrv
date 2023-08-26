@@ -38,7 +38,8 @@ public:
   //
   void clearContent(void);
   void loadFile(void);
-  bool exportFromPath(Path /*the_path*/ = Path());
+  bool importFromPath(Path /*the_path*/ = Path());
+  bool exportToPath(Path /*the_path*/);
   //
  
   static const FileFormat *AllFormats() { return &formatFile[0]; }

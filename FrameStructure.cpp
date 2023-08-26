@@ -129,7 +129,7 @@ Molecule *FrameStructure::getMolecule() const
 void FrameStructure::loadFile()
 {
   //
-  this->exportFromPath(); // reloading
+  this->importFromPath(); // reloading
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ void FrameStructure::loadFile()
 /// @brief //
 /// @param //
 //
-bool FrameStructure::exportFromPath(Path the_path)
+bool FrameStructure::importFromPath(Path the_path)
 {
   bool bToModify(false);
   if (the_path.empty())
@@ -195,6 +195,21 @@ void FrameStructure::clearContent(void)
 {
   this->getMolecule()->Initialize();
   viewMol_->showMolecule(nullptr, false);
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+bool FrameStructure::exportToPath(Path the_path)
+{
+  bool bRes = false;
+  String str_ext = the_path.extension();
+  //
+  if (!str_ext.compare(".png"))
+    bRes = WriteImageFormatPNG(*this, the_path);
+  return bRes;
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

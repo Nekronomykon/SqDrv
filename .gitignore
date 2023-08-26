@@ -34,3 +34,13 @@
 # Builds
 Build/
 Build/*
+*.user
+
+# Image files
+*.png
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+*.jfif
+*.jpe

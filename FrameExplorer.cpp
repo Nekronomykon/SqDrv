@@ -691,16 +691,14 @@ void FrameExplorer::on_actionImport__triggered()
   QString sPath = QFileDialog::getOpenFileName(this, sCaption, sDir, sFilter, &sSelFilter, options);
   if (sPath.isEmpty())
     return;
-  // this->resetPath(sPath, false); // no loading, conversely, saving as:
-  // this->doDataSave():{frameStr_->doSave();
-  //
-  Path path_export(sPath.toLocal8Bit().data());
 
-  if (!frameStr_->hasPath() || path_export.compare(frameStr_->getPath()))
+  //
+  Path path_import(sPath.toLocal8Bit().data());
+
+  if (!frameStr_->hasPath() || path_import.compare(frameStr_->getPath()))
   {
     if (this->queryDataSaved())
-      // frameStr_->doImportFromPath(path_export);
-      ;
+      frameStr_->importFromPath(path_import);
     frameStr_->setModified(true); // imagine success
   }
   this->adjustTitle();
@@ -725,7 +723,9 @@ void FrameExplorer::on_actionExport__triggered()
   QString sPath = QFileDialog::getSaveFileName(this, sCaption, sDir, sFilter, &sSelFilter, options);
   if (sPath.isEmpty())
     return;
-    // * * *
+  // * * *
+  Path path_export(sPath.toLocal8Bit().data());
+  frameStr_->exportToPath(path_export);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
