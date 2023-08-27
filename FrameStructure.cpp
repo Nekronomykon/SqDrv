@@ -37,7 +37,7 @@ const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE),
     //
     FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
-    FileFormat("Encapsulated PostScript", ".eps", nullptr, WriteImageFormatPS),
+    FileFormat("PostScript", ".ps", nullptr, WriteImageFormatPS),
     FileFormat("Joint Photo Expert Graphics", ".jpeg", nullptr, WriteImageFormatPNG),
     FileFormat("Portable Network Graphics", ".png", nullptr, WriteImageFormatPNG),
     FileFormat("Tagged Image Format", ".tiff", nullptr, WriteImageFormatTIFF),
@@ -226,7 +226,7 @@ bool FrameStructure::exportToPath(Path the_path)
     bRes = WriteImageFormatJPEG(*this, the_path);
   if (!str_ext.compare(".png"))
     bRes = WriteImageFormatPNG(*this, the_path);
-  if (!str_ext.compare(".eps"))
+  if (!str_ext.compare(".ps"))
     bRes = WriteImageFormatPS(*this, the_path);
   if (!str_ext.compare(".tiff"))
     bRes = WriteImageFormatTIFF(*this, the_path);
