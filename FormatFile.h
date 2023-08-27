@@ -33,8 +33,15 @@ public:
       : nameFormat_(nameFmt), maskFormat_(maskFmt), operationRead_(read), operationSave_(save)
   {
   }
+  //
   String getName() const { return nameFormat_; }
   String getMask() const { return maskFormat_; }
+  bool conforms(Path a_path) const
+  {
+    return !hasMask()
+               ? false
+               : bool(!maskFormat_.compare(a_path.extension().string()));
+  }
   //
   bool hasName() const { return !nameFormat_.empty(); }
   bool hasMask() const { return !maskFormat_.empty(); }
@@ -42,9 +49,24 @@ public:
   bool hasSave() const { return bool(operationSave_ != nullptr); }
   //
   bool isValid() const { return (hasRead() || hasSave()) && hasName() && hasMask(); }
+  bool isNative() const { return hasRead() && hasSave() && hasName() && hasMask(); }
   bool isToLoad() const { return hasRead() && hasName() && hasMask(); }
   bool isToSave() const { return hasSave() && hasName() && hasMask(); }
-
+  //
+  bool applyReadTo(Host &host, Path the_path)
+  {
+    return (!hasRead() || !conforms(the_path))
+               ? false
+               : (*operationRead_)(the_path, host);
+  }
+  //
+  bool applySaveTo(Host &host, Path the_path)
+  {
+    return (!hasSave() || !conforms(the_path))
+               ? false
+               : (*operationSave_)(host, the_path);
+  }
+  //
 private:
   String nameFormat_ = String();
   String maskFormat_ = String(".*");
@@ -76,6 +98,15 @@ struct IsFormatToSave
   bool operator()(const TagFormatFile<Host> &tag) const
   {
     return tag.isToSave();
+  }
+};
+
+struct IsFormatNative
+{
+  template <class Host>
+  bool operator()(const TagFormatFile<Host> &tag) const
+  {
+    return tag.isNative();
   }
 };
 
