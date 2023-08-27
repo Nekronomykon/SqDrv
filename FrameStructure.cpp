@@ -165,32 +165,16 @@ bool FrameStructure::importFromPath(Path the_path)
     // if paths are equal, this is reload, with substitution otherwise
   }
 
-  std::string str_ext = the_path.extension().string();
   bool bRes = false;
-  auto *pMol = this->getMolecule();
-
-  // Cast the format file object from the extension: the FormatTag pattern
-  // deserves a special mechanism to realize
-  if (!str_ext.compare(".xyz")) // ReadFileFormat<AcquireFileXYZ>(* * *)
-    bRes = ReadDataFormatXYZ(the_path, *this);
-
-  if (!str_ext.compare(".cml")) // ReadFileFormat<AcquireFileCML>(* * *)
-    bRes = ReadDataFormatCML(the_path, *this);
-
-  // if(!ex.compare(".hin")) ReadFileFormat<AcquireFileHIN>(* * *)
-  // if(!ex.compare(".mgp")) ReadFileFormat<AcquireFileMGP>(* * *)
-  if (!str_ext.compare(".pdb")) // ReadFileFormat<AcquireFilePDB>(* * *)
-    bRes = ReadDataFormatPDB(the_path, *this);
-
-  // if(!ex.compare(".sum")) ReadFileFormat<AcquireFileSUM>(* * *)
-  // if(!ex.compare(".wfn")) ReadFileFormat<AcquireFileWFN>(* * *)
-  // if(!ex.compare(".wfx")) ReadFileFormat<AcquireFileWFN>(* * *)
-  if (!str_ext.compare(".cube")) // ReadFileFormat<AcquireFileCUBE>(* * *)
-    bRes = ReadDataFormatCUBE(the_path, *this);
-
-  // if(!ex.compare(".mol2")) ReadFileFormat<AcquireFileMOL2>(* * *)
-  // if(!ex.compare(".extout")) ReadFileFormat<AcquireFileExtOut>(* * *)
-  // ^^^^^^^^^^^^^^^^^ formats enumeration ^^^^^^^^^^^^^^^^^
+  //
+  const FileFormat *ff = AllFormats();
+  do
+  {
+    bRes = ff->applyReadTo(*this, the_path);
+    if (bRes)
+      break;
+  } while ((++ff)->isValid());
+  //
   if (bRes)
   {
     viewMol_->showMolecule(nullptr, true);
@@ -218,18 +202,15 @@ void FrameStructure::clearContent(void)
 bool FrameStructure::exportToPath(Path the_path)
 {
   bool bRes = false;
-  String str_ext = the_path.extension();
   //
-  if (!str_ext.compare(".bmp"))
-    bRes = WriteImageFormatBMP(*this, the_path);
-  if (!str_ext.compare(".jpeg"))
-    bRes = WriteImageFormatJPEG(*this, the_path);
-  if (!str_ext.compare(".png"))
-    bRes = WriteImageFormatPNG(*this, the_path);
-  if (!str_ext.compare(".ps"))
-    bRes = WriteImageFormatPS(*this, the_path);
-  if (!str_ext.compare(".tiff"))
-    bRes = WriteImageFormatTIFF(*this, the_path);
+  const FileFormat *ff = AllFormats();
+  do
+  {
+    bRes = ff->applySaveTo(*this, the_path);
+    if (bRes)
+      break;
+  } while ((++ff)->isValid());
+  //
   return bRes;
 }
 //

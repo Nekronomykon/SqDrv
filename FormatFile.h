@@ -53,14 +53,14 @@ public:
   bool isToLoad() const { return hasRead() && hasName() && hasMask(); }
   bool isToSave() const { return hasSave() && hasName() && hasMask(); }
   //
-  bool applyReadTo(Host &host, Path the_path)
+  bool applyReadTo(Host &host, Path the_path) const
   {
     return (!hasRead() || !conforms(the_path))
                ? false
                : (*operationRead_)(the_path, host);
   }
   //
-  bool applySaveTo(Host &host, Path the_path)
+  bool applySaveTo(Host &host, Path the_path) const
   {
     return (!hasSave() || !conforms(the_path))
                ? false
