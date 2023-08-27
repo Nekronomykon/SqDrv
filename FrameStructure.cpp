@@ -41,7 +41,7 @@ const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("Joint Photo Expert Graphics", ".jpeg", nullptr, WriteImageFormatPNG),
     FileFormat("Portable Network Graphics", ".png", nullptr, WriteImageFormatPNG),
     FileFormat("Tagged Image Format", ".tiff", nullptr, WriteImageFormatTIFF),
-    FileFormat() // invalid format
+    FileFormat("All files") // invalid format
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
