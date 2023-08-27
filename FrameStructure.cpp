@@ -8,7 +8,11 @@
 #include "AcquireFilePDB.h"
 #include "AcquireFileXYZ.h"
 
+#include "ExportFileBMP.h"
+#include "ExportFileJPEG.h"
 #include "ExportFilePNG.h"
+#include "ExportFileTIFF.h"
+#include "ExportFilePS.h"
 
 #include <QMessageBox>
 
@@ -17,7 +21,11 @@ bool ReadDataFormatPDB(Path a_path, FrameStructure &host) { return ParseFilePDBT
 bool ReadDataFormatXYZ(Path a_path, FrameStructure &host) { return ParseFileXYZTo(a_path, host); }
 bool ReadDataFormatCUBE(Path a_path, FrameStructure &host) { return ParseFileCUBETo(a_path, host); }
 //
+bool WriteImageFormatBMP(FrameStructure &host, Path a_path) { return ExportToBMPFile(host, a_path); }
+bool WriteImageFormatJPEG(FrameStructure &host, Path a_path) { return ExportToJPEGFile(host, a_path); }
 bool WriteImageFormatPNG(FrameStructure &host, Path a_path) { return ExportToPNGFile(host, a_path); }
+bool WriteImageFormatPS(FrameStructure &host, Path a_path) { return ExportToPostScriptFile(host, a_path); }
+bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTIFFFile(host, a_path); }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
 /// @brief //
@@ -27,7 +35,12 @@ const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
     FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB),
     FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE),
+    //
+    FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
+    FileFormat("Encapsulated PostScript", ".eps", nullptr, WriteImageFormatPS),
+    FileFormat("Joint Photo Expert Graphics", ".jpeg", nullptr, WriteImageFormatPNG),
     FileFormat("Portable Network Graphics", ".png", nullptr, WriteImageFormatPNG),
+    FileFormat("Tagged Image Format", ".tiff", nullptr, WriteImageFormatTIFF),
     FileFormat() // invalid format
 };
 
@@ -207,8 +220,16 @@ bool FrameStructure::exportToPath(Path the_path)
   bool bRes = false;
   String str_ext = the_path.extension();
   //
+  if (!str_ext.compare(".bmp"))
+    bRes = WriteImageFormatBMP(*this, the_path);
+  if (!str_ext.compare(".jpeg"))
+    bRes = WriteImageFormatJPEG(*this, the_path);
   if (!str_ext.compare(".png"))
     bRes = WriteImageFormatPNG(*this, the_path);
+  if (!str_ext.compare(".eps"))
+    bRes = WriteImageFormatPS(*this, the_path);
+  if (!str_ext.compare(".tiff"))
+    bRes = WriteImageFormatTIFF(*this, the_path);
   return bRes;
 }
 //

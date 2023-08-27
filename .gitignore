@@ -37,6 +37,7 @@ Build/*
 *.user
 
 # Image files in tests
+tests/*.bmp
 tests/*.png
 tests/*.tif
 tests/*.tiff
@@ -44,3 +45,6 @@ tests/*.jpg
 tests/*.jpeg
 tests/*.jfif
 tests/*.jpe
+tests/*.ps
+tests/*.eps
+tests/*.pdf

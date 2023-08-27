@@ -15,8 +15,8 @@ using ExportFilePNG = vtkPNGWriter;
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-typedef vtkNew<ExportFilePNG> NewExportPNG;
-typedef vtkSmartPointer<ExportFilePNG> ToExportPNG;
+typedef vtkNew<ExportFilePNG>            NewExportPNG;
+typedef vtkSmartPointer<ExportFilePNG>    ToExportPNG;
 
 template <class Host>
 bool ExportToPNGFile(Host &host, Path a_path)

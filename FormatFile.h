@@ -81,13 +81,15 @@ struct IsFormatToSave
 
 //
 template <class Host, class What>
-String BuildFileDialogFilter(const Host &host, What if_it)
+String BuildFileDialogFilter(const Host &host, What if_it, bool bPreformat = true)
 {
   String sAll("All files (*.*)");
   const auto *ptrFormat = Host::AllFormats();
   if (!ptrFormat)
     return sAll; // not any formats registered
-  String sTypes("All appropriate files (");
+  String sTypes;
+  if (bPreformat)
+    sTypes.assign("All known files (");
   String sKnown;
   do
   {
@@ -105,12 +107,18 @@ String BuildFileDialogFilter(const Host &host, What if_it)
 
     // all known
     sKnown += sFormat;
-
-    sTypes += sMask;
-    sTypes += " ";
+    if (!sTypes.empty())
+    {
+      sTypes += sMask;
+      sTypes += " ";
+    }
   } while ((++ptrFormat)->isValid());
 
-  sTypes += ");;"; // all-known mask is closed
+  if (!sTypes.empty())
+  {
+    // *sTypes.rbegin() = 0;
+    sTypes += ");;"; // all-known mask is closed
+  }
   sTypes += sKnown;
   sTypes += sAll;
 

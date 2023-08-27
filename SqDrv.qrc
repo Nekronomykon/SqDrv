@@ -11,8 +11,10 @@
         <file>images/Import.png</file>
         <file>images/Export.png</file>
         <file>images/Detach.png</file>
+        <file>images/Options.png</file>
         <file>images/About.png</file>
         <file>images/AboutKit.png</file>
+        <file>images/Properties.png</file>
         <file>images/ProjectReset.png</file>
         <file>images/ProjectOrthogonal.png</file>
         <file>images/ProjectPerspective.png</file>

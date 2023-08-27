@@ -170,7 +170,7 @@ FrameExplorer *FrameExplorer::setupActions(void)
   actionClearAll_->setIcon(iconClearAll);
   // actionClear_->setShortcut(QKeySequence::ClearAll);
 
-  const QIcon iconProps = QIcon::fromTheme("document-properties", QIcon(":/images/Options.png"));
+  const QIcon iconProps = QIcon::fromTheme("document-properties", QIcon(":/images/Properties.png"));
   actionProperties_->setIcon(iconProps);
 
   const QIcon iconOptions = QIcon::fromTheme("preferences-system", QIcon(":/images/Options.png"));
