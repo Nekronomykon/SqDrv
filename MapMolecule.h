@@ -25,6 +25,7 @@ class vtkTrivialProducer;
 
 #include <vtkMapper.h>
 
+#include "Molecule.h"
 #include "MapMoleculeParams.h"
 
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapMolecule : public vtkMapper, public MapMoleculeParams
@@ -38,8 +39,8 @@ public:
   /**
    * Get/Set the input vtkMolecule.
    */
-  void SetInputData(vtkMolecule *in);
-  vtkMolecule *GetInput();
+  void SetInputData(Molecule *in);
+  Molecule *GetInput();
   ///@}
 
   /**

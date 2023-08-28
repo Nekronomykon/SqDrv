@@ -151,7 +151,7 @@ MapMolecule::~MapMolecule()
 /// @brief //
 /// @param //
 //
-void MapMolecule::SetInputData(vtkMolecule *input)
+void MapMolecule::SetInputData(Molecule *input)
 {
   this->SetInputDataInternal(0, input);
 }
@@ -162,9 +162,9 @@ void MapMolecule::SetInputData(vtkMolecule *input)
 /// @brief //
 /// @param //
 //
-vtkMolecule *MapMolecule::GetInput()
+Molecule *MapMolecule::GetInput()
 {
-  return vtkMolecule::SafeDownCast(this->GetExecutive()->GetInputData(0, 0));
+  return Molecule::SafeDownCast(this->GetExecutive()->GetInputData(0, 0));
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

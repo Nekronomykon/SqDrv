@@ -8,4 +8,9 @@
 
 #include "Elements.h"
 
+#include <vtkMolecule.h>
+using Molecule = vtkMolecule;
+typedef vtkNew<Molecule> NewMolecule;
+typedef vtkSmartPointer<Molecule> AMolecule;
+
 #endif // !Molecule_h__

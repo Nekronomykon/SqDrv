@@ -47,11 +47,7 @@ using InStyle = vtkInteractorStyle;
 typedef vtkNew<InStyle> NewInStyle;
 typedef vtkSmartPointer<InStyle> AnInStyle;
 //
-#include <vtkMolecule.h>
-using Molecule = vtkMolecule;
-typedef vtkNew<Molecule> NewMolecule;
-typedef vtkSmartPointer<Molecule> AMolecule;
-//
+#include "Molecule.h"
 #include "MapMolecule.h"
 // using MapMolecule = vtkMoleculeMapper;
 typedef vtkNew<MapMolecule> NewMolMap;
