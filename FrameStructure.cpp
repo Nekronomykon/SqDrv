@@ -26,6 +26,7 @@ bool WriteImageFormatJPEG(FrameStructure &host, Path a_path) { return ExportToJP
 bool WriteImageFormatPNG(FrameStructure &host, Path a_path) { return ExportToPNGFile(host, a_path); }
 bool WriteImageFormatPS(FrameStructure &host, Path a_path) { return ExportToPostScriptFile(host, a_path); }
 bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTIFFFile(host, a_path); }
+//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
 /// @brief //
@@ -85,30 +86,6 @@ void FrameStructure::setModified(bool bSet) { bChanged_ = bSet; }
 /// @brief //
 /// @param //
 //
-Path FrameStructure::getPath(void) const { return path_source_; }
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief //
-/// @param //
-//
-bool FrameStructure::hasPath(void) const { return path_source_.empty() ? false : true; }
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @name  //
-/// @brief //
-/// @param //
-//
-Path FrameStructure::resetPath(Path path_new)
-{
-  std::swap(path_new, path_source_);
-  return path_new;
-}
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @name  //
-/// @brief //
-/// @param //
-//
 ViewMolecule *FrameStructure::getMoleculeView() const
 {
   return viewMol_;
@@ -161,7 +138,7 @@ bool FrameStructure::importFromPath(Path the_path)
   }
   else
   {
-    bToModify = bool(the_path.compare(path_source_));
+    bToModify = bool(the_path.compare(this->getPath()));
     // if paths are equal, this is reload, with substitution otherwise
   }
 

@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include "FormatFile.h"
+#include "ImplPathName.h"
 
 #include <QPointer>
 
@@ -16,6 +17,7 @@
 #include <QTabWidget>
 
 class FrameStructure : public QTabWidget
+, public ImplPathName<FrameStructure>
 {
   Q_OBJECT
 
@@ -28,9 +30,6 @@ public:
   bool isModified() const;
   void setModified(bool /*bSet*/ = true);
   //
-  Path getPath(void) const;
-  bool hasPath(void) const;
-  Path resetPath(Path /*path*/ = Path());
   //
   ViewMolecule *getMoleculeView() const;
   MapMolecule *getMoleculeMap() const;
@@ -49,7 +48,6 @@ protected:
 
 private:
   bool bChanged_ = false;
-  Path path_source_;
   NewMolecule molecule_;
   QPointer<ViewMolecule> viewMol_;
   QPointer<EditMarkLines> editSrc_;

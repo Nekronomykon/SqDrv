@@ -7,7 +7,7 @@
 #endif //  _MSC_VER
 
 #include "FormatFile.h"
-
+#include "AcquireFileBase.h"
 #include <vtkXYZMolReader.h>
 #include <vtkXYZMolReader2.h>
 

@@ -7,7 +7,7 @@
 #endif //  _MSC_VER
 
 #include "FormatFile.h"
-
+#include "AcquireFileBase.h"
 #include <vtkGaussianCubeReader.h>
 #include <vtkGaussianCubeReader2.h>
 

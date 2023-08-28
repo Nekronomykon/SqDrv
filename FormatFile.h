@@ -7,8 +7,6 @@
 #endif //  _MSC_VER
 
 #include <string>
-
-#include <string>
 using String = std::string;
 
 #include <utility>

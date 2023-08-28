@@ -7,7 +7,7 @@
 #endif //  _MSC_VER
 
 #include "FormatFile.h"
-
+#include "AcquireFileBase.h"
 #include <vtkPDBReader.h>
 
 using AcquireFilePDB = vtkPDBReader;

@@ -7,7 +7,7 @@
 #endif //  _MSC_VER
 
 #include "FormatFile.h"
-
+#include "AcquireFileBase.h"
 #include <vtkCMLMoleculeReader.h>
 
 using AcquireFileCML = vtkCMLMoleculeReader;
