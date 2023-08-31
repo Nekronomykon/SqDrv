@@ -43,28 +43,28 @@ class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileEXTOUT
     : public AcquireQTAIMFile
 {
 public:
-    static AcquireFileEXTOUT *New();
-    vtkTypeMacro(AcquireFileEXTOUT, AcquireQTAIMFile);
-    void PrintSelf(ostream &os, vtkIndent indent) override;
+  static AcquireFileEXTOUT *New();
+  vtkTypeMacro(AcquireFileEXTOUT, AcquireQTAIMFile);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
 protected:
-    explicit AcquireFileEXTOUT();
-    ~AcquireFileEXTOUT() override = default;
+  explicit AcquireFileEXTOUT();
+  ~AcquireFileEXTOUT() override = default;
 
-    // ----------------------------------------------------------------------------------------------------
-    // To be overriden to read information stored in the (file) stream
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    // int ReadSizesFrom(InputFile & /*inp*/) override;
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
-    // int OnReadDataComplete(Molecule* /* ptrMol */) override;
-    // ----------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------
+  // To be overriden to read information stored in the (file) stream
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  // int ReadSizesFrom(InputFile & /*inp*/) override;
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
+  // int OnReadDataComplete(Molecule* /* ptrMol */) override;
+  // ----------------------------------------------------------------------------------------------------
 
 private:
-    AcquireFileEXTOUT(const AcquireFileEXTOUT &) = delete;
-    void operator=(const AcquireFileEXTOUT &) = delete;
+  AcquireFileEXTOUT(const AcquireFileEXTOUT &) = delete;
+  void operator=(const AcquireFileEXTOUT &) = delete;
 };
 
 typedef vtkNew<AcquireFileEXTOUT> NewAcquireEXTOUT;
@@ -73,10 +73,10 @@ typedef vtkSmartPointer<AcquireFileEXTOUT> ToAcquireEXTOUT;
 template <class Host>
 bool ParseFileEXTOUTTo(Path a_path, Host &host)
 {
-    NewAcquireEXTOUT read;
-    read->resetPath(a_path);
-    read->SetOutput(host.getMolecule());
-    read->Update();
+  NewAcquireEXTOUT read;
+  read->resetPath(a_path);
+  read->SetOutput(host.getMolecule());
+  read->Update();
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 //}; // namespace vtk

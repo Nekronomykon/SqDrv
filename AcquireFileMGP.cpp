@@ -36,10 +36,9 @@ vtkStandardNewMacro(AcquireFileMGP);
 //------------------------------------------------------------------------------
 AcquireFileMGP::AcquireFileMGP() {}
 
-
 //------------------------------------------------------------------------------
 void AcquireFileMGP::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "An MGP parser:\n";
-    this->Superclass::PrintSelf(os, indent);
+  os << indent << "An MGP parser:\n";
+  this->Superclass::PrintSelf(os, indent);
 }

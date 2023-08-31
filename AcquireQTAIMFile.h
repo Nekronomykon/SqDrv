@@ -27,46 +27,46 @@ class AcquireQTAIMFile
     : public AcquireFileBase
 {
 protected:
-    explicit AcquireQTAIMFile();
+  explicit AcquireQTAIMFile();
 
 public:
-    static AcquireQTAIMFile *New();
-    vtkTypeMacro(AcquireQTAIMFile, AcquireFileBase);
-    void PrintSelf(ostream &os, vtkIndent indent) override;
+  static AcquireQTAIMFile *New();
+  vtkTypeMacro(AcquireQTAIMFile, AcquireFileBase);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
-    vtkIdType GetNumberOfCP(void) const { return NumberOfCriticals_; }
+  vtkIdType GetNumberOfCP(void) const { return NumberOfCriticals_; }
 
-    vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }
-    // --
-    vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
-    vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; } // generally 0
-    // --
-    vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }
-    vtkIdType GetNumberOfRCP(void) const { return NumberOfRCP_; }
-    vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
-    // ===========================================================================
+  vtkIdType GetNumberOfACP(void) const { return NumberOfNACP_ + NumberOfNNACP_; }
+  // --
+  vtkIdType GetNumberOfNACP(void) const { return NumberOfNACP_; }
+  vtkIdType GetNumberOfNNACP(void) const { return NumberOfNNACP_; } // generally 0
+  // --
+  vtkIdType GetNumberOfBCP(void) const { return NumberOfBCP_; }
+  vtkIdType GetNumberOfRCP(void) const { return NumberOfRCP_; }
+  vtkIdType GetNumberOfCCP(void) const { return NumberOfCCP_; }
+  // ===========================================================================
 
-    int ReadCriticalPoints(InputFile & /*inp*/, Molecule * /*ptrMol*/);
+  int ReadCriticalPoints(InputFile & /*inp*/, Molecule * /*ptrMol*/);
 
 protected:
-    // ----------------------------------------------------------------------------------------------------
-    // To be overriden to read information stored in the (file) stream
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    int ReadSizesFrom(InputFile & /*inp*/) override;
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
-    // ----------------------------------------------------------------------------------------------------
-    // virtual int ReadQTAIMSizes(InputFile& /* inp */);
+  // ----------------------------------------------------------------------------------------------------
+  // To be overriden to read information stored in the (file) stream
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  int ReadSizesFrom(InputFile & /*inp*/) override;
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
+  // ----------------------------------------------------------------------------------------------------
+  // virtual int ReadQTAIMSizes(InputFile& /* inp */);
 
-    // private:
-    vtkIdType NumberOfCriticals_ = 0;
-    vtkIdType NumberOfNACP_ = 0;
-    vtkIdType NumberOfNNACP_ = 0;
-    vtkIdType NumberOfBCP_ = 0;
-    vtkIdType NumberOfRCP_ = 0;
-    vtkIdType NumberOfCCP_ = 0;
+  // private:
+  vtkIdType NumberOfCriticals_ = 0;
+  vtkIdType NumberOfNACP_ = 0;
+  vtkIdType NumberOfNNACP_ = 0;
+  vtkIdType NumberOfBCP_ = 0;
+  vtkIdType NumberOfRCP_ = 0;
+  vtkIdType NumberOfCCP_ = 0;
 };
 // }; // namespace vtk
 

@@ -39,6 +39,6 @@ AcquireFileEXTOUT::AcquireFileEXTOUT() {}
 //------------------------------------------------------------------------------
 void AcquireFileEXTOUT::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "An EXTOUT parser:\n";
-    this->Superclass::PrintSelf(os, indent);
+  os << indent << "An EXTOUT parser:\n";
+  this->Superclass::PrintSelf(os, indent);
 }

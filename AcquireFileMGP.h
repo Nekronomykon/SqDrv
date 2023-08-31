@@ -43,28 +43,28 @@ class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileMGP
     : public AcquireQTAIMFile
 {
 public:
-    static AcquireFileMGP *New();
-    vtkTypeMacro(AcquireFileMGP, AcquireQTAIMFile);
-    void PrintSelf(ostream &os, vtkIndent indent) override;
+  static AcquireFileMGP *New();
+  vtkTypeMacro(AcquireFileMGP, AcquireQTAIMFile);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
 protected:
-    explicit AcquireFileMGP();
-    ~AcquireFileMGP() override = default;
+  explicit AcquireFileMGP();
+  ~AcquireFileMGP() override = default;
 
-    // ----------------------------------------------------------------------------------------------------
-    // To be overriden to read information stored in the (file) stream
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    // int ReadSizesFrom(InputFile & /*inp*/) override;
-    // ----------------------------------------------------------------------------------------------------
-    // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-    // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
-    // int OnReadDataComplete(Molecule* /* ptrMol */) override;
-    // ----------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------
+  // To be overriden to read information stored in the (file) stream
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  // int ReadSizesFrom(InputFile & /*inp*/) override;
+  // ----------------------------------------------------------------------------------------------------
+  // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  // int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/) override;
+  // int OnReadDataComplete(Molecule* /* ptrMol */) override;
+  // ----------------------------------------------------------------------------------------------------
 
 private:
-    AcquireFileMGP(const AcquireFileMGP &) = delete;
-    void operator=(const AcquireFileMGP &) = delete;
+  AcquireFileMGP(const AcquireFileMGP &) = delete;
+  void operator=(const AcquireFileMGP &) = delete;
 };
 
 typedef vtkNew<AcquireFileMGP> NewAcquireMGP;
@@ -73,10 +73,10 @@ typedef vtkSmartPointer<AcquireFileMGP> ToAcquireMGP;
 template <class Host>
 bool ParseFileMGPTo(Path a_path, Host &host)
 {
-    NewAcquireMGP read;
-    read->resetPath(a_path);
-    read->SetOutput(host.getMolecule());
-    read->Update();
+  NewAcquireMGP read;
+  read->resetPath(a_path);
+  read->SetOutput(host.getMolecule());
+  read->Update();
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 

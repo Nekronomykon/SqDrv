@@ -144,6 +144,6 @@ int AcquireFileSUM::_RequestInformation(vtkInformation *vtkNotUsed(request),
 //------------------------------------------------------------------------------
 void AcquireFileSUM::PrintSelf(ostream &os, vtkIndent indent)
 {
-    os << indent << "A SUM parser:\n";
-    this->Superclass::PrintSelf(os, indent);
+  os << indent << "A SUM parser:\n";
+  this->Superclass::PrintSelf(os, indent);
 }
