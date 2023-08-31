@@ -26,12 +26,16 @@ public:
   //
   vtkIdType GetNumberOfAtoms() const;
   vtkIdType resetNumberOfAtoms(vtkIdType /*id*/ = 0L);
+  //
+  String getNameOfStructure()const;
+  String resetNameOfStructure(String /*name*/ = String());
 
 protected:
   explicit AcquireFileBase(int /* nOuts */ = 1);
   ~AcquireFileBase() override = default;
   //
   vtkIdType &NumberOfAtoms();
+  String& NameOfStructure();
 
   // ----------------------------------------------------------------------------------------------------
   // To be overriden to read information stored in the (file) stream

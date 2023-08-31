@@ -111,14 +111,14 @@ vtkTypeBool SourceOfMolecule::ProcessRequest(
 int SourceOfMolecule::FillOutputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
   // now add our info
-  info->Set(vtkDataObject::DATA_TYPE_NAME(), "Molecule");
+  info->Set(vtkDataObject::DATA_TYPE_NAME(), "vtkMolecule");
   return 1;
 }
 
 //------------------------------------------------------------------------------
 int SourceOfMolecule::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
-  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "Molecule");
+  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkMolecule");
   return 1;
 }
 

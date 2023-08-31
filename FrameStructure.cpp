@@ -6,6 +6,8 @@
 #include "AcquireFileCML.h"
 #include "AcquireFileCUBE.h"
 #include "AcquireFilePDB.h"
+#include "AcquireFileWFN.h"
+#include "AcquireFileWFX.h"
 #include "AcquireFileXYZ.h"
 
 #include "ExportFileBMP.h"
@@ -18,13 +20,15 @@
 
 bool ReadDataFormatCML(Path a_path, FrameStructure &host) { return ParseFileCMLTo(a_path, host); }
 bool ReadDataFormatPDB(Path a_path, FrameStructure &host) { return ParseFilePDBTo(a_path, host); }
+bool ReadDataFormatWFN(Path a_path, FrameStructure &host) { return ParseFileWFNTo(a_path, host); }
+bool ReadDataFormatWFX(Path a_path, FrameStructure &host) { return ParseFileWFXTo(a_path, host); }
 bool ReadDataFormatXYZ(Path a_path, FrameStructure &host) { return ParseFileXYZTo(a_path, host); }
 bool ReadDataFormatCUBE(Path a_path, FrameStructure &host) { return ParseFileCUBETo(a_path, host); }
 //
-bool WriteImageFormatBMP(FrameStructure &host, Path a_path) { return ExportToBMPFile(host, a_path); }
-bool WriteImageFormatJPEG(FrameStructure &host, Path a_path) { return ExportToJPEGFile(host, a_path); }
-bool WriteImageFormatPNG(FrameStructure &host, Path a_path) { return ExportToPNGFile(host, a_path); }
 bool WriteImageFormatPS(FrameStructure &host, Path a_path) { return ExportToPostScriptFile(host, a_path); }
+bool WriteImageFormatBMP(FrameStructure &host, Path a_path) { return ExportToBMPFile(host, a_path); }
+bool WriteImageFormatPNG(FrameStructure &host, Path a_path) { return ExportToPNGFile(host, a_path); }
+bool WriteImageFormatJPEG(FrameStructure &host, Path a_path) { return ExportToJPEGFile(host, a_path); }
 bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTIFFFile(host, a_path); }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,9 +36,11 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 /// @brief //
 //
 const FrameStructure::FileFormat FrameStructure::formatFile[] = {
-    FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML),
     FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
+    FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML),
     FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB),
+    FileFormat("Wavefunction data", ".wfn", ReadDataFormatWFN),
+    FileFormat("Wavefunction eXtended data", ".wfx", ReadDataFormatWFX),
     FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE),
     //
     FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
