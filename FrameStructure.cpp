@@ -5,7 +5,10 @@
 
 #include "AcquireFileCML.h"
 #include "AcquireFileCUBE.h"
+#include "AcquireFileEXTOUT.h"
+#include "AcquireFileMGP.h"
 #include "AcquireFilePDB.h"
+#include "AcquireFileSUM.h"
 #include "AcquireFileWFN.h"
 #include "AcquireFileWFX.h"
 #include "AcquireFileXYZ.h"
@@ -19,11 +22,14 @@
 #include <QMessageBox>
 
 bool ReadDataFormatCML(Path a_path, FrameStructure &host) { return ParseFileCMLTo(a_path, host); }
+bool ReadDataFormatMGP(Path a_path, FrameStructure &host) { return ParseFileMGPTo(a_path, host); }
 bool ReadDataFormatPDB(Path a_path, FrameStructure &host) { return ParseFilePDBTo(a_path, host); }
+bool ReadDataFormatSUM(Path a_path, FrameStructure &host) { return ParseFileSUMTo(a_path, host); }
 bool ReadDataFormatWFN(Path a_path, FrameStructure &host) { return ParseFileWFNTo(a_path, host); }
 bool ReadDataFormatWFX(Path a_path, FrameStructure &host) { return ParseFileWFXTo(a_path, host); }
 bool ReadDataFormatXYZ(Path a_path, FrameStructure &host) { return ParseFileXYZTo(a_path, host); }
 bool ReadDataFormatCUBE(Path a_path, FrameStructure &host) { return ParseFileCUBETo(a_path, host); }
+bool ReadDataFormatEXTOUT(Path a_path, FrameStructure &host) { return ParseFileEXTOUTTo(a_path, host); }
 //
 bool WriteImageFormatPS(FrameStructure &host, Path a_path) { return ExportToPostScriptFile(host, a_path); }
 bool WriteImageFormatBMP(FrameStructure &host, Path a_path) { return ExportToBMPFile(host, a_path); }
@@ -38,10 +44,13 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
     FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML),
+    FileFormat("AIMAll molecular graph", ".mgp", ReadDataFormatMGP),
+    FileFormat("AIMAll analysis summary", ".sum", ReadDataFormatSUM),
     FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB),
     FileFormat("Wavefunction data", ".wfn", ReadDataFormatWFN),
     FileFormat("Wavefunction eXtended data", ".wfx", ReadDataFormatWFX),
     FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE),
+    FileFormat("AIMAll extended output", ".extout", ReadDataFormatEXTOUT),
     //
     FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
     FileFormat("PostScript", ".ps", nullptr, WriteImageFormatPS),
