@@ -129,10 +129,9 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
     String str_type;
     if (!GetLine(inp, str_type))
     {
-      vtkErrorMacro("AcquireQTAIMFile error: CP record #"
-                    << ++nReadCP
-                    << "in file " << this->getPath().string()
-                    << "does not contain the type data");
+      vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP << "in file "
+                                                          << this->getPath().string()
+                                                          << "does not contain the type data");
       return 0;
     }
     InputString inp_type(str_type);
@@ -168,7 +167,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
     {
       // -> AtomType1 // exactly the only
       if (type == cpTypeSaddleB)
-        idElementAdd = 0;
+        idElementAdd = Elements::idNe;
       // idElementAdd = 18; // ??? fictituous Ar
       // pMol->AppendBond(idCP)
       else
@@ -188,15 +187,15 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
       vtkIdType idA1 = strtol(str_aux, &str_aux, 10);
       --idA1; // number to index
       // adding a simplex
-      pMol->AppendBond(atom_new.GetId(), idA0, 0); // TODO: Try to rely upon the AppendBondCP(...) call below;
-      pMol->AppendBond(atom_new.GetId(), idA1, 0); // special bond type CriticalPoint::BondCriticalPoint required
+      pMol->AppendBond(atom_new.GetId(), idA0, 1); // TODO: Try to rely upon the AppendBondCP(...) call below;
+      pMol->AppendBond(atom_new.GetId(), idA1, 1); // special bond type CriticalPoint::BondCriticalPoint required
       // pMol->AppendBondCP(idA0, idA1, xyz);
     }
     else if (!skip.find("RCP"))
     {
       // -> AtomType1 AtomType2  ???  may be greater than 3 atoms
       if (type == cpTypeSaddleR)
-        idElementAdd = Elements::idNone; // fictituous point
+        idElementAdd = Elements::idHe; // fictituous point
       else
       {
         vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
@@ -222,7 +221,7 @@ int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
     {
       // -> AtomType1 AtomType2 -> should be greater than 3 atoms
       if (type == cpTypeMinimum)
-        idElementAdd = 2; // fictituous He; local minimum
+        idElementAdd = 0; // Xx; local minimum
       else
       {
         vtkErrorMacro("AcquireQTAIMFile error: CP record #" << ++nReadCP
