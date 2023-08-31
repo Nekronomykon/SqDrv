@@ -6,22 +6,52 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include "MoleculeSource.h"
+#include <vtkStringArray.h>
+
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+
+#include "SourceOfMolecule.h"
 
 #include "ImplPathName.h"
 
 class AcquireFileBase
-    : public MoleculeSource,
+    : public SourceOfMolecule,
       public ImplPathName<AcquireFileBase>
 {
 public:
   static AcquireFileBase *New();
-  vtkTypeMacro(AcquireFileBase, MoleculeSource);
+  vtkTypeMacro(AcquireFileBase, SourceOfMolecule);
   void PrintSelf(ostream &os, vtkIndent indent) override;
   //
+  vtkIdType GetNumberOfAtoms() const;
+  vtkIdType resetNumberOfAtoms(vtkIdType /*id*/ = 0L);
+
 protected:
   explicit AcquireFileBase(int /* nOuts */ = 1);
   ~AcquireFileBase() override = default;
+  //
+  vtkIdType &NumberOfAtoms();
+
+  // ----------------------------------------------------------------------------------------------------
+  // To be overriden to read information stored in the (file) stream
+  // ----------------------------------------------------------------------------------------------------
+  int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  virtual int ReadSizesFrom(InputFile & /*inp*/);
+  // ----------------------------------------------------------------------------------------------------
+  int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
+  virtual int ReadDataFrom(InputFile & /*inp*/, Molecule * /*ptrMol*/);
+  virtual int OnReadDataComplete(Molecule * /* ptrMol */);
+  // ----------------------------------------------------------------------------------------------------
+
+private:
+  vtkIdType NumberOfAtoms_ = -1;
+  String nameStructure_ = String();
+  vtkNew<vtkStringArray> nameAtoms_;
+
+private:
+  AcquireFileBase(const AcquireFileBase &) = delete;
+  void operator=(const AcquireFileBase &) = delete;
 };
 
 #endif // !AcquireFile_Base_h__

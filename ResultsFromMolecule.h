@@ -1,5 +1,5 @@
-#ifndef Source_Of_Molecule_h__
-#define Source_Of_Molecule_h__
+#ifndef Results_From_Molecule_h__
+#define Results_From_Molecule_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -10,21 +10,21 @@
 
 #include <vtkAlgorithm.h>
 
-class SourceOfMolecule
+class ResultsFromMolecule
     : public vtkAlgorithm
 {
 public:
-  static SourceOfMolecule *New();
-  vtkTypeMacro(SourceOfMolecule, vtkAlgorithm);
+  static ResultsFromMolecule *New();
+  vtkTypeMacro(ResultsFromMolecule, vtkAlgorithm);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   ///@{
   /**
    * Get the output data object for a port on this algorithm.
    */
-  Molecule *GetOutput();
-  Molecule *GetOutput(int);
-  virtual void SetOutput(Molecule *d);
+  Molecule *GetInput();
+  Molecule *GetInput(int);
+  virtual void SetInput(Molecule *d);
   ///@}
 
   /**
@@ -36,9 +36,9 @@ public:
 
   // this method is not recommended for use, but lots of old style filters
   // use it
-  vtkDataObject *GetInput();
-  vtkDataObject *GetInput(int port);
-  Molecule *GetMoleculeInput(int port);
+  // vtkDataObject *GetOutput();
+  // vtkDataObject *GetOutput(int port);
+  // Molecule *GetMoleculeOutput(int port);
 
   ///@{
   /**
@@ -50,8 +50,8 @@ public:
    * input index to the input port index, not an index of a connection
    * within a single port.
    */
-  void SetInputData(vtkDataObject *);
-  void SetInputData(int, vtkDataObject *);
+  void SetOutputData(vtkDataObject *);
+  void SetOutputData(int, vtkDataObject *);
   ///@}
 
   ///@{
@@ -61,13 +61,13 @@ public:
    * use the more general vtkAlgorithm::AddInputConnection().  See
    * SetInputData() for details.
    */
-  void AddInputData(vtkDataObject *);
-  void AddInputData(int, vtkDataObject *);
+  void AddOutputData(vtkDataObject *);
+  void AddOutputData(int, vtkDataObject *);
   ///@}
 
 protected:
-  explicit SourceOfMolecule(int /*nOuts */ = 1);
-  ~SourceOfMolecule() override = default;
+  explicit ResultsFromMolecule(int /*nOuts */ = 1, int /* nIns */ = 1);
+  ~ResultsFromMolecule() override = default;
 
   // convenience method
   virtual int RequestInformation(vtkInformation *request, vtkInformationVector **inputVector,
@@ -91,8 +91,8 @@ protected:
   int FillInputPortInformation(int port, vtkInformation *info) override;
 
 private:
-  SourceOfMolecule(const SourceOfMolecule &) = delete;
-  void operator=(const SourceOfMolecule &) = delete;
+  ResultsFromMolecule(const ResultsFromMolecule &) = delete;
+  void operator=(const ResultsFromMolecule &) = delete;
 };
 
-#endif // !Source_Of_Molecule_h__
+#endif // !Results_From_Molecule_h__

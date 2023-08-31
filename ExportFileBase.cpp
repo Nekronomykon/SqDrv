@@ -6,7 +6,7 @@ using namespace std;
 vtkStandardNewMacro(ExportFileBase);
 
 //------------------------------------------------------------------------------
-ExportFileBase::ExportFileBase(int nOuts) : MoleculeSource(nOuts)
+ExportFileBase::ExportFileBase(int nOuts) : ResultsFromMolecule(nOuts)
 {
 }
 

@@ -6,17 +6,17 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include "MoleculeSource.h"
+#include "ResultsFromMolecule.h"
 
 #include "ImplPathName.h"
 
 class ExportFileBase
-    : public MoleculeSource,
+    : public ResultsFromMolecule,
       public ImplPathName<ExportFileBase>
 {
 public:
   static ExportFileBase *New();
-  vtkTypeMacro(ExportFileBase, MoleculeSource);
+  vtkTypeMacro(ExportFileBase, ResultsFromMolecule);
   void PrintSelf(ostream &os, vtkIndent indent) override;
   //
 protected:

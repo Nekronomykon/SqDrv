@@ -1,9 +1,9 @@
-#include "SourceOfMolecule.h"
+#include "ResultsFromMolecule.h"
 
 /*=========================================================================
 
   Program:   Visualization Toolkit
-  Module:    SourceOfMolecule.cxx
+  Module:    ResultsFromMolecule.cxx
 
   Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
   All rights reserved.
@@ -25,64 +25,64 @@
 using namespace std;
 
 //------------------------------------------------------------------------------
-vtkStandardNewMacro(SourceOfMolecule);
+vtkStandardNewMacro(ResultsFromMolecule);
 
 //------------------------------------------------------------------------------
-SourceOfMolecule::SourceOfMolecule(int nOuts)
+ResultsFromMolecule::ResultsFromMolecule(int nOuts, int nIns)
 {
   // by default assume filters have one input and one output
   // subclasses that deviate should modify this setting
-  // this->SetNumberOfInputPorts(1);
+  this->SetNumberOfInputPorts(nIns);
   this->SetNumberOfOutputPorts(nOuts);
 }
 
 //------------------------------------------------------------------------------
-// SourceOfMolecule::~SourceOfMolecule();
+// ResultsFromMolecule::~ResultsFromMolecule();
 
 //------------------------------------------------------------------------------
-void SourceOfMolecule::PrintSelf(ostream &os, vtkIndent indent)
+void ResultsFromMolecule::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 }
 
 //------------------------------------------------------------------------------
-Molecule *SourceOfMolecule::GetOutput()
-{
-  return this->GetOutput(0);
-}
-
-//------------------------------------------------------------------------------
-Molecule *SourceOfMolecule::GetOutput(int port)
-{
-  return Molecule::SafeDownCast(this->GetOutputDataObject(port));
-}
-
-//------------------------------------------------------------------------------
-void SourceOfMolecule::SetOutput(Molecule *d)
-{
-  this->GetExecutive()->SetOutputData(0, d);
-}
-
-//------------------------------------------------------------------------------
-vtkDataObject *SourceOfMolecule::GetInput()
+Molecule *ResultsFromMolecule::GetInput()
 {
   return this->GetInput(0);
 }
 
 //------------------------------------------------------------------------------
-vtkDataObject *SourceOfMolecule::GetInput(int port)
+Molecule *ResultsFromMolecule::GetInput(int port)
 {
-  return this->GetExecutive()->GetInputData(port, 0);
+  return Molecule::SafeDownCast( this->GetInputDataObject(port, 0)) ;
 }
 
 //------------------------------------------------------------------------------
-Molecule *SourceOfMolecule::GetMoleculeInput(int port)
+void ResultsFromMolecule::SetInput(Molecule *d)
+{
+  this->SetInputDataObject(0, d);
+}
+/*
+//------------------------------------------------------------------------------
+vtkDataObject *ResultsFromMolecule::GetOutput()
+{
+  return this->GetOutput(0);
+}
+
+//------------------------------------------------------------------------------
+vtkDataObject *ResultsFromMolecule::GetOutput(int port)
+{
+  return this->GetExecutive()->GetOutputData(port, 0);
+}
+//------------------------------------------------------------------------------
+Molecule *ResultsFromMolecule::GetMoleculeOutput(int port)
 {
   return Molecule::SafeDownCast(this->GetInput(port));
 }
+*/
 
 //------------------------------------------------------------------------------
-vtkTypeBool SourceOfMolecule::ProcessRequest(
+vtkTypeBool ResultsFromMolecule::ProcessRequest(
     vtkInformation *request,
     vtkInformationVector **inputVector,
     vtkInformationVector *outputVector)
@@ -108,22 +108,23 @@ vtkTypeBool SourceOfMolecule::ProcessRequest(
 }
 
 //------------------------------------------------------------------------------
-int SourceOfMolecule::FillOutputPortInformation(int vtkNotUsed(port), vtkInformation *info)
+int ResultsFromMolecule::FillOutputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
-  // now add our info
-  info->Set(vtkDataObject::DATA_TYPE_NAME(), "Molecule");
+  // now add our info ???
+  info->Set(vtkDataObject::DATA_TYPE_NAME(), "Molecule"); // "vtkMolecule"???
   return 1;
 }
 
 //------------------------------------------------------------------------------
-int SourceOfMolecule::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
+int ResultsFromMolecule::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
-  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "Molecule");
+  // now add our info ???
+  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "Molecule"); // "vtkMolecule"???
   return 1;
 }
 
 //------------------------------------------------------------------------------
-int SourceOfMolecule::RequestInformation(vtkInformation *vtkNotUsed(request),
+int ResultsFromMolecule::RequestInformation(vtkInformation *vtkNotUsed(request),
                                        vtkInformationVector **vtkNotUsed(inputVector),
                                        vtkInformationVector *vtkNotUsed(outputVector))
 {
@@ -132,7 +133,7 @@ int SourceOfMolecule::RequestInformation(vtkInformation *vtkNotUsed(request),
 }
 
 //------------------------------------------------------------------------------
-int SourceOfMolecule::RequestUpdateExtent(vtkInformation *vtkNotUsed(request),
+int ResultsFromMolecule::RequestUpdateExtent(vtkInformation *vtkNotUsed(request),
                                         vtkInformationVector **inputVector,
                                         vtkInformationVector *vtkNotUsed(outputVector))
 {
@@ -152,34 +153,35 @@ int SourceOfMolecule::RequestUpdateExtent(vtkInformation *vtkNotUsed(request),
 //------------------------------------------------------------------------------
 // This is the superclasses style of Execute method.  Convert it into
 // an imaging style Execute method.
-int SourceOfMolecule::RequestData(vtkInformation *vtkNotUsed(request),
+int ResultsFromMolecule::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *vtkNotUsed(outputVector))
 {
   return 1;
 }
-
+/*
 //------------------------------------------------------------------------------
-void SourceOfMolecule::SetInputData(vtkDataObject *input)
+void ResultsFromMolecule::SetInputData(vtkDataObject *input)
 {
   this->SetInputData(0, input);
 }
 
 //------------------------------------------------------------------------------
-void SourceOfMolecule::SetInputData(int index, vtkDataObject *input)
+void ResultsFromMolecule::SetInputData(int index, vtkDataObject *input)
 {
   this->SetInputDataInternal(index, input);
 }
 
 //------------------------------------------------------------------------------
-void SourceOfMolecule::AddInputData(vtkDataObject *input)
+void ResultsFromMolecule::AddInputData(vtkDataObject *input)
 {
   this->AddInputData(0, input);
 }
 
 //------------------------------------------------------------------------------
-void SourceOfMolecule::AddInputData(int index, vtkDataObject *input)
+void ResultsFromMolecule::AddInputData(int index, vtkDataObject *input)
 {
 
   this->AddInputDataInternal(index, input);
 }
+*/
