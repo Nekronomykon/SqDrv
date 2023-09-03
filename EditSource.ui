@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditSource</class>
+ <widget class="QWidget" name="EditSource">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="layoutMain_">
+   <item>
+    <layout class="QHBoxLayout" name="layoutTitle_" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="labelTitle_">
+       <property name="text">
+        <string>Structure title:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editTitle_">
+       <property name="placeholderText">
+        <string extracomment="[structure title]">[title string for the current structure file]</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutAtomicFormula_" stretch="0,0,1">
+     <item>
+      <widget class="QLineEdit" name="editNumberOfAtoms_">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="placeholderText">
+        <string>[number of atoms]</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelNumberOfAtoms_">
+       <property name="text">
+        <string>atoms of formula</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editFormula_">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="placeholderText">
+        <string>[molecular formula]</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="EditMarkLines" name="editAtoms_"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EditMarkLines</class>
+   <extends>QPlainTextEdit</extends>
+   <header>EditMarkLines.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

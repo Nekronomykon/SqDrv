@@ -176,7 +176,7 @@ Molecule *MapMolecule::GetInput()
 void MapMolecule::UseBallAndStickSettings()
 {
   this->SetAtomicRadiusType(VDWRadius);
-  this->SetAtomicRadiusScaleFactor(0.3);
+  this->SetAtomicRadiusScaleFactor(0.25);
   this->SetAtomColorMode(DiscreteByAtom);
   //
   this->SetRenderBonds(true);
@@ -197,7 +197,7 @@ void MapMolecule::UseVDWSpheresSettings()
   this->SetAtomicRadiusScaleFactor(1.0);
   this->SetAtomColorMode(DiscreteByAtom);
   //
-  this->SetRenderBonds(false); 
+  this->SetRenderBonds(false);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1042,6 +1042,26 @@ void MapMolecule::setGlyphsToUpdate(bool bSet)
 {
   this->GlyphDataInitialized = bSet;
   this->UpdateGlyphPolyData();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+vtkGlyph3DMapper *MapMolecule::glyphMapAtoms() const
+{
+  return this->AtomGlyphMapper;
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+vtkGlyph3DMapper *MapMolecule::glyphMapBonds() const
+{
+  return this->BondGlyphMapper;
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

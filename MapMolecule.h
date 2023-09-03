@@ -46,10 +46,9 @@ public:
   /**
    * Set ivars to default ball-and-stick settings. This is equivalent
    * to the following:
-   * - SetRenderAtoms( true )
    * - SetRenderBonds( true )
    * - SetAtomicRadiusType( VDWRadius )
-   * - SetAtomicRadiusScaleFactor( 0.3 )
+   * - SetAtomicRadiusScaleFactor( 0.25 )
    * - SetBondColorMode( DiscreteByAtom )
    * - SetUseMultiCylindersForBonds( true )
    * - SetBondRadius( 0.075 )
@@ -69,7 +68,6 @@ public:
   /**
    * Set ivars to default liquorice stick settings. This is
    * equivalent to the following:
-   * - SetRenderAtoms( true )
    * - SetRenderBonds( true )
    * - SetAtomicRadiusType( UnitRadius )
    * - SetAtomicRadiusScaleFactor( 0.1 )
@@ -84,10 +82,9 @@ public:
    * extremely large molecules where the overall shape is more
    * important than the details of the atoms/bond. This is equivalent
    * to the following:
-   * - SetRenderAtoms( true )
    * - SetRenderBonds( true )
    * - SetAtomicRadiusType( UnitRadius )
-   * - SetAtomicRadiusScaleFactor( 0.60 )
+   * - SetAtomicRadiusScaleFactor( 0.5 )
    * - SetBondColorMode( SingleColor )
    * - SetBondColor( 50, 50, 50 )
    * - SetUseMultiCylindersForBonds( false )
@@ -289,6 +286,9 @@ public:
   vtkPeriodicTable *GetPeriodicTable() { return this->PeriodicTable; }
 
   void setGlyphsToUpdate(bool /*bSet*/ = true);
+  //
+  virtual vtkGlyph3DMapper* glyphMapAtoms() const;
+  virtual vtkGlyph3DMapper* glyphMapBonds() const;
 
 protected:
   MapMolecule();

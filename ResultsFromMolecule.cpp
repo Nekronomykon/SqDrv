@@ -111,7 +111,7 @@ vtkTypeBool ResultsFromMolecule::ProcessRequest(
 int ResultsFromMolecule::FillOutputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
   // now add our info ???
-  info->Set(vtkDataObject::DATA_TYPE_NAME(), "Molecule"); // "vtkMolecule"???
+  info->Set(vtkDataObject::DATA_TYPE_NAME(), "vtkMolecule"); // "vtkMolecule"???
   return 1;
 }
 
@@ -119,7 +119,7 @@ int ResultsFromMolecule::FillOutputPortInformation(int vtkNotUsed(port), vtkInfo
 int ResultsFromMolecule::FillInputPortInformation(int vtkNotUsed(port), vtkInformation *info)
 {
   // now add our info ???
-  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "Molecule"); // "vtkMolecule"???
+  info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkMolecule"); // "vtkMolecule"???
   return 1;
 }
 

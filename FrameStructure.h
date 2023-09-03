@@ -11,13 +11,12 @@
 
 #include <QPointer>
 
-#include "EditMarkLines.h"
 #include "ViewMolecule.h"
+#include "EditSource.h"
 
 #include <QTabWidget>
 
-class FrameStructure : public QTabWidget
-, public ImplPathName<FrameStructure>
+class FrameStructure : public QTabWidget, public ImplPathName<FrameStructure>
 {
   Q_OBJECT
 
@@ -31,7 +30,10 @@ public:
   void setModified(bool /*bSet*/ = true);
   //
   //
-  ViewMolecule *getMoleculeView() const;
+  EditSource *editSource();
+  EditSource *getEditSource() const;
+  ViewMolecule *viewMolecule();
+  ViewMolecule *getViewMolecule() const;
   MapMolecule *getMoleculeMap() const;
   Molecule *getMolecule() const;
   //
@@ -40,7 +42,7 @@ public:
   bool importFromPath(Path /*the_path*/ = Path());
   bool exportToPath(Path /*the_path*/);
   //
- 
+
   static const FileFormat *AllFormats() { return &formatFile[0]; }
 
 protected:
@@ -50,7 +52,7 @@ private:
   bool bChanged_ = false;
   NewMolecule molecule_;
   QPointer<ViewMolecule> viewMol_;
-  QPointer<EditMarkLines> editSrc_;
+  QPointer<EditSource> editSrc_;
 };
 
 #endif // !Frame_Structure_h__

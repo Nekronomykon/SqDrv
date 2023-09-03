@@ -65,7 +65,7 @@ const FrameStructure::FileFormat FrameStructure::formatFile[] = {
 /// @brief //
 /// @param //
 //
-FrameStructure::FrameStructure(QWidget *parent) : QTabWidget(parent), viewMol_(new ViewMolecule(this)), editSrc_(new EditMarkLines(this))
+FrameStructure::FrameStructure(QWidget *parent) : QTabWidget(parent), viewMol_(new ViewMolecule(this)), editSrc_(new EditSource(this))
 {
   this->addTab(viewMol_, tr("Structure view"));
   this->addTab(editSrc_, tr("Atomic content"));
@@ -101,7 +101,28 @@ void FrameStructure::setModified(bool bSet) { bChanged_ = bSet; }
 /// @brief //
 /// @param //
 //
-ViewMolecule *FrameStructure::getMoleculeView() const
+EditSource *FrameStructure::editSource()
+{
+  this->setCurrentWidget(editSrc_);
+  return editSrc_;
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+EditSource *FrameStructure::getEditSource() const
+{
+  return editSrc_;
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+ViewMolecule *FrameStructure::getViewMolecule(void) const
 {
   return viewMol_;
 }
@@ -111,7 +132,18 @@ ViewMolecule *FrameStructure::getMoleculeView() const
 /// @brief //
 /// @param //
 //
-MapMolecule *FrameStructure::getMoleculeMap() const
+ViewMolecule *FrameStructure::viewMolecule(void)
+{
+  this->setCurrentWidget(viewMol_);
+  return viewMol_;
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+MapMolecule *FrameStructure::getMoleculeMap(void) const
 {
   return viewMol_->getMolMap();
 }
