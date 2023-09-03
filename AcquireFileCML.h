@@ -15,17 +15,17 @@ using AcquireFileCML = vtkCMLMoleculeReader;
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-typedef vtkNew<AcquireFileCML>           NewAcquireCML;
-typedef vtkSmartPointer<AcquireFileCML>   ToAcquireCML;
-
+typedef vtkNew<AcquireFileCML> NewAcquireCML;
+typedef vtkSmartPointer<AcquireFileCML> ToAcquireCML;
 
 template <class Host>
 bool ParseFileCMLTo(Path a_path, Host &host)
 {
-    NewAcquireCML read;
-    read->SetFileName(a_path.c_str());
-    read->SetOutput(host.getMolecule());
-    read->Update();
+  NewAcquireCML read;
+  read->SetFileName(a_path.c_str());
+  read->SetOutput(host.getMolecule());
+  read->Update();
+  host.resetTitle(/* read->getTitle() */);
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 

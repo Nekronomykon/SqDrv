@@ -16,16 +16,17 @@ using AcquireFileCUBE = vtkGaussianCubeReader2;
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-typedef vtkNew<AcquireFileCUBE>           NewAcquireCUBE;
-typedef vtkSmartPointer<AcquireFileCUBE>   ToAcquireCUBE;
+typedef vtkNew<AcquireFileCUBE> NewAcquireCUBE;
+typedef vtkSmartPointer<AcquireFileCUBE> ToAcquireCUBE;
 
 template <class Host>
 bool ParseFileCUBETo(Path a_path, Host &host)
 {
-    NewAcquireCUBE read;
-    read->SetFileName(a_path.c_str());
-    read->SetOutput(host.getMolecule());
-    read->Update();
+  NewAcquireCUBE read;
+  read->SetFileName(a_path.c_str());
+  read->SetOutput(host.getMolecule());
+  read->Update();
+  host.resetTitle(/* read->getTitle() */);
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 

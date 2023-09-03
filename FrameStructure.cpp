@@ -155,7 +155,18 @@ MapMolecule *FrameStructure::getMoleculeMap(void) const
 //
 Molecule *FrameStructure::getMolecule() const
 {
-  return viewMol_->getMolecule();
+    return viewMol_->getMolecule();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void FrameStructure::resetTitle(String title)
+{
+    QString strTitle(title.c_str());
+    editSrc_->resetTitleString(strTitle);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

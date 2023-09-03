@@ -76,6 +76,7 @@ bool ParseFileWFXTo(Path a_path, Host &host)
   read->resetPath(a_path);
   read->SetOutput(host.getMolecule());
   read->Update();
+  host.resetTitle(read->getTitle());
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 

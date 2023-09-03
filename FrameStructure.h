@@ -36,6 +36,7 @@ public:
   ViewMolecule *getViewMolecule() const;
   MapMolecule *getMoleculeMap() const;
   Molecule *getMolecule() const;
+  void resetTitle(String /*title*/ = String());
   //
   void clearContent(void);
   void loadFile(void);

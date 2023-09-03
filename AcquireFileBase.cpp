@@ -19,39 +19,39 @@ AcquireFileBase::AcquireFileBase(int nOuts) : SourceOfMolecule(nOuts)
 //------------------------------------------------------------------------------
 vtkIdType AcquireFileBase::GetNumberOfAtoms() const
 {
-  return NumberOfAtoms_;
+  return numAtoms_;
 }
 
 //------------------------------------------------------------------------------
 vtkIdType &AcquireFileBase::NumberOfAtoms()
 {
-  return NumberOfAtoms_;
+  return numAtoms_;
 }
 
 //------------------------------------------------------------------------------
 vtkIdType AcquireFileBase::resetNumberOfAtoms(vtkIdType id)
 {
-  std::swap(id, NumberOfAtoms_);
+  std::swap(id, numAtoms_);
   return id;
 }
 
 //------------------------------------------------------------------------------
 String AcquireFileBase::getTitle() const
 {
-  return nameStructure_;
+  return title_;
 }
 
 //------------------------------------------------------------------------------
 String AcquireFileBase::resetTitle(String name)
 {
-  std::swap(name, nameStructure_);
+  std::swap(name, title_);
   return name;
 }
 
 //------------------------------------------------------------------------------
 String &AcquireFileBase::Title()
 {
-  return nameStructure_;
+  return title_;
 }
 
 //------------------------------------------------------------------------------

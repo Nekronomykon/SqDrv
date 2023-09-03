@@ -29,13 +29,13 @@ public:
   //
   String getTitle()const;
   String resetTitle(String /*name*/ = String());
+  String& Title();
 
 protected:
   explicit AcquireFileBase(int /* nOuts */ = 1);
   ~AcquireFileBase() override = default;
   //
   vtkIdType &NumberOfAtoms();
-  String& Title();
 
   // ----------------------------------------------------------------------------------------------------
   // To be overriden to read information stored in the (file) stream
@@ -49,8 +49,8 @@ protected:
   // ----------------------------------------------------------------------------------------------------
 
 private:
-  vtkIdType NumberOfAtoms_ = -1;
-  String nameStructure_ = String();
+  String title_ = String();
+  vtkIdType numAtoms_ = -1;
   vtkNew<vtkStringArray> nameAtoms_;
 
 private:

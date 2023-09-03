@@ -93,6 +93,7 @@ bool ParseFileXYZTo(Path a_path, Host &host)
   mkbonds->SetOutput(host.getMolecule());
   read->Update();
   mkbonds->Update();
+  host.resetTitle(read->getTitle());
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 

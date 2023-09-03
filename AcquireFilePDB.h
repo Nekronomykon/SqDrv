@@ -15,16 +15,17 @@ using AcquireFilePDB = vtkPDBReader;
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
-typedef vtkNew<AcquireFilePDB>           NewAcquirePDB;
-typedef vtkSmartPointer<AcquireFilePDB>   ToAcquirePDB;
+typedef vtkNew<AcquireFilePDB> NewAcquirePDB;
+typedef vtkSmartPointer<AcquireFilePDB> ToAcquirePDB;
 
 template <class Host>
 bool ParseFilePDBTo(Path a_path, Host &host)
 {
-    NewAcquirePDB read;
-    read->SetFileName(a_path.c_str());
-    read->SetOutput(host.getMolecule());
-    read->Update();
+  NewAcquirePDB read;
+  read->SetFileName(a_path.c_str());
+  read->SetOutput(host.getMolecule());
+  read->Update();
+  host.resetTitle( /* read->getTitle() */ );
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
