@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QGuiApplication>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
@@ -13,6 +14,10 @@
 EditMarkLines::EditMarkLines(QWidget *parent)
     : QPlainTextEdit(parent), barLines_(new BarLines(this))
 {
+  QFont fontFx("Monospace", 10, -1, false);
+  fontFx.setFixedPitch(true);
+  this->setFont(fontFx);
+  // 
   connect(this, &EditMarkLines::blockCountChanged,
           this, &EditMarkLines::updateLineNumberAreaWidth);
   connect(this, &EditMarkLines::updateRequest,

@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 #include <QKeySequence>
 #include <QDockWidget>
+#include <QFontDialog>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
@@ -922,6 +923,44 @@ void FrameExplorer::on_actionStyleStick__triggered()
   auto *pView = frameStr_->viewMolecule();
   pView->setStyleStick()
       ->showMolecule();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void FrameExplorer::on_actionViewStructure__triggered()
+{
+  auto *pView = frameStr_->viewMolecule();
+  pView->showMolecule();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void FrameExplorer::on_actionViewSource__triggered()
+{
+  auto *pSrc = frameStr_->editSource(); //
+  pSrc->setFocus();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void FrameExplorer::on_actionSetFont__triggered()
+{
+  QFontDialog::FontDialogOption opts = QFontDialog::DontUseNativeDialog;
+  auto *pSrc = frameStr_->editSource(); //
+  pSrc->setFocus();
+  bool bOk(false);
+  QFont fnt = QFontDialog::getFont(&bOk, pSrc->getEditAtoms()->font(), this, tr("Fonf choose"), opts);
+  if (bOk)
+    pSrc->updateFont(fnt);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

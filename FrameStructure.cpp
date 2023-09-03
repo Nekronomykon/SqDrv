@@ -71,6 +71,7 @@ FrameStructure::FrameStructure(QWidget *parent) : QTabWidget(parent), viewMol_(n
   this->addTab(editSrc_, tr("Atomic content"));
   //
   viewMol_->mapMolecule(molecule_);
+  editSrc_->resetMolecule(molecule_);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

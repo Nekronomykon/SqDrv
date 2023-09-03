@@ -90,6 +90,8 @@
      <property name="title">
       <string>&amp;Molecule</string>
      </property>
+     <addaction name="actionViewStructure_"/>
+     <addaction name="separator"/>
      <addaction name="actionViewBonds_"/>
      <addaction name="separator"/>
      <addaction name="actionLabelAtoms_"/>
@@ -110,10 +112,18 @@
      <addaction name="actionProjectOrthogonal_"/>
      <addaction name="actionProjectPerspective_"/>
     </widget>
+    <widget class="QMenu" name="menuSource_">
+     <property name="title">
+      <string>&amp;Source</string>
+     </property>
+     <addaction name="actionViewSource_"/>
+     <addaction name="actionSetFont_"/>
+    </widget>
     <addaction name="actionFullScreen_"/>
     <addaction name="separator"/>
     <addaction name="menuProjection_"/>
     <addaction name="menuMolecule_"/>
+    <addaction name="menuSource_"/>
     <addaction name="separator"/>
     <addaction name="actionPrintSetup_"/>
     <addaction name="actionPrintPreview_"/>
@@ -290,7 +300,7 @@
   </action>
   <action name="actionViewBonds_">
    <property name="text">
-    <string>&amp;View bonds</string>
+    <string>View &amp;bonds</string>
    </property>
   </action>
   <action name="actionStyleBall_">
@@ -346,6 +356,21 @@
   <action name="actionElements_">
    <property name="text">
     <string>Tabl&amp;e of elements..</string>
+   </property>
+  </action>
+  <action name="actionSetFont_">
+   <property name="text">
+    <string>Set &amp;font..</string>
+   </property>
+  </action>
+  <action name="actionViewSource_">
+   <property name="text">
+    <string>View &amp;source</string>
+   </property>
+  </action>
+  <action name="actionViewStructure_">
+   <property name="text">
+    <string>&amp;View structure</string>
    </property>
   </action>
  </widget>

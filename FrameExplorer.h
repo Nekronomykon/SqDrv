@@ -103,6 +103,9 @@ protected slots:
   void on_actionStyleUser__triggered(void);
   void on_actionStyleSpace__triggered(void);
   void on_actionStyleStick__triggered(void);
+  void on_actionViewStructure__triggered(void);
+  void on_actionViewSource__triggered(void);
+  void on_actionSetFont__triggered(void);
 
 private:
   bool bFullScreen_ = false;

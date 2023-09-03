@@ -17,20 +17,20 @@ class EditMarkLines : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit EditMarkLines(QWidget* parent = nullptr);
+    explicit EditMarkLines(QWidget *parent = nullptr);
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
-     int lineNumberAreaWidth();
+    int lineNumberAreaWidth();
 
-     bool isModified() {return this->document()->isModified();}
+    bool isModified() { return this->document()->isModified(); }
 
- protected:
-     void resizeEvent(QResizeEvent *event) override;
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
- private slots:
-     void updateLineNumberAreaWidth(int newBlockCount);
-     void highlightCurrentLine();
-     void updateLineNumberArea(const QRect &rect, int dy);
+private slots:
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void highlightCurrentLine();
+    void updateLineNumberArea(const QRect &rect, int dy);
 
 private:
     QPointer<BarLines> barLines_;

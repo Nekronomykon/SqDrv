@@ -9,7 +9,8 @@
 #include <QPointer>
 #include <QLineEdit>
 
-#include <memory>
+// #include <memory>
+#include "Molecule.h"
 
 #include "EditMarkLines.h"
 
@@ -24,13 +25,18 @@ public:
   explicit EditSource(QWidget * /*parent*/ = nullptr);
   bool isModified(void) const;
   //
-  QString getTitleString(void)const;
+  QString getTitleString(void) const;
   // QString getTitle(void);
   void resetTitleString(QString /*strTitle*/ = QString());
   //
   EditMarkLines *getEditAtoms() const;
+  //
+  Molecule * resetMolecule(Molecule * /*pMol*/ = nullptr);
+  void showMolecule();
+  void updateFont(QFont);
 
 private:
+  Molecule *ptrMolecule_ = nullptr;
 };
 
 #endif // !Edit_Source_h__
