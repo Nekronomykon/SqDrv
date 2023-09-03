@@ -45,7 +45,7 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
   */
 
-  GetLine(inp, this->NameOfStructure()); // first (title) line may be empty
+  GetLine(inp, this->Title()); // first (title) line may be empty
 
   std::string one_line;
   int nOrb, nPrim;

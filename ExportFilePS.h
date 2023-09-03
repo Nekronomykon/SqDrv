@@ -23,7 +23,7 @@ bool ExportToPostScriptFile(Host &host, Path a_path)
 {
   NewExportPS writer;
   writer->SetFileName(a_path.c_str());
-  return host.getMoleculeView()->exportImageTo(writer, false);
+  return host.viewMolecule()->exportImageTo(writer, true);
 }
 
 #endif // !Export_File_PS_h__

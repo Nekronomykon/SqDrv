@@ -23,7 +23,7 @@ bool ExportToBMPFile(Host &host, Path a_path)
 {
   NewExportBMP writer;
   writer->SetFileName(a_path.c_str());
-  return host.getMoleculeView()->exportImageTo(writer, true);
+  return host.viewMolecule()->exportImageTo(writer, true);
 }
 
 #endif // !Export_File_BMP_h__

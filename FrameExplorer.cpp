@@ -324,7 +324,7 @@ FrameExplorer::FrameExplorer(QWidget *parent)
 //
 void FrameExplorer::showBackRGB(void)
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->getViewMolecule();
   editBgRed_->setText(QString::number(pView->backgroundRed()));
   editBgGreen_->setText(QString::number(pView->backgroundGreen()));
   editBgBlue_->setText(QString::number(pView->backgroundBlue()));
@@ -411,7 +411,7 @@ void FrameExplorer::saveSettings()
 bool FrameExplorer::isFullScreen(void) const { return bFullScreen_; }
 void FrameExplorer::toggleFullScreen(void)
 {
-  auto *pView = frameStr_->getMoleculeView();
+  // auto *pView = frameStr_->getMoleculeView();
   if (this->isFullScreen())
   {
     this->showNormal();
@@ -499,7 +499,7 @@ void FrameExplorer::on_nameBackgroundColor(const QString &name)
   if (!isalpha(*ba))
     return;
 
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->ColorBackgroundByName(ba.data());
   this->showBackRGB();
 }
@@ -511,7 +511,7 @@ void FrameExplorer::on_nameBackgroundColor(const QString &name)
 //
 void FrameExplorer::on_changedBackgroundRed()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setBackgroundRed(editBgRed_->text().toDouble());
   this->showBackRGB();
 }
@@ -523,7 +523,7 @@ void FrameExplorer::on_changedBackgroundRed()
 //
 void FrameExplorer::on_changedBackgroundGreen()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setBackgroundGreen(editBgGreen_->text().toDouble());
   this->showBackRGB();
 }
@@ -535,7 +535,7 @@ void FrameExplorer::on_changedBackgroundGreen()
 //
 void FrameExplorer::on_changedBackgroundBlue()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setBackgroundBlue(editBgBlue_->text().toDouble());
   this->showBackRGB();
 }
@@ -808,6 +808,7 @@ void FrameExplorer::on_actionNew__triggered()
 //
 void FrameExplorer::on_actionLabelAtoms__triggered()
 {
+  auto *pView = frameStr_->viewMolecule();
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -817,6 +818,7 @@ void FrameExplorer::on_actionLabelAtoms__triggered()
 //
 void FrameExplorer::on_actionViewBonds__triggered()
 {
+  auto *pView = frameStr_->viewMolecule();
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -826,6 +828,7 @@ void FrameExplorer::on_actionViewBonds__triggered()
 //
 void FrameExplorer::on_actionLabelBonds__triggered()
 {
+  auto *pView = frameStr_->viewMolecule();
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -835,7 +838,7 @@ void FrameExplorer::on_actionLabelBonds__triggered()
 //
 void FrameExplorer::on_actionCameraReset__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->resetCamera()
       ->showMolecule();
 }
@@ -847,7 +850,7 @@ void FrameExplorer::on_actionCameraReset__triggered()
 //
 void FrameExplorer::on_actionProjectOrthogonal__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setProjectParallel()
       ->showMolecule();
 }
@@ -859,7 +862,7 @@ void FrameExplorer::on_actionProjectOrthogonal__triggered()
 //
 void FrameExplorer::on_actionProjectPerspective__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setProjectPerspective()
       ->showMolecule();
 }
@@ -871,7 +874,7 @@ void FrameExplorer::on_actionProjectPerspective__triggered()
 //
 void FrameExplorer::on_actionStyleBall__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setStyleBall()
       ->showMolecule();
 }
@@ -883,7 +886,7 @@ void FrameExplorer::on_actionStyleBall__triggered()
 //
 void FrameExplorer::on_actionStyleFast__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setStyleFast()
       ->showMolecule();
 }
@@ -904,7 +907,7 @@ void FrameExplorer::on_actionStyleUser__triggered()
 //
 void FrameExplorer::on_actionStyleSpace__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setStyleSpace()
       ->showMolecule();
 }
@@ -916,7 +919,7 @@ void FrameExplorer::on_actionStyleSpace__triggered()
 //
 void FrameExplorer::on_actionStyleStick__triggered()
 {
-  auto *pView = frameStr_->getMoleculeView();
+  auto *pView = frameStr_->viewMolecule();
   pView->setStyleStick()
       ->showMolecule();
 }

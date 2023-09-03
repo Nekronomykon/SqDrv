@@ -22,9 +22,12 @@ class EditSource
   Q_OBJECT
 public:
   explicit EditSource(QWidget * /*parent*/ = nullptr);
-
   bool isModified(void) const;
-
+  //
+  QString getTitleString(void)const;
+  // QString getTitle(void);
+  void resetTitleString(QString /*strTitle*/ = QString());
+  //
   EditMarkLines *getEditAtoms() const;
 
 private:

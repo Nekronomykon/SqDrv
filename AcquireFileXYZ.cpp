@@ -69,7 +69,7 @@ int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
   // ~?~ or somewhat similar...
   //
 
-  GetLine(inp, this->NameOfStructure()); // second (title) line may be empty
+  GetLine(inp, this->Title()); // second (title) line may be empty
 
   // simply scroll NumberOfAtom lines of the file:
   for (; na; --na)

@@ -36,20 +36,20 @@ vtkIdType AcquireFileBase::resetNumberOfAtoms(vtkIdType id)
 }
 
 //------------------------------------------------------------------------------
-String AcquireFileBase::getNameOfStructure() const
+String AcquireFileBase::getTitle() const
 {
   return nameStructure_;
 }
 
 //------------------------------------------------------------------------------
-String AcquireFileBase::resetNameOfStructure(String name)
+String AcquireFileBase::resetTitle(String name)
 {
   std::swap(name, nameStructure_);
   return name;
 }
 
 //------------------------------------------------------------------------------
-String &AcquireFileBase::NameOfStructure()
+String &AcquireFileBase::Title()
 {
   return nameStructure_;
 }
@@ -60,7 +60,7 @@ void AcquireFileBase::PrintSelf(ostream &os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
   os << indent << "[ FileName: " << this->getPath()
      << " Running number of atoms: " << this->GetNumberOfAtoms()
-     << " Running title" << this->getNameOfStructure()
+     << " Running title" << this->getTitle()
      << " ]" << endl;
 }
 
