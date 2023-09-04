@@ -1,4 +1,12 @@
 #include "EditSource.h"
+
+#include "Elements.h"
+#include "Formula.h"
+using namespace vtk;
+
+#include <QTextCursor>
+#include <QTextBlock>
+#include <QStringLiteral>
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
@@ -68,9 +76,9 @@ EditMarkLines *EditSource::getEditAtoms() const
 //
 Molecule *EditSource::resetMolecule(Molecule *pMol)
 {
-    if(pMol != ptrMolecule_)
-        std::swap(ptrMolecule_,pMol);
-    return pMol;
+  if (pMol != ptrMolecule_)
+    std::swap(ptrMolecule_, pMol);
+  return pMol;
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +88,44 @@ Molecule *EditSource::resetMolecule(Molecule *pMol)
 //
 void EditSource::showMolecule()
 {
+  editAtoms_->clear();
+  editNumberOfAtoms_->clear();
+  editFormula_->clear();
 
+  vtkIdType nAtoms = !ptrMolecule_
+                         ? 0
+                         : ptrMolecule_->GetNumberOfAtoms();
+
+  editNumberOfAtoms_->setText(QString::number(nAtoms));
+  Formula form(*ptrMolecule_);
+  editFormula_->setText(QString( form.asString().c_str() ));
+
+  if (ptrMolecule_ && (nAtoms > 0))
+  {
+    vtkIdType idAtom = 0;
+    vtkIdType idFragment = -1;
+    QTextCursor cursor(editAtoms_->document());
+    do
+    {
+      vtkAtom atomHere = ptrMolecule_->GetAtom(idAtom);
+      QString strAtom(tr(" %1").arg(Elements::GetElementSymbol(atomHere.GetAtomicNumber()).c_str(), 4));
+
+      /* code */
+      if (idFragment > 0)
+      {
+        strAtom += tr("(%1)").arg(idFragment);
+      }
+      strAtom += "  ";
+      strAtom += (tr("  %1  %2  %3")
+                      .arg(ptrMolecule_->GetPoint(idAtom)[0], 13, 'f', 8)
+                      .arg(ptrMolecule_->GetPoint(idAtom)[1], 13, 'f', 8)
+                      .arg(ptrMolecule_->GetPoint(idAtom)[2], 13, 'f', 8));
+      ++idAtom; // next atom:
+
+      cursor.insertText(strAtom);
+      cursor.insertBlock();
+    } while (idAtom < nAtoms);
+  }
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -13,6 +13,16 @@
   <property name="windowTitle">
    <string>Explore structures</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="SqDrv.qrc">
+    <normaloff>:/images/SqDrv.png</normaloff>:/images/SqDrv.png</iconset>
+  </property>
+  <property name="documentMode">
+   <bool>true</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="FrameStructure" name="frameStr_"/>
   <widget class="QMenuBar" name="barMenu_">
    <property name="geometry">
@@ -382,6 +392,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="SqDrv.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -214,6 +214,7 @@ bool FrameStructure::importFromPath(Path the_path)
   if (bRes)
   {
     viewMol_->showMolecule(nullptr, true);
+    editSrc_->showMolecule();
     this->setModified(bToModify);
   }
   return bRes;

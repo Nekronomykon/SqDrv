@@ -1,10 +1,16 @@
 #ifndef Elements_h
 #define Elements_h
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 #include <vtkStdString.h>
 #include <vtkType.h>
 
 #include <string>
+#include <utility>
 
 typedef std::string String;
 typedef unsigned short IndexElement;
@@ -183,7 +189,10 @@ namespace vtk
     static IndexElement SymbolToNumber(const char * /* s */, char **save = nullptr);
     static bool IsValidAtomNumber(IdAtomType idType)
     {
-      return ((idType & idAtomNumberMask) < idUnknownYet);
+      if (idType <= 0)
+        return false;
+      idType &= idAtomNumberMask;
+      return bool(idType < idUnknownYet);
     }
     static vtkStdString GetElementSymbol(IndexElement /*idElement*/);
     static double GetMeanMass(long /* id */);
@@ -206,5 +215,20 @@ namespace vtk
   };
 
 }; // namespace vtk
+
+struct ElementPreceeds
+{
+  // ElementPreceeds(): base(){}
+  // const std::less<IndexElement> base;
+  bool operator()(const IndexElement e1, const IndexElement e2) const
+  {
+    if (e1 == vtk::Elements::id_C)
+      return bool(e2 != vtk::Elements::id_C);
+    else
+      return (e2 == vtk::Elements::id_C)
+                 ? false
+                 : bool(e1 < e2);
+  }
+};
 
 #endif //! Elements_h

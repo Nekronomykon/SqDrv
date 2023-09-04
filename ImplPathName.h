@@ -23,9 +23,10 @@ using Path = fs::path;
 #include <cassert>
 
 typedef std::ifstream InputFile;
+typedef std::ofstream OutputFile;
 //
-typedef std::ostringstream OutputString;
 typedef std::istringstream InputString;
+typedef std::ostringstream OutputString;
 
 struct ImplPathRoot
 {
