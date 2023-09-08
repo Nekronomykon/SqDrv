@@ -1,5 +1,5 @@
-#ifndef Acquire_File_MGP_h__
-#define Acquire_File_MGP_h__
+#ifndef AcquireFile_MGP_h__
+#define AcquireFile_MGP_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -83,4 +83,4 @@ bool ParseFileMGPTo(Path a_path, Host &host)
 
 // }; // namespace vtk
 
-#endif // !Acquire_File_MGP_h__
+#endif // !AcquireFile_MGP_h__

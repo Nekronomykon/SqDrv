@@ -1,5 +1,5 @@
-#ifndef Acquire_File_CML_h__
-#define Acquire_File_CML_h__
+#ifndef AcquireFile_CML_h__
+#define AcquireFile_CML_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -29,4 +29,4 @@ bool ParseFileCMLTo(Path a_path, Host &host)
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-#endif // !Acquire_File_CML_h__
+#endif // !AcquireFile_CML_h__

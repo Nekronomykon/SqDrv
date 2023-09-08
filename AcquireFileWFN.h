@@ -1,5 +1,5 @@
-#ifndef Acquire_File_WFN_h__
-#define Acquire_File_WFN_h__
+#ifndef AcquireFile_WFN_h__
+#define AcquireFile_WFN_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -80,4 +80,4 @@ bool ParseFileWFNTo(Path a_path, Host &host)
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-#endif // !Acquire_File_WFN_h__
+#endif // !AcquireFile_WFN_h__

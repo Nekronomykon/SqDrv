@@ -4,6 +4,8 @@
 #include "Formula.h"
 using namespace vtk;
 
+#include "ImplPathName.h"
+
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QStringLiteral>
@@ -44,7 +46,7 @@ bool EditSource::isModified(void) const
 /// @brief //
 /// @param //
 //
-QString EditSource::getTitleString() const
+QString EditSource::getTitleString(void) const
 {
   return editTitle_->text();
 }
@@ -64,7 +66,7 @@ void EditSource::resetTitleString(QString str)
 /// @brief //
 /// @param //
 //
-EditMarkLines *EditSource::getEditAtoms() const
+EditMarkLines *EditSource::getEditAtoms(void) const
 {
   return editAtoms_;
 }
@@ -86,7 +88,7 @@ Molecule *EditSource::resetMolecule(Molecule *pMol)
 /// @brief //
 /// @param //
 //
-void EditSource::showMolecule()
+void EditSource::showMolecule(void)
 {
   editAtoms_->clear();
   editNumberOfAtoms_->clear();
@@ -98,9 +100,9 @@ void EditSource::showMolecule()
 
   editNumberOfAtoms_->setText(QString::number(nAtoms));
   Formula form(*ptrMolecule_);
-  editFormula_->setText(QString( form.asString().c_str() ));
+  editFormula_->setText(QString(form.asString().c_str()));
 
-  if (ptrMolecule_ && (nAtoms > 0))
+  if (ptrMolecule_ && (nAtoms > 0)о)
   {
     vtkIdType idAtom = 0;
     vtkIdType idFragment = -1;
@@ -108,24 +110,52 @@ void EditSource::showMolecule()
     do
     {
       vtkAtom atomHere = ptrMolecule_->GetAtom(idAtom);
-      QString strAtom(tr(" %1").arg(Elements::GetElementSymbol(atomHere.GetAtomicNumber()).c_str(), 4));
+
+      /* Atom --> String */
+      OutputString outs;
+      outs << std::setw(4) << Elements::GetElementSymbol(atomHere.GetAtomicNumber());
 
       /* code */
       if (idFragment > 0)
       {
-        strAtom += tr("(%1)").arg(idFragment);
+        // strAtom += tr("(%1)").arg(idFragment);
       }
-      strAtom += "  ";
-      strAtom += (tr("  %1  %2  %3")
-                      .arg(ptrMolecule_->GetPoint(idAtom)[0], 13, 'f', 8)
-                      .arg(ptrMolecule_->GetPoint(idAtom)[1], 13, 'f', 8)
-                      .arg(ptrMolecule_->GetPoint(idAtom)[2], 13, 'f', 8));
+      outs
+          << std::fixed
+          << std::setw(14) << std::setprecision(8) << atomHere.GetMolecule()->GetPoint(atomHere.GetId())[0]
+          << std::setw(14) << std::setprecision(8) << atomHere.GetMolecule()->GetPoint(atomHere.GetId())[1]
+          << std::setw(14) << std::setprecision(8) << atomHere.GetMolecule()->GetPoint(atomHere.GetId())[2]
+          << std::endl;
       ++idAtom; // next atom:
 
-      cursor.insertText(strAtom);
-      cursor.insertBlock();
+      // cursor.insertText(strAtom);
+      cursor.insertText(outs.str().c_str());
+      // cursor.insertBlock();
     } while (idAtom < nAtoms);
   }
 }
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void EditSource::readMolecule(void)
+{
+  NewMolecule mol_read;
+  auto* pDoc = editAtoms_->document();
+  QTextBlock blkText = pDoc->begin();
+  vtkIdType idAtom = mol_read->GetNumberOfAtoms();
+  do
+  {
+    if(blkText.isValid())
+    {
+      InputString inps(String( blkText.text().toLatin1().data() ));
+    }
+    /* code */
+    blkText = blkText.next();
+  } while (blkText == pDoc->end());
+  
+  }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

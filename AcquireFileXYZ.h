@@ -1,5 +1,5 @@
-#ifndef Acquire_File_XYZ_h__
-#define Acquire_File_XYZ_h__
+#ifndef AcquireFile_XYZ_h__
+#define AcquireFile_XYZ_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -8,18 +8,13 @@
 
 #include "FormatFile.h"
 #include "AcquireFileBase.h"
-#include <vtkXYZMolReader.h>
-#include <vtkXYZMolReader2.h>
+// #include <vtkXYZMolReader.h>
+// #include <vtkXYZMolReader2.h>
 
 // using AcquireFileXYZ = vtkXYZMolReader2;
 
-class AcquireFileXYZ;
-
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
-
-typedef vtkNew<AcquireFileXYZ> NewAcquireXYZ;
-typedef vtkSmartPointer<AcquireFileXYZ> ToAcquireXYZ;
 
 #include <MakeBonds.h> // bottom of file...
 
@@ -81,6 +76,9 @@ private:
 
 // }; // namespace vtk
 
+typedef vtkNew<AcquireFileXYZ> NewAcquireXYZ;
+typedef vtkSmartPointer<AcquireFileXYZ> ToAcquireXYZ;
+
 template <class Host>
 bool ParseFileXYZTo(Path a_path, Host &host)
 {
@@ -97,4 +95,4 @@ bool ParseFileXYZTo(Path a_path, Host &host)
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-#endif // !Acquire_File_XYZ_h__
+#endif // !AcquireFile_XYZ_h__

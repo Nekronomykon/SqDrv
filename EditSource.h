@@ -23,6 +23,8 @@ class EditSource
   Q_OBJECT
 public:
   explicit EditSource(QWidget * /*parent*/ = nullptr);
+
+  void updateFont(QFont);
   bool isModified(void) const;
   //
   QString getTitleString(void) const;
@@ -32,8 +34,8 @@ public:
   EditMarkLines *getEditAtoms() const;
   //
   Molecule * resetMolecule(Molecule * /*pMol*/ = nullptr);
-  void showMolecule();
-  void updateFont(QFont);
+  void showMolecule(void);
+  void readMolecule(void);
 
 private:
   Molecule *ptrMolecule_ = nullptr;

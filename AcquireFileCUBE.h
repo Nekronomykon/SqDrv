@@ -1,5 +1,5 @@
-#ifndef Acquire_File_CUBE_h__
-#define Acquire_File_CUBE_h__
+#ifndef AcquireFile_CUBE_h__
+#define AcquireFile_CUBE_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -30,4 +30,4 @@ bool ParseFileCUBETo(Path a_path, Host &host)
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-#endif // !Acquire_File_CUBE_h__
+#endif // !AcquireFile_CUBE_h__

@@ -1,5 +1,5 @@
-#ifndef Acquire_File_PDB_h__
-#define Acquire_File_PDB_h__
+#ifndef AcquireFile_PDB_h__
+#define AcquireFile_PDB_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -29,4 +29,4 @@ bool ParseFilePDBTo(Path a_path, Host &host)
   return bool(host.getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-#endif // !Acquire_File_PDB_h__
+#endif // !AcquireFile_PDB_h__

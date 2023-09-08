@@ -1,5 +1,5 @@
-#ifndef Acquire_File_SUM_h__
-#define Acquire_File_SUM_h__
+#ifndef AcquireFile_SUM_h__
+#define AcquireFile_SUM_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -87,4 +87,4 @@ bool ParseFileSUMTo(Path a_path, Host &host)
 
 // }; // namespace vtk
 
-#endif // !Acquire_File_SUM_h__
+#endif // !AcquireFile_SUM_h__

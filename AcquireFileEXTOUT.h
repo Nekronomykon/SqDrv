@@ -1,5 +1,5 @@
-#ifndef Acquire_File_EXTOUT_h__
-#define Acquire_File_EXTOUT_h__
+#ifndef AcquireFile_EXTOUT_h__
+#define AcquireFile_EXTOUT_h__
 
 #ifdef _MSC_VER
 #pragma once
@@ -82,4 +82,4 @@ bool ParseFileEXTOUTTo(Path a_path, Host &host)
 }
 //}; // namespace vtk
 
-#endif // !Acquire_File_EXTOUT_h__
+#endif // !AcquireFile_EXTOUT_h__
