@@ -102,7 +102,7 @@ void EditSource::showMolecule(void)
   Formula form(*ptrMolecule_);
   editFormula_->setText(QString(form.asString().c_str()));
 
-  if (ptrMolecule_ && (nAtoms > 0)о)
+  if (ptrMolecule_ && (nAtoms > 0))
   {
     vtkIdType idAtom = 0;
     vtkIdType idFragment = -1;
