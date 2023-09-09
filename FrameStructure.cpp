@@ -4,14 +4,15 @@
 #include <vtkMoleculeAlgorithm.h>
 
 #include "AcquireFileCML.h"
-#include "AcquireFileCUBE.h"
-#include "AcquireFileEXTOUT.h"
 #include "AcquireFileMGP.h"
 #include "AcquireFilePDB.h"
 #include "AcquireFileSUM.h"
 #include "AcquireFileWFN.h"
 #include "AcquireFileWFX.h"
 #include "AcquireFileXYZ.h"
+#include "AcquireFileCUBE.h"
+#include "AcquireFileMOL2.h"
+#include "AcquireFileEXTOUT.h"
 
 #include "ExportFileBMP.h"
 #include "ExportFileJPEG.h"
@@ -29,6 +30,7 @@ bool ReadDataFormatWFN(Path a_path, FrameStructure &host) { return ParseFileWFNT
 bool ReadDataFormatWFX(Path a_path, FrameStructure &host) { return ParseFileWFXTo(a_path, host); }
 bool ReadDataFormatXYZ(Path a_path, FrameStructure &host) { return ParseFileXYZTo(a_path, host); }
 bool ReadDataFormatCUBE(Path a_path, FrameStructure &host) { return ParseFileCUBETo(a_path, host); }
+bool ReadDataFormatMOL2(Path a_path, FrameStructure &host) { return ParseFileMOL2To(a_path, host); }
 bool ReadDataFormatEXTOUT(Path a_path, FrameStructure &host) { return ParseFileEXTOUTTo(a_path, host); }
 //
 bool WriteImageFormatPS(FrameStructure &host, Path a_path) { return ExportToPostScriptFile(host, a_path); }
@@ -43,13 +45,14 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 //
 const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
-    FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML),
+    FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML), // to rewrite
     FileFormat("AIMAll molecular graph", ".mgp", ReadDataFormatMGP),
     FileFormat("AIMAll analysis summary", ".sum", ReadDataFormatSUM),
-    FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB),
+    FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB), // to rewrite
     FileFormat("Wavefunction data", ".wfn", ReadDataFormatWFN),
     FileFormat("Wavefunction eXtended data", ".wfx", ReadDataFormatWFX),
-    FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE),
+    FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE), // to rewrite
+    FileFormat("MDL Mol2 structure", ".mol2", ReadDataFormatMOL2),  // to write: here's a stub...
     FileFormat("AIMAll extended output", ".extout", ReadDataFormatEXTOUT),
     //
     FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
@@ -156,7 +159,7 @@ MapMolecule *FrameStructure::getMoleculeMap(void) const
 //
 Molecule *FrameStructure::getMolecule() const
 {
-    return viewMol_->getMolecule();
+  return viewMol_->getMolecule();
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,8 +169,8 @@ Molecule *FrameStructure::getMolecule() const
 //
 void FrameStructure::resetTitle(String title)
 {
-    QString strTitle(title.c_str());
-    editSrc_->resetTitleString(strTitle);
+  QString strTitle(title.c_str());
+  editSrc_->resetTitleString(strTitle);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
