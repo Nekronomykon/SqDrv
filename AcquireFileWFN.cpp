@@ -36,9 +36,6 @@ vtkStandardNewMacro(AcquireFileWFN);
 AcquireFileWFN::AcquireFileWFN() : AcquireFileBase(1) {}
 
 //------------------------------------------------------------------------------
-// int AcquireFileWFN::RequestInformation(vtkInformation *vtkNotUsed(request),
-//                                       vtkInformationVector **vtkNotUsed(inputVector),
-//                                       vtkInformationVector *outputVector)
 int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
 {
   /*
@@ -77,31 +74,6 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
 }
 
 //------------------------------------------------------------------------------
-// This call should be used in the form of call of
-// int ReadDataFrom(InputFile& /*inp*/)
-//------------------------------------------------------------------------------
-/*
-int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
-                                vtkInformationVector **vtkNotUsed(inputVector),
-                                vtkInformationVector *outputVector)
-{
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  Molecule *ptrMol = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
-
-  if (!ptrMol)
-  {
-    vtkErrorMacro("AcquireFileWFN does not have a Molecule as ptrMol.");
-    return 1;
-  }
-
-  InputFile inp(this->getPath());
-
-  if (!inp.is_open())
-  {
-    vtkErrorMacro("AcquireFileWFN error opening file: " << this->getPath().string());
-    return 0;
-  }
-  */
 int AcquireFileWFN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 {
   // call base class:
