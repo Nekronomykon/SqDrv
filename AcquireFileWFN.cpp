@@ -78,18 +78,19 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
 
 //------------------------------------------------------------------------------
 // This call should be used in the form of call of
-// int ReadDataFrom(InputFile& /*inp*/)  
+// int ReadDataFrom(InputFile& /*inp*/)
 //------------------------------------------------------------------------------
+/*
 int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
-  Molecule *output = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
+  Molecule *ptrMol = Molecule::SafeDownCast(vtkDataObject::GetData(outputVector));
 
-  if (!output)
+  if (!ptrMol)
   {
-    vtkErrorMacro("AcquireFileWFN does not have a Molecule as output.");
+    vtkErrorMacro("AcquireFileWFN does not have a Molecule as ptrMol.");
     return 1;
   }
 
@@ -100,6 +101,12 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
     vtkErrorMacro("AcquireFileWFN error opening file: " << this->getPath().string());
     return 0;
   }
+  */
+int AcquireFileWFN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
+{
+  // call base class:
+  if (!this->Superclass::ReadDataFrom(inp, ptrMol))
+    return 0;
 
   String one_line; // read this string from disk
   // and parse it using istringstream and state
@@ -118,7 +125,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
   }
 
   // reconstruct Molecule
-  output->Initialize();
+  ptrMol->Initialize();
 
   // by strings, and strings by atoms:
   vtkIdType nAtoms = this->GetNumberOfAtoms();
@@ -150,7 +157,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
         >> x >> y >> z >> skip  // CHARGE
         >> skip                 // '='
         >> q;                   // << now the EOL is here
-    output->AppendAtom((unsigned short)q, x, y, z);
+    ptrMol->AppendAtom((unsigned short)q, x, y, z);
   }
   inp.close();
 
