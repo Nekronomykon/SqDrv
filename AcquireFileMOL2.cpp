@@ -1,5 +1,8 @@
 #include "AcquireFileMOL2.h"
 
+#include "Elements.h"
+using namespace vtk;
+
 //------------------------------------------------------------------------------
 vtkStandardNewMacro(AcquireFileMOL2);
 
@@ -11,6 +14,30 @@ void AcquireFileMOL2::PrintSelf(ostream &os, vtkIndent indent)
 {
   os << indent << "MOL2 parser:\n";
   this->Superclass::PrintSelf(os, indent);
+}
+
+//------------------------------------------------------------------------------
+vtkIdType &AcquireFileMOL2::NumberOfBonds()
+{
+  return numberOfBonds_;
+}
+
+//------------------------------------------------------------------------------
+vtkIdType &AcquireFileMOL2::NumberOfFragments()
+{
+  return numberOfFragments_;
+}
+
+//------------------------------------------------------------------------------
+vtkIdType AcquireFileMOL2::GetNumberOfBonds() const
+{
+  return numberOfBonds_;
+}
+
+//------------------------------------------------------------------------------
+vtkIdType AcquireFileMOL2::GetNumberOfFragments() const
+{
+  return numberOfFragments_;
 }
 
 //------------------------------------------------------------------------------
@@ -83,6 +110,72 @@ int AcquireFileMOL2::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
     return 0;
 
   String one_line;
+  if (!ScrollToPrefix(inp, "@<TRIPOS>ATOM", one_line))
+  {
+    vtkErrorMacro("AcquireFileMOL2 error reading ATOM section from: " << this->getPath().string());
+    return 0;
+  }
+  // reading atoms:
+  for (vtkIdType i = 0; i < this->GetNumberOfAtoms(); i++)
+  {
+    /* code */
+    if (!GetLine(inp, one_line))
+    {
+      vtkErrorMacro("AcquireFileMOL2 error reading ATOM line from: " << this->getPath().string());
+      return 0;
+    }
+    InputString inps(one_line);
+    String skip;
+    String label;
+    double x(0), y(0), z(0), q(0);
+    int idFrag;
+    String type;
+    String nameFrag;
+    inps >> skip              // atom ordinal that is not used
+        >> label              // Atom name
+        >> x >> y >> z        // Coords
+        >> type               // SYBYL type
+        >> idFrag >> nameFrag // Fragment IDs
+        >> q                  // formal charge
+        ;
+    vtkIdType idElem = Elements::SymbolToNumber(type.c_str());
+    if (!Elements::IsValidAtomNumber(idElem))
+      idElem = Elements::SymbolToNumber(label.c_str());
+    ptrMol->AppendAtom(idElem, x, y, z);
+  }
 
-  return 1;
+  if (!ScrollToPrefix(inp, "@<TRIPOS>BOND", one_line))
+  {
+    vtkErrorMacro("AcquireFileMOL2 error reading ATOM section from: " << this->getPath().string());
+    return 0;
+  }
+  // reading bonds:
+  for (vtkIdType i = 0; i < this->GetNumberOfBonds(); i++)
+  {
+    /* code */
+    if (!GetLine(inp, one_line))
+    {
+      vtkErrorMacro("AcquireFileMOL2 error reading BOND line from: " << this->getPath().string());
+      return 0;
+    }
+    InputString inps(one_line);
+    String skip;
+    vtkIdType idFrom, idTo, idBond(0);
+    String type;
+    inps >> skip // bond ordinal that is not used
+        >> idFrom >> idTo >> type;
+    if (type[0] == '1')
+      idBond = 1;
+    else if (type[0] == '2')
+      idBond = 2;
+    else if (type[0] == '3')
+      idBond = 3;
+    else if (type[0] == 'a')
+      idBond = 7; // aromatic
+    ptrMol->AppendBond(--idFrom,--idTo, idBond);
+  }
+
+  return (ptrMol->GetNumberOfAtoms() > 0)
+             ? 1
+             : 0;
 }

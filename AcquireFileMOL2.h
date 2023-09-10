@@ -23,6 +23,8 @@ public:
   // ----------------------------------------------------------------------------------------------------
   vtkIdType& NumberOfBonds();
   vtkIdType& NumberOfFragments();
+  vtkIdType GetNumberOfBonds()const;
+  vtkIdType GetNumberOfFragments()const;
 
 protected:
   explicit AcquireFileMOL2();

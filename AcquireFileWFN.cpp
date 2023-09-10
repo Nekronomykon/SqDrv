@@ -77,6 +77,9 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
 }
 
 //------------------------------------------------------------------------------
+// This call should be used in the form of call of
+// int ReadDataFrom(InputFile& /*inp*/)  
+//------------------------------------------------------------------------------
 int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
@@ -90,9 +93,9 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
     return 1;
   }
 
-  InputFile fileInput(this->getPath());
+  InputFile inp(this->getPath());
 
-  if (!fileInput.is_open())
+  if (!inp.is_open())
   {
     vtkErrorMacro("AcquireFileWFN error opening file: " << this->getPath().string());
     return 0;
@@ -101,14 +104,14 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
   String one_line; // read this string from disk
   // and parse it using istringstream and state
 
-  GetLine(fileInput, one_line); // first line: Title
-  if (!fileInput)
+  GetLine(inp, one_line); // first line: Title
+  if (!inp)
   {
     vtkErrorMacro("AcquireFileWFN signaled an unexpected EOF in file: " << this->getPath().string());
     return 0;
   }
 
-  if (!GetLine(fileInput, one_line) || one_line.empty()) // second line: Sizes
+  if (!GetLine(inp, one_line) || one_line.empty()) // second line: Sizes
   {
     vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
     return 0;
@@ -121,16 +124,16 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
   vtkIdType nAtoms = this->GetNumberOfAtoms();
   for (int i = 0; i < nAtoms; i++)
   {
-    if (!GetLine(fileInput, one_line) || one_line.empty()) // first line: NumberOfAtoms
+    if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
     {
       vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
       return 0;
     }
-    if (fileInput.fail()) // checking we are at end of line
+    if (inp.fail()) // checking we are at end of line
     {
       vtkErrorMacro("AcquireFileWFN error reading file: "
                     << this->getPath().string() << " Problem reading atoms' positions.");
-      fileInput.close();
+      inp.close();
       return 0;
     }
 
@@ -149,7 +152,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
         >> q;                   // << now the EOL is here
     output->AppendAtom((unsigned short)q, x, y, z);
   }
-  fileInput.close();
+  inp.close();
 
   return 1;
 }
