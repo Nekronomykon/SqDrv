@@ -207,6 +207,14 @@ FrameExplorer *FrameExplorer::setupActions(void)
   const QIcon iconStyleStick(":/images/StyleStick.png");
   actionStyleStick_->setIcon(iconStyleStick);
 
+  const QIcon iconViewStr(":/images/ViewStr.png");
+  actionViewStructure_->setIcon(iconViewStr);
+  frameStr_->setTabIcon(0, iconViewStr);
+
+  const QIcon iconEditSrc(":/images/EditSrc.png");
+  actionViewSource_->setIcon(iconEditSrc);
+  frameStr_->setTabIcon(1, iconEditSrc);
+
   return this;
 }
 //

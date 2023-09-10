@@ -47,7 +47,7 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
 
   GetLine(inp, this->Title()); // first (title) line may be empty
 
-  std::string one_line;
+  String one_line;
   int nOrb, nPrim;
 
   // second line: NumberOfAtoms is the rightmost of the numeric fields
@@ -56,16 +56,15 @@ int AcquireFileWFN::ReadSizesFrom(InputFile &inp)
     vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
     return 0;
   }
-  else
-  {
-    InputString inp_na(one_line);
-    String skip;
-    inp_na >> skip                // GTO
-        >> nOrb >> skip           // MOL
-        >> skip                   // ORBITALS
-        >> nPrim >> skip          // PRIMITIVES
-        >> this->NumberOfAtoms(); // ignoring rest of the line (NUCLEI)
-  }
+
+  InputString inp_na(one_line);
+  String skip;
+  inp_na >> skip                // GTO
+      >> nOrb >> skip           // MOL
+      >> skip                   // ORBITALS
+      >> nPrim >> skip          // PRIMITIVES
+      >> this->NumberOfAtoms(); // ignoring rest of the line (NUCLEI)
+
   int na = this->GetNumberOfAtoms();
 
   for (; na; --na)
@@ -99,7 +98,7 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
     return 0;
   }
 
-  std::string one_line; // read this string from disk
+  String one_line; // read this string from disk
   // and parse it using istringstream and state
 
   GetLine(fileInput, one_line); // first line: Title
@@ -135,9 +134,9 @@ int AcquireFileWFN::RequestData(vtkInformation *vtkNotUsed(request),
       return 0;
     }
 
-    std::istringstream inp_na(one_line);
-    std::string atomType;
-    std::string skip;
+    InputString inp_na(one_line);
+    String atomType;
+    String skip;
     int nSkip;
     char cSkip;
     float x, y, z, q;

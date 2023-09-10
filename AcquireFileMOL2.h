@@ -13,12 +13,16 @@
 #include <vtkSmartPointer.h>
 
 class AcquireFileMOL2
-: public AcquireFileBase
+    : public AcquireFileBase
 {
 public:
   static AcquireFileMOL2 *New();
   vtkTypeMacro(AcquireFileMOL2, AcquireFileBase);
   void PrintSelf(ostream &os, vtkIndent indent) override;
+
+  // ----------------------------------------------------------------------------------------------------
+  vtkIdType& NumberOfBonds();
+  vtkIdType& NumberOfFragments();
 
 protected:
   explicit AcquireFileMOL2();
@@ -28,10 +32,10 @@ protected:
   // To be overriden to read information stored in the (file) stream
   // ----------------------------------------------------------------------------------------------------
   // int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-  // int ReadSizesFrom(InputFile & /*inp*/) override;
+  int ReadSizesFrom(InputFile & /*inp*/) override;
   // ----------------------------------------------------------------------------------------------------
   // int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
-  // int ReadDataFrom(InputFile & /*inp*/, Molecule * /* pMol */) override;
+  int ReadDataFrom(InputFile & /*inp*/, Molecule * /* pMol */) override;
   // int OnReadDataComplete(Molecule * /* ptrMol */) override;
   // ----------------------------------------------------------------------------------------------------
 
@@ -39,6 +43,9 @@ private:
   AcquireFileMOL2(const AcquireFileMOL2 &) = delete;
   void operator=(const AcquireFileMOL2 &) = delete;
 
+  private:
+  vtkIdType numberOfBonds_ = 0;
+  vtkIdType numberOfFragments_ = -1;
 };
 
 typedef vtkNew<AcquireFileMOL2> NewAcquireMOL2;
@@ -56,4 +63,3 @@ bool ParseFileMOL2To(Path a_path, Host &host)
 }
 
 #endif // !AcquireFile_MOL2_h__
-

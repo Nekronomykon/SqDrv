@@ -42,16 +42,16 @@ int AcquireFileWFX::ReadSizesFrom(InputFile &inp)
 {
   int nAtoms, nPrim, nOrb;
 
-  std::string str_NumAtoms = GetMarkupContent(inp, "Number of Nuclei");
+  String str_NumAtoms = GetMarkupContent(inp, "Number of Nuclei");
 
   // second line: NumberOfAtoms is the rightmost of the numeric fields
   if (str_NumAtoms.empty()) // Number of nuclei
   {
-    vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
+    vtkErrorMacro("AcquireFileWFX error reading (atomic) size from: " << this->getPath().string());
     return 0;
   }
 
-  std::istringstream inp_na(str_NumAtoms);
+  InputString inp_na(str_NumAtoms);
   inp_na >> this->NumberOfAtoms();
 
   return (this->GetNumberOfAtoms()) ? 1 : 0;

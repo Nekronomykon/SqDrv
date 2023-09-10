@@ -2,6 +2,8 @@
     <qresource prefix="/">
         <file>images/SqDrv.png</file>
         <file>images/Exit.png</file>
+        <file>images/EditSrc.png</file>
+        <file>images/ViewStr.png</file>
         <file>images/NewWindow.png</file>
         <file>images/NewDocument.png</file>
         <file>images/CloseWindow.png</file>
