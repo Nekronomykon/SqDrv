@@ -171,7 +171,7 @@ int AcquireFileMOL2::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
     else if (type[0] == '3')
       idBond = 3;
     else if (type[0] == 'a')
-      idBond = 7; // aromatic
+      idBond = 7; // aromatic, amide --> to think on it
     ptrMol->AppendBond(--idFrom,--idTo, idBond);
   }
 
