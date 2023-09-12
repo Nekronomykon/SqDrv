@@ -1,9 +1,9 @@
-#include "AcquireFileXYZ.h"
+#include "AcquireFileHIN.h"
 
 /*=========================================================================
 
   Program:   Visualization Toolkit
-  Module:    AcquireFileXYZ.cxx
+  Module:    AcquireFileHIN.cxx
 
   Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
   All rights reserved.
@@ -32,62 +32,57 @@ using namespace vtk;
 #include <sstream>
 
 //------------------------------------------------------------------------------
-vtkStandardNewMacro(AcquireFileXYZ);
+vtkStandardNewMacro(AcquireFileHIN);
 
 //------------------------------------------------------------------------------
-AcquireFileXYZ::AcquireFileXYZ() : AcquireFileBase(1) {}
+AcquireFileHIN::AcquireFileHIN() : AcquireFileBase(1) {}
 
 //------------------------------------------------------------------------------
-// int AcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request),
+void AcquireFileHIN::PrintSelf(ostream &os, vtkIndent indent)
+{
+  os << indent << "HIN parser:\n";
+  this->Superclass::PrintSelf(os, indent);
+}
+
+//------------------------------------------------------------------------------
+// int AcquireFileHIN::RequestInformation(vtkInformation *vtkNotUsed(request),
 //                                       vtkInformationVector **vtkNotUsed(inputVector),
 //                                       vtkInformationVector *outputVector)
-int AcquireFileXYZ::ReadSizesFrom(InputFile &inp)
+int AcquireFileHIN::ReadSizesFrom(InputFile &inp)
 {
   String one_line;
 
   if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
   {
-    vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error reading (atomic) size from: " << this->getPath().string());
     return 0;
   }
-  else
+  vtkIdType nAtoms(0), nFragments(0);
+  do
   {
-    InputString inp_na(one_line);
-    inp_na >> this->NumberOfAtoms(); // ignoring rest of the line
-  }
-  int na = this->GetNumberOfAtoms();
-
-  if (!na)
-  {
-    vtkErrorMacro("AcquireFileXYZ error setting (atomic) size from: " << this->getPath().string());
-    return 0;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////
-  // ~?~ size_t nReadAtoms = this->ReadStructure(inp, nullptr, context);
-  //                                             ^ from ^    ^ to ^
-  // ~?~ or somewhat similar...
-  //
-
-  GetLine(inp, this->Title()); // second (title) line may be empty
-
-  // simply scroll NumberOfAtom lines of the file:
-  for (; na; --na)
-  {
-    if (!GetLine(inp, one_line) || one_line.empty())
-      break; // for each atom a line with symbol, x, y, z
-  }
-  //
-  /////////////////////////////////////////////////////////////////////////////////
-
-  return (!na) ? 1 : 0;
+    if (!one_line.find("atom"))
+    {
+      ++nAtoms;
+      continue;
+    }
+    if (!one_line.find("mol"))
+    {
+      ++nFragments;
+      continue;
+    }
+    /* code */
+  } while (GetLine(inp, one_line));
+  this->resetNumberOfAtoms(nAtoms);
+  return (nAtoms > 0)
+             ? 1
+             : 0;
 }
 
 //------------------------------------------------------------------------------
-// int AcquireFileXYZ::RequestData(vtkInformation *vtkNotUsed(request),
+// int AcquireFileHIN::RequestData(vtkInformation *vtkNotUsed(request),
 //                                vtkInformationVector **vtkNotUsed(inputVector),
 //                                vtkInformationVector *outputVector)
-int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
+int AcquireFileHIN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 {
   // call base class:
   if (!this->Superclass::ReadDataFrom(inp, ptrMol))
@@ -99,7 +94,7 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 
   if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
   {
-    vtkErrorMacro("AcquireFileXYZ error reading (atomic) size from: " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error reading (atomic) size from: " << this->getPath().string());
     return 0;
   }
   else
@@ -110,21 +105,21 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 
   if (nAtoms != this->GetNumberOfAtoms())
   {
-    vtkErrorMacro("AcquireFileXYZ error: inconsistent atomic sizes while rereading " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error: inconsistent atomic sizes while rereading " << this->getPath().string());
     return 0;
   }
 
   if (!GetLine(inp, one_line))
   {
-    vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while taking to atoms of " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error: unexpected EOF while taking to atoms of " << this->getPath().string());
     return 0;
   }
-  // Read and append XYZ atoms --> to make it the traits structure:
+  // Read and append HIN atoms --> to make it the traits structure:
   for (int i = 0; i < nAtoms; i++)
   {
     if (!GetLine(inp, one_line))
     {
-      vtkErrorMacro("AcquireFileXYZ error: unexpected EOF while reading atom "
+      vtkErrorMacro("AcquireFileHIN error: unexpected EOF while reading atom "
                     << i + 1
                     << " of overall " << nAtoms
                     << " from " << this->getPath().string());
@@ -136,7 +131,7 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
     inp_atom >> atomType >> x >> y >> z;
     if (inp.fail()) // checking we are at end of line
     {
-      vtkErrorMacro("AcquireFileXYZ error reading file: "
+      vtkErrorMacro("AcquireFileHIN error reading file: "
                     << this->getPath().string() << " Problem reading atoms' positions.");
       inp.close();
       return 0;
@@ -148,16 +143,9 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
   return 1;
 }
 
-//------------------------------------------------------------------------------
-void AcquireFileXYZ::PrintSelf(ostream &os, vtkIndent indent)
-{
-  os << indent << "XYZ parser:\n";
-  this->Superclass::PrintSelf(os, indent);
-}
-
 /*
 //------------------------------------------------------------------------------
-int AcquireFileXYZ::OnReadDataComplete(Molecule *ptrMol)
+int AcquireFileHIN::OnReadDataComplete(Molecule *ptrMol)
 {
     if (!this->Superclass::OnReadDataComplete(ptrMol) )
      return 0;
