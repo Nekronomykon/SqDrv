@@ -16,16 +16,16 @@ using namespace vtk;
 using namespace std;
 
 //------------------------------------------------------------------------------
-vtkStandardNewMacro(AcquireQTAIMFile);
+vtkStandardNewMacro(AcquireFileAIM);
 
 //------------------------------------------------------------------------------
-AcquireQTAIMFile::AcquireQTAIMFile() : AcquireFileBase(1) {}
+AcquireFileAIM::AcquireFileAIM() : AcquireFileBase(1) {}
 // temporary; nOuts should be greater than 1 -->
 // do we need ports for the QTAIM results? Or the Molecule should store some
 // QTAIM info within itself?
 
 //------------------------------------------------------------------------------
-void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
+void AcquireFileAIM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
   os << endl
@@ -41,7 +41,7 @@ void AcquireQTAIMFile::PrintSelf(ostream &os, vtkIndent indent)
 
 // To be overriden to read information stored in the (file) stream
 // int AcquireQTAIMFile::RequestInformation(vtkInformation *p_info, vtkInformationVector **pp_ifv, vtkInformationVector *p_ifv)
-int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
+int AcquireFileAIM::ReadSizesFrom(InputFile &inp)
 {
   const char sKeyTotal[] = "Total number of electron density critical points found =";
   const char sKeyNACP[] = "Number of NACPs  =";
@@ -76,7 +76,7 @@ int AcquireQTAIMFile::ReadSizesFrom(InputFile &inp)
 //    , vtkInformationVector **pp_ifv
 //    , vtkInformationVector *p_ifv)
 //
-int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
+int AcquireFileAIM::ReadDataFrom(InputFile &inp, Molecule *pMol)
 {
   // call base class:
   if (!this->Superclass::ReadDataFrom(inp, pMol))
@@ -91,7 +91,7 @@ int AcquireQTAIMFile::ReadDataFrom(InputFile &inp, Molecule *pMol)
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-int AcquireQTAIMFile::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
+int AcquireFileAIM::ReadCriticalPoints(InputFile &inp, Molecule *pMol)
 {
   String one_line;
   vtkIdType nReadCP = 0;

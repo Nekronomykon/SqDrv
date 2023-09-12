@@ -28,7 +28,7 @@
  * @par Thanks:
  * Dr. Jean M. Favre who developed and contributed this class
  */
-#include "AcquireQTAIMFile.h"
+#include "AcquireFileAIM.h"
 
 #include <istream> // for std::istream
 #include <vector>  // for std::vector
@@ -40,11 +40,11 @@
 // {
 
 class /* VTKIOCHEMISTRY_EXPORT*/ AcquireFileMGP
-    : public AcquireQTAIMFile
+    : public AcquireFileAIM
 {
 public:
   static AcquireFileMGP *New();
-  vtkTypeMacro(AcquireFileMGP, AcquireQTAIMFile);
+  vtkTypeMacro(AcquireFileMGP, AcquireFileAIM);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
 protected:

@@ -23,15 +23,15 @@ class vtkInformationVector;
 // namespace vtk
 //{
 
-class AcquireQTAIMFile
+class AcquireFileAIM
     : public AcquireFileBase
 {
 protected:
-  explicit AcquireQTAIMFile();
+  explicit AcquireFileAIM();
 
 public:
-  static AcquireQTAIMFile *New();
-  vtkTypeMacro(AcquireQTAIMFile, AcquireFileBase);
+  static AcquireFileAIM *New();
+  vtkTypeMacro(AcquireFileAIM, AcquireFileBase);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   vtkIdType GetNumberOfCP(void) const { return NumberOfCriticals_; }
