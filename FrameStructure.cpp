@@ -4,6 +4,7 @@
 #include <vtkMoleculeAlgorithm.h>
 
 #include "AcquireFileCML.h"
+#include "AcquireFileHIN.h"
 #include "AcquireFileMGP.h"
 #include "AcquireFilePDB.h"
 #include "AcquireFileSUM.h"
@@ -23,6 +24,7 @@
 #include <QMessageBox>
 
 bool ReadDataFormatCML(Path a_path, FrameStructure &host) { return ParseFileCMLTo(a_path, host); }
+bool ReadDataFormatHIN(Path a_path, FrameStructure &host) { return ParseFileHINTo(a_path, host); }
 bool ReadDataFormatMGP(Path a_path, FrameStructure &host) { return ParseFileMGPTo(a_path, host); }
 bool ReadDataFormatPDB(Path a_path, FrameStructure &host) { return ParseFilePDBTo(a_path, host); }
 bool ReadDataFormatSUM(Path a_path, FrameStructure &host) { return ParseFileSUMTo(a_path, host); }
@@ -46,13 +48,14 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
     FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML), // to rewrite / optimize / extract more data
+    FileFormat("HyperChem input", ".hin", ReadDataFormatHIN),          // to complete: here's a stub...
     FileFormat("AIMAll molecular graph", ".mgp", ReadDataFormatMGP),
     FileFormat("AIMAll analysis summary", ".sum", ReadDataFormatSUM),
     FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB), // to rewrite / optimize / extract more data
     FileFormat("Wavefunction data", ".wfn", ReadDataFormatWFN),
     FileFormat("Wavefunction eXtended data", ".wfx", ReadDataFormatWFX),
     FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE), // to rewrite / optimize / extract more data
-    FileFormat("Tripos Mol2 structure", ".mol2", ReadDataFormatMOL2),  // to write: here's a stub...
+    FileFormat("Tripos Mol2 structure", ".mol2", ReadDataFormatMOL2),
     FileFormat("AIMAll extended output", ".extout", ReadDataFormatEXTOUT),
     //
     FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),

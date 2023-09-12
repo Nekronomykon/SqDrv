@@ -52,11 +52,12 @@ int AcquireFileHIN::ReadSizesFrom(InputFile &inp)
 {
   String one_line;
 
-  if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
+  if (!GetLine(inp, one_line)) // first line: NumberOfAtoms
   {
-    vtkErrorMacro("AcquireFileHIN error reading (atomic) size from: " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error reading source string " << this->getPath().string());
     return 0;
   }
+
   vtkIdType nAtoms(0), nFragments(0);
   do
   {
@@ -92,53 +93,33 @@ int AcquireFileHIN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
 
   String one_line;
 
-  if (!GetLine(inp, one_line) || one_line.empty()) // first line: NumberOfAtoms
+  if (!GetLine(inp, one_line)) // first line: NumberOfAtoms
   {
-    vtkErrorMacro("AcquireFileHIN error reading (atomic) size from: " << this->getPath().string());
+    vtkErrorMacro("AcquireFileHIN error reading source string " << this->getPath().string());
     return 0;
   }
-  else
+  vtkIdType idFragFrom(0), idFragTill(0);
+  do
   {
-    std::istringstream inp_na(one_line);
-    inp_na >> nAtoms; // ignoring rest of the line
-  }
-
-  if (nAtoms != this->GetNumberOfAtoms())
-  {
-    vtkErrorMacro("AcquireFileHIN error: inconsistent atomic sizes while rereading " << this->getPath().string());
-    return 0;
-  }
-
-  if (!GetLine(inp, one_line))
-  {
-    vtkErrorMacro("AcquireFileHIN error: unexpected EOF while taking to atoms of " << this->getPath().string());
-    return 0;
-  }
-  // Read and append HIN atoms --> to make it the traits structure:
-  for (int i = 0; i < nAtoms; i++)
-  {
-    if (!GetLine(inp, one_line))
+    InputString inps(one_line);
+    String code, skip;
+    inps >> code >> skip;
+    if (!code.compare("mol")) // new molecule fragment
     {
-      vtkErrorMacro("AcquireFileHIN error: unexpected EOF while reading atom "
-                    << i + 1
-                    << " of overall " << nAtoms
-                    << " from " << this->getPath().string());
-      return 0;
+      continue;
     }
-    std::istringstream inp_atom(one_line);
-    std::string atomType;
-    float x, y, z;
-    inp_atom >> atomType >> x >> y >> z;
-    if (inp.fail()) // checking we are at end of line
+    if (!code.compare("endmol")) // new molecule fragment
     {
-      vtkErrorMacro("AcquireFileHIN error reading file: "
-                    << this->getPath().string() << " Problem reading atoms' positions.");
-      inp.close();
-      return 0;
+      continue;
     }
-    ptrMol->AppendAtom(Elements::SymbolToNumber(atomType.c_str()),
-                       x, y, z);
-  }
+    if (!code.compare("atom")) // atom string:
+    {
+      String atomType;
+      double q, x, y, z;
+      continue;
+    }
+    /* code */
+  } while (GetLine(inp, one_line));
 
   return 1;
 }

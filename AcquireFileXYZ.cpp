@@ -104,7 +104,7 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
   }
   else
   {
-    std::istringstream inp_na(one_line);
+    InputString inp_na(one_line);
     inp_na >> nAtoms; // ignoring rest of the line
   }
 
@@ -130,8 +130,8 @@ int AcquireFileXYZ::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
                     << " from " << this->getPath().string());
       return 0;
     }
-    std::istringstream inp_atom(one_line);
-    std::string atomType;
+    InputString inp_atom(one_line);
+    String atomType;
     float x, y, z;
     inp_atom >> atomType >> x >> y >> z;
     if (inp.fail()) // checking we are at end of line
