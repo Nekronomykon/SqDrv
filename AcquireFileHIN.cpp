@@ -147,7 +147,6 @@ int AcquireFileHIN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
       }
       continue;
     }
-    /* code */
   } while (GetLine(inp, one_line));
 
   return ptrMol->GetNumberOfAtoms() > 0
