@@ -103,43 +103,54 @@ int AcquireFileHIN::ReadDataFrom(InputFile &inp, Molecule *ptrMol)
   {
     InputString inps(one_line);
     String code, skip;
-    inps >> code >> skip;
-    if (!code.compare("mol")) // new molecule fragment
+    vtkIdType idKey;
+    inps >> code >> idKey;
+    vtkIdType idBeginFrag(0);
+    if (!code.find("mol")) // new molecule fragment
     {
+      inps >> skip; // file name???
       continue;
     }
-    if (!code.compare("endmol")) // new molecule fragment
+    if (!code.find("endmol")) // new molecule fragment
     {
+      idBeginFrag = ptrMol->GetNumberOfAtoms();
       continue;
     }
-    if (!code.compare("atom")) // atom string:
+    if (!code.find("atom")) // atom string:
     {
+      // atom 1 - S   **  - 0  1.42151   2.56678   1.77484 4 2 d 4 s 10 s 11 s
       String atomType;
+      char cSkip, cType;
+      int nBonds, idTo;
       double q, x, y, z;
+      // atom 1 - S   **  - 0  1.42151   2.56678   1.77484 4 2 d 4 s 10 s 11 s
+      //       ^ now reading from here
+      inps >> cSkip >> atomType >> skip >> cSkip >> q >> x >> y >> z >> nBonds;
+      vtkAtom atom = ptrMol->AppendAtom(Elements::SymbolToNumber(atomType.c_str()), x, y, z);
+      // atom 1 - S   **  - 0  1.42151   2.56678   1.77484 4 2 d 4 s 10 s 11 s
+      //                                                    ^ now reading from here
+      while (nBonds--)
+      {
+        inps >> idTo >> cType;
+        idTo += idBeginFrag;
+        if (--idTo >= atom.GetId())
+          break;
+        int kBondType = 0;
+        if (cType == 's')
+          kBondType = 1;
+        else if (cType == 'd')
+          kBondType = 2;
+        else if (cType == 't')
+          kBondType = 3;
+        // whatever else...
+        ptrMol->AppendBond(atom.GetId(), idTo, kBondType);
+      }
       continue;
     }
     /* code */
   } while (GetLine(inp, one_line));
 
-  return 1;
+  return ptrMol->GetNumberOfAtoms() > 0
+             ? 1
+             : 0;
 }
-
-/*
-//------------------------------------------------------------------------------
-int AcquireFileHIN::OnReadDataComplete(Molecule *ptrMol)
-{
-    if (!this->Superclass::OnReadDataComplete(ptrMol) )
-     return 0;
-
-    vtkNew<Molecule> newmol;
-
-    // Let's make some possible bonds:
-    vtkNew<MakeBondsDistances> mk_bonds;
-    mk_bonds->SetInputData(this->GetOutput());
-    mk_bonds->SetOutput(newmol);
-    mk_bonds->Update();
-
-    ptrMol->DeepCopy(newmol);
-    return (ptrMol->GetNumberOfAtoms() > 0 ? 1 : 0);
-}
-*/
