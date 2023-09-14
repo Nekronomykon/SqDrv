@@ -24,11 +24,17 @@ public:
   typedef bool (*DataParser)(Path, Host &);
   typedef bool (*DataWriter)(Host &, Path);
 
-  explicit TagFormatFile(String nameFmt = String(),
-                         String maskFmt = String(),
+  explicit TagFormatFile(String maskFmt,
+                         String nameFmt,
                          DataParser read = nullptr,
                          DataWriter save = nullptr)
       : nameFormat_(nameFmt), maskFormat_(maskFmt), operationRead_(read), operationSave_(save)
+  {
+  }
+  explicit TagFormatFile(String nameFmt,
+                         DataParser read = nullptr,
+                         DataWriter save = nullptr)
+      : nameFormat_(nameFmt), maskFormat_(), operationRead_(read), operationSave_(save)
   {
   }
   //
@@ -46,10 +52,10 @@ public:
   bool hasRead() const { return bool(operationRead_ != nullptr); }
   bool hasSave() const { return bool(operationSave_ != nullptr); }
   //
-  bool isValid() const { return (hasRead() || hasSave()) && hasName() && hasMask(); }
-  bool isNative() const { return hasRead() && hasSave() && hasName() && hasMask(); }
-  bool isToLoad() const { return hasRead() && hasName() && hasMask(); }
-  bool isToSave() const { return hasSave() && hasName() && hasMask(); }
+  bool isValid() const { return (hasRead() || hasSave()) && hasName(); }
+  bool isNative() const { return hasRead() && hasSave() && hasName() ; }
+  bool isToLoad() const { return hasRead() && hasName(); }
+  bool isToSave() const { return hasSave() && hasName(); }
   //
   bool applyReadTo(Host &host, Path the_path) const
   {
@@ -66,8 +72,8 @@ public:
   }
   //
 private:
-  String nameFormat_ = String();
   String maskFormat_ = String(".*");
+  String nameFormat_ = String();
   DataParser operationRead_ = nullptr;
   DataWriter operationSave_ = nullptr;
 };

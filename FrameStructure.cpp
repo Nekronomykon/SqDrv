@@ -23,6 +23,8 @@
 
 #include <QMessageBox>
 
+#include <map>
+
 bool ReadDataFormatCML(Path a_path, FrameStructure &host) { return ParseFileCMLTo(a_path, host); }
 bool ReadDataFormatHIN(Path a_path, FrameStructure &host) { return ParseFileHINTo(a_path, host); }
 bool ReadDataFormatMGP(Path a_path, FrameStructure &host) { return ParseFileMGPTo(a_path, host); }
@@ -45,25 +47,39 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 /// @name  //
 /// @brief //
 //
-const FrameStructure::FileFormat FrameStructure::formatFile[] = {
-    FileFormat("XMol atomic data", ".xyz", ReadDataFormatXYZ),
-    FileFormat("Chemical Markup Language", ".cml", ReadDataFormatCML), // to rewrite / optimize / extract more data
-    FileFormat("HyperChem input", ".hin", ReadDataFormatHIN),          // to complete: here's a stub...
-    FileFormat("AIMAll molecular graph", ".mgp", ReadDataFormatMGP),
-    FileFormat("AIMAll analysis summary", ".sum", ReadDataFormatSUM),
-    FileFormat("Brookhaven data bank", ".pdb", ReadDataFormatPDB), // to rewrite / optimize / extract more data
-    FileFormat("Wavefunction data", ".wfn", ReadDataFormatWFN),
-    FileFormat("Wavefunction eXtended data", ".wfx", ReadDataFormatWFX),
-    FileFormat("Gaussian Cube field", ".cube", ReadDataFormatCUBE), // to rewrite / optimize / extract more data
-    FileFormat("Tripos Mol2 structure", ".mol2", ReadDataFormatMOL2),
-    FileFormat("AIMAll extended output", ".extout", ReadDataFormatEXTOUT),
+const FrameStructure::MolFormatMap FrameStructure::suffixToFormat = {
+    {".xyz", FileFormat("XMol atomic data", ReadDataFormatXYZ, nullptr)},
+    {".cml", FileFormat("Chemical Markup Language", ReadDataFormatCML, nullptr)},
+    {".hin", FileFormat("HyperChem input", ReadDataFormatHIN, nullptr)},
     //
-    FileFormat("Bitmap image", ".bmp", nullptr, WriteImageFormatBMP),
-    FileFormat("PostScript", ".ps", nullptr, WriteImageFormatPS),
-    FileFormat("Joint Photo Expert Graphics", ".jpeg", nullptr, WriteImageFormatPNG),
-    FileFormat("Portable Network Graphics", ".png", nullptr, WriteImageFormatPNG),
-    FileFormat("Tagged Image Format", ".tiff", nullptr, WriteImageFormatTIFF),
-    FileFormat("All files") // invalid format
+};
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+//
+const FrameStructure::FileFormat FrameStructure::formatFile[] = {
+    FileFormat(".xyz", "XMol atomic data", ReadDataFormatXYZ, nullptr),
+    FileFormat(".cml", "Chemical Markup Language", ReadDataFormatCML, nullptr), // to rewrite / optimize / extract more data
+    FileFormat(".hin", "HyperChem input", ReadDataFormatHIN, nullptr),
+    FileFormat(".mgp", "AIMAll molecular graph", ReadDataFormatMGP, nullptr),
+    FileFormat(".sum", "AIMAll analysis summary", ReadDataFormatSUM, nullptr),
+    FileFormat(".pdb", "Brookhaven data bank", ReadDataFormatPDB, nullptr), // to rewrite / optimize / extract more data
+    FileFormat(".wfn", "Wavefunction data", ReadDataFormatWFN, nullptr),
+    FileFormat(".wfx", "Wavefunction eXtended data", ReadDataFormatWFX, nullptr),
+    FileFormat(".cube", "Gaussian Cube field", ReadDataFormatCUBE, nullptr), // to rewrite / optimize / extract more data
+    FileFormat(".mol2", "Tripos Mol2 structure", ReadDataFormatMOL2, nullptr),
+    FileFormat(".extout", "AIMAll extended output", ReadDataFormatEXTOUT, nullptr),
+    FileFormat(".arc", "MOPAC run archive", /*ReadDataFormatARC */ nullptr, nullptr),
+    FileFormat(".mop", "MOPAC input", /*, ReadDataFormatMOP */ nullptr, nullptr),
+    FileFormat(".out", "MOPAC output", /*, ReadDataFormatOUT */ nullptr, nullptr),
+    //
+    FileFormat(".bmp", "Bitmap image", nullptr, WriteImageFormatBMP),
+    FileFormat(".ps", "PostScript", nullptr, WriteImageFormatPS),
+    FileFormat(".jpeg", "Joint Photo Expert Graphics", nullptr, WriteImageFormatPNG),
+    FileFormat(".png", "Portable Network Graphics", nullptr, WriteImageFormatPNG),
+    FileFormat(".tiff", "Tagged Image Format", nullptr, WriteImageFormatTIFF),
+    FileFormat("") // invalid format to complete
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

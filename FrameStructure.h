@@ -16,12 +16,17 @@
 
 #include <QTabWidget>
 
+#include <map>
+
 class FrameStructure : public QTabWidget, public ImplPathName<FrameStructure>
 {
   Q_OBJECT
 
 public:
   typedef TagFormatFile<FrameStructure> FileFormat;
+  typedef std::map<String, FrameStructure::FileFormat> MolFormatMap;
+  typedef std::multimap<String, FrameStructure::FileFormat> MolFormatMapEx;
+
 
   explicit FrameStructure(QWidget * /*parent*/ = nullptr);
   ~FrameStructure() override;
@@ -47,7 +52,8 @@ public:
   static const FileFormat *AllFormats() { return &formatFile[0]; }
 
 protected:
-  static const FileFormat formatFile[];
+  static const FileFormat formatFile[]; // equivalent to map, convert to multimap?
+  static const MolFormatMap suffixToFormat;
 
 private:
   bool bChanged_ = false;
