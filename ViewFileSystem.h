@@ -23,6 +23,9 @@ public:
   explicit ViewFileSystem(QWidget * /*parent*/ = nullptr);
   ~ViewFileSystem() override = default;
 
+protected slots:
+  void listActiveDir(const QModelIndex & /*idx*/);
+
 private:
   QPointer<ModelFiles> model_;
   QPointer<ViewFilesTree> tree_;

@@ -27,9 +27,12 @@ public:
   typedef std::map<String, FrameStructure::FileFormat> MolFormatMap;
   typedef std::multimap<String, FrameStructure::FileFormat> MolFormatMapEx;
 
-
   explicit FrameStructure(QWidget * /*parent*/ = nullptr);
-  ~FrameStructure() override;
+  ~FrameStructure() override = default;
+
+  static QStringList listAllExtensions();
+  template <class What>
+  static QStringList listExtensionsFor(What it_is);
 
   bool isModified() const;
   void setModified(bool /*bSet*/ = true);

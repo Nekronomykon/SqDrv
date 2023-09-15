@@ -121,18 +121,27 @@ FrameStructure::FrameStructure(QWidget *parent) : QTabWidget(parent), viewMol_(n
 /// @brief //
 /// @param //
 //
-FrameStructure::~FrameStructure()
-{
-}
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @name  //
-/// @brief //
-/// @param //
-//
 bool FrameStructure::isModified() const { return bChanged_; }
 //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+QStringList FrameStructure::listAllExtensions()
+{
+  QStringList res;
+  auto itFormatTag = suffixToFormat.cbegin();
+  do
+  {
+    QString extz("*");
+    if (!itFormatTag->first.empty())
+    {
+      extz += itFormatTag->first.c_str();
+      res << extz;
+    }
+    /* code */
+  } while (++itFormatTag != suffixToFormat.cend());
+
+  return res;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
 /// @brief //
 /// @param //
@@ -223,7 +232,7 @@ void FrameStructure::loadFile()
   // Path to_read = this->resetPath();
   // this->clearAll(); // set to override any attempts to write?
   // if (this->importFromPath(to_read))
-  //   this->resetPath(to_read); 
+  //   this->resetPath(to_read);
   // ^^^ is this the better formulation of reloading
   this->importFromPath();
 }
@@ -312,3 +321,22 @@ bool FrameStructure::exportToPath(Path the_path)
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template<class What>
+QStringList FrameStructure::listExtensionsFor(What it_is)
+{
+    QStringList res;
+    auto itFormatTag = suffixToFormat.cbegin();
+    do
+    {
+        QString extz("*");
+        if (!itFormatTag->first.empty() && it_is(itFormatTag->second))
+        {
+            extz += itFormatTag->first.c_str();
+            res << extz;
+        }
+        /* code */
+    } while (++itFormatTag != suffixToFormat.cend());
+
+    return res;
+}

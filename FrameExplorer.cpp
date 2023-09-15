@@ -44,6 +44,11 @@ namespace // anonymous for setting keys
     return QStringLiteral("Geometry");
   }
   //
+  static inline QString keyState(void)
+  {
+    return QStringLiteral("State");
+  }
+  //
   static inline QString keyFile(void)
   {
     return QStringLiteral("File");
@@ -230,6 +235,7 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   barTools_->addAction(actionSave_);
 
   QToolBar *tbEdit = this->addToolBar(tr("Edit"));
+  tbEdit->setObjectName("ToolsEdit");
   tbEdit->addAction(actionUndo_);
   tbEdit->addAction(actionRedo_);
   tbEdit->addSeparator();
@@ -242,6 +248,7 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
 
   // QString sVal;
   QToolBar *tbView = this->addToolBar(tr("View"));
+  tbView->setObjectName("ToolsView");
   tbView->addAction(actionFullScreen_);
   //
   tbView->addSeparator();
@@ -275,6 +282,7 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   this->showBackRGB();
 
   QToolBar *tbHelp = this->addToolBar(tr("Info"));
+  tbHelp->setObjectName("ToolsInfo");
   tbHelp->addAction(actionProperties_);
   tbHelp->addAction(actionOptions_);
   tbHelp->addAction(actionAbout_);
@@ -291,11 +299,14 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
 FrameExplorer *FrameExplorer::setupDockViews(void)
 {
   QDockWidget *pTab = new QDockWidget(tr("Files"), this);
+  pTab->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  pTab->setObjectName("DockFilesystem");
   pTab->setWidget(files_);
   this->addDockWidget(Qt::LeftDockWidgetArea, pTab);
   //
   QDockWidget *pLeft = new QDockWidget(tr("Workspace"), this);
   pLeft->setWidget(workspace_);
+  pLeft->setObjectName("DockWorkspace");
   //
   this->tabifyDockWidget(pTab, pLeft);
   //
@@ -397,18 +408,8 @@ bool FrameExplorer::queryDataSaved()
 void FrameExplorer::loadSettings()
 {
   QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
-  const QByteArray geometry = settings.value(keyGeometry(), QByteArray()).toByteArray();
-  if (geometry.isEmpty())
-  {
-    const QRect availableGeometry = screen()->availableGeometry();
-    resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
-    move((availableGeometry.width() - width()) / 2,
-         (availableGeometry.height() - height()) / 2);
-  }
-  else
-  {
-    this->restoreGeometry(geometry);
-  }
+  this->restoreGeometry( settings.value(keyGeometry(), QByteArray()).toByteArray());
+  this->restoreState(settings.value(keyState(),QByteArray()).toByteArray());
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,6 +421,7 @@ void FrameExplorer::saveSettings()
 {
   QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
   settings.setValue(keyGeometry(), this->saveGeometry());
+  settings.setValue(keyState(), this->saveState());
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief //
