@@ -2,6 +2,8 @@
     "cmake.configureOnOpen": false,
     "files.associations": {
         "iosfwd": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "chrono": "cpp",
+        "variant": "cpp"
     }
 }

@@ -70,8 +70,8 @@ const FrameStructure::MolFormatMap FrameStructure::suffixToFormat = {
     {".tiff", FileFormat("Tagged Image Format", nullptr, WriteImageFormatTIFF)},                                 // --> VTK
     {".sum", FileFormat("AIMAll analysis summary", ReadDataFormatSUM, nullptr)},                                 // classes of AcquireAIM genus
     {".sumviz", FileFormat("AIMAll analysis summary viZuals", /* ReadDataFormatSUMVIZ */ nullptr, nullptr)},     // no example yet
-    {".wfn", FileFormat("Wavefunction data", ReadDataFormatWFN, nullptr)},                                       // Parameters of Rho calx are not used
-    {".wfx", FileFormat("Wavefunction eXtended data", ReadDataFormatWFX, nullptr)},                              // Parameters of Rho calx are not used
+    {".wfn", FileFormat("WaveFunction data", ReadDataFormatWFN, nullptr)},                                       // Parameters of Rho calx are not used
+    {".wfx", FileFormat("WaveFunction eXtended data", ReadDataFormatWFX, nullptr)},                              // Parameters of Rho calx are not used
     {".xyz", FileFormat("XMol atomic data", ReadDataFormatXYZ, nullptr)},                                        // ReadAtom as the traits --> many uses of it
     {".zmt", FileFormat("HyperChem Z-matrix", /* ReadDataFormatZMT */ nullptr, nullptr)}                         // no example yet
                                                                                                                  // Moar Z-matrix readerz required!!!!

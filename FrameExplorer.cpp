@@ -290,9 +290,15 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
 //
 FrameExplorer *FrameExplorer::setupDockViews(void)
 {
+  QDockWidget *pTab = new QDockWidget(tr("Files"), this);
+  pTab->setWidget(files_);
+  this->addDockWidget(Qt::LeftDockWidgetArea, pTab);
+  //
   QDockWidget *pLeft = new QDockWidget(tr("Workspace"), this);
   pLeft->setWidget(workspace_);
-  this->addDockWidget(Qt::LeftDockWidgetArea, pLeft);
+  //
+  this->tabifyDockWidget(pTab, pLeft);
+  //
   return this;
 }
 //
@@ -305,7 +311,8 @@ FrameExplorer::FrameExplorer(QWidget *parent)
       editBgRed_(new QLineEdit(this)),
       editBgGreen_(new QLineEdit(this)),
       editBgBlue_(new QLineEdit(this)),
-      workspace_(new ViewWorkspace(this))
+      workspace_(new ViewWorkspace(this)),
+      files_(new ViewFileSystem(this))
 {
   this->setupUi(this);
 

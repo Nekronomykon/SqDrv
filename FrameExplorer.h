@@ -17,7 +17,7 @@
 #include "QVTKNamedColors.h"
 
 #include "ViewWorkspace.h"
-
+#include "ViewFileSystem.h"
 #include "ResetCursor.h"
 
 #include "ui_FrameExplorer.h"
@@ -116,6 +116,7 @@ private:
   QPointer<QLineEdit> editBgBlue_;
   //
   QPointer<ViewWorkspace> workspace_;
+  QPointer<ViewFileSystem> files_;
 private slots:
   void on_nameBackgroundColor(const QString & /* name */);
   void on_changedBackgroundRed(void);
