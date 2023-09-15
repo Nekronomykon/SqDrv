@@ -48,10 +48,33 @@ bool WriteImageFormatTIFF(FrameStructure &host, Path a_path) { return ExportToTI
 /// @brief //
 //
 const FrameStructure::MolFormatMap FrameStructure::suffixToFormat = {
-    {".xyz", FileFormat("XMol atomic data", ReadDataFormatXYZ, nullptr)},
-    {".cml", FileFormat("Chemical Markup Language", ReadDataFormatCML, nullptr)},
-    {".hin", FileFormat("HyperChem input", ReadDataFormatHIN, nullptr)},
-    //
+    {".agpviz", FileFormat("AIMAll critical point viZuals", /* ReadDataFormatAGPVIZ */ nullptr, nullptr)},       // no example yet
+    {".arc", FileFormat("MOPAC run archive", /* ReadDataFormatARC */ nullptr, nullptr)},                         // no example yet
+    {".basviz", FileFormat("AIMAll attractor basin viZuals", /* ReadDataFormatBASVIZ */ nullptr, nullptr)},      // no example yet
+    {".bmp", FileFormat("Bitmap image", nullptr, WriteImageFormatBMP)},                                          // also .dib?
+    {".cml", FileFormat("Chemical Markup Language", ReadDataFormatCML, nullptr)},                                // also .c3xml ???
+    {".cube", FileFormat("Gaussian Cube field", ReadDataFormatCUBE, nullptr)},                                   // to rewrite / optimize / extract more data
+    {".extout", FileFormat("AIMAll extended output", ReadDataFormatEXTOUT, nullptr)},                            // classes of AcquireAIM genus
+    {".hin", FileFormat("HyperChem input", ReadDataFormatHIN, nullptr)},                                         // HyperChem formats are to be studied
+    {".iasviz", FileFormat("AIMAll interatomic surfaces viZuals", /* ReadDataFormatIASVIZ */ nullptr, nullptr)}, // no example yet
+    {".jpeg", FileFormat("Joint Photo Expert Graphics", nullptr, WriteImageFormatJPEG)},                         // --> VTK
+    {".mgp", FileFormat("AIMAll molecular graph", ReadDataFormatMGP, nullptr)},                                  // classes of AcquireAIM genus
+    {".mgpviz", FileFormat("AIMAll molecular graph viZuals", /* ReadDataFormatMGPVIZ */ nullptr, nullptr)},      // no example yet
+    {".mol2", FileFormat("Tripos Mol2 structure", ReadDataFormatMOL2, nullptr)},                                 // What has Sybyl done? or WTF
+    {".mop", FileFormat("MOPAC input", /* ReadDataFormatMOP */ nullptr, nullptr)},                               // no example yet
+    {".out", FileFormat("MOPAC output", /* ReadDataFormatOUT */ nullptr, nullptr)},                              // no example yet
+    {".pdb", FileFormat("Brookhaven data bank", ReadDataFormatPDB, nullptr)},                                    // to rewrite / optimize / extract more data
+    {".png", FileFormat("Portable Network Graphics", nullptr, WriteImageFormatPNG)},                             // --> VTK
+    {".pov", FileFormat("Persistence Of Vision scene", nullptr, /* WriteImageFormatPOV */ nullptr)},             // no example yet
+    {".ps", FileFormat("PostScript", nullptr, WriteImageFormatPS)},                                              // --> VTK
+    {".tiff", FileFormat("Tagged Image Format", nullptr, WriteImageFormatTIFF)},                                 // --> VTK
+    {".sum", FileFormat("AIMAll analysis summary", ReadDataFormatSUM, nullptr)},                                 // classes of AcquireAIM genus
+    {".sumviz", FileFormat("AIMAll analysis summary viZuals", /* ReadDataFormatSUMVIZ */ nullptr, nullptr)},     // no example yet
+    {".wfn", FileFormat("Wavefunction data", ReadDataFormatWFN, nullptr)},                                       // Parameters of Rho calx are not used
+    {".wfx", FileFormat("Wavefunction eXtended data", ReadDataFormatWFX, nullptr)},                              // Parameters of Rho calx are not used
+    {".xyz", FileFormat("XMol atomic data", ReadDataFormatXYZ, nullptr)},                                        // ReadAtom as the traits --> many uses of it
+    {".zmt", FileFormat("HyperChem Z-matrix", /* ReadDataFormatZMT */ nullptr, nullptr)}                         // no example yet
+                                                                                                                 // Moar Z-matrix readerz required!!!!
 };
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,13 +93,10 @@ const FrameStructure::FileFormat FrameStructure::formatFile[] = {
     FileFormat(".cube", "Gaussian Cube field", ReadDataFormatCUBE, nullptr), // to rewrite / optimize / extract more data
     FileFormat(".mol2", "Tripos Mol2 structure", ReadDataFormatMOL2, nullptr),
     FileFormat(".extout", "AIMAll extended output", ReadDataFormatEXTOUT, nullptr),
-    FileFormat(".arc", "MOPAC run archive", /*ReadDataFormatARC */ nullptr, nullptr),
-    FileFormat(".mop", "MOPAC input", /*, ReadDataFormatMOP */ nullptr, nullptr),
-    FileFormat(".out", "MOPAC output", /*, ReadDataFormatOUT */ nullptr, nullptr),
     //
     FileFormat(".bmp", "Bitmap image", nullptr, WriteImageFormatBMP),
     FileFormat(".ps", "PostScript", nullptr, WriteImageFormatPS),
-    FileFormat(".jpeg", "Joint Photo Expert Graphics", nullptr, WriteImageFormatPNG),
+    FileFormat(".jpeg", "Joint Photo Expert Graphics", nullptr, WriteImageFormatJPEG),
     FileFormat(".png", "Portable Network Graphics", nullptr, WriteImageFormatPNG),
     FileFormat(".tiff", "Tagged Image Format", nullptr, WriteImageFormatTIFF),
     FileFormat("") // invalid format to complete
@@ -200,7 +220,24 @@ void FrameStructure::resetTitle(String title)
 void FrameStructure::loadFile()
 {
   //
-  this->importFromPath(); // reloading
+  // Path to_read = this->resetPath();
+  // this->clearAll(); // set to override any attempts to write?
+  // if (this->importFromPath(to_read))
+  //   this->resetPath(to_read); 
+  // ^^^ is this the better formulation of reloading
+  this->importFromPath();
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+size_t FrameStructure::countFormatsByExt(String sext)
+{
+  if (sext[0] != '.')
+    sext.insert(sext.begin(), '.'); // ??? mandatory? or remove '.' from keys?
+  return suffixToFormat.count(sext);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,13 +265,14 @@ bool FrameStructure::importFromPath(Path the_path)
   const FileFormat *ff = AllFormats();
   do
   {
-    bRes = ff->applyReadTo(*this, the_path);
+    bRes = ff->checkReadTo(*this, the_path);
     if (bRes)
       break;
   } while ((++ff)->isValid());
   //
   if (bRes)
   {
+
     viewMol_->showMolecule(nullptr, true);
     editSrc_->showMolecule();
     this->setModified(bToModify);
@@ -265,7 +303,7 @@ bool FrameStructure::exportToPath(Path the_path)
   const FileFormat *ff = AllFormats();
   do
   {
-    bRes = ff->applySaveTo(*this, the_path);
+    bRes = ff->checkSaveTo(*this, the_path);
     if (bRes)
       break;
   } while ((++ff)->isValid());

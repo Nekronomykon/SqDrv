@@ -39,8 +39,8 @@ public:
   }
   //
   String getName() const { return nameFormat_; }
-  String getMask() const { return maskFormat_; }
-  bool conforms(Path a_path) const
+  String getMask() const { return maskFormat_; } // prepared to remove
+  bool conforms(Path a_path) const               // prepared to remove
   {
     return !hasMask()
                ? false
@@ -53,26 +53,39 @@ public:
   bool hasSave() const { return bool(operationSave_ != nullptr); }
   //
   bool isValid() const { return (hasRead() || hasSave()) && hasName(); }
-  bool isNative() const { return hasRead() && hasSave() && hasName() ; }
+  bool isNative() const { return hasRead() && hasSave() && hasName(); }
   bool isToLoad() const { return hasRead() && hasName(); }
   bool isToSave() const { return hasSave() && hasName(); }
   //
+  bool checkReadTo(Host &host, Path the_path) const // prepared to remove
+  {
+    return (!this->hasRead() || !this->conforms(the_path))
+               ? false
+               : (*operationRead_)(the_path, host);
+  }
   bool applyReadTo(Host &host, Path the_path) const
   {
-    return (!hasRead() || !conforms(the_path))
+    return (!this->hasRead())
                ? false
                : (*operationRead_)(the_path, host);
   }
   //
+  //
+  bool checkSaveTo(Host &host, Path the_path) const // prepared to remove
+  {
+    return (!this->hasSave() || !this->conforms(the_path))
+               ? false
+               : (*operationSave_)(host, the_path);
+  }
   bool applySaveTo(Host &host, Path the_path) const
   {
-    return (!hasSave() || !conforms(the_path))
+    return (!this->hasSave())
                ? false
                : (*operationSave_)(host, the_path);
   }
   //
 private:
-  String maskFormat_ = String(".*");
+  String maskFormat_ = String(".*"); // prepared to remove
   String nameFormat_ = String();
   DataParser operationRead_ = nullptr;
   DataWriter operationSave_ = nullptr;
@@ -105,7 +118,7 @@ struct IsFormatToSave
   }
 };
 
-struct IsFormatNative
+struct IsFormatNative // both save and load
 {
   template <class Host>
   bool operator()(const TagFormatFile<Host> &tag) const

@@ -50,6 +50,7 @@ public:
   //
 
   static const FileFormat *AllFormats() { return &formatFile[0]; }
+  static size_t countFormatsByExt(String sext);
 
 protected:
   static const FileFormat formatFile[]; // equivalent to map, convert to multimap?
