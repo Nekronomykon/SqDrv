@@ -10,7 +10,7 @@ ViewFileSystem::ViewFileSystem(QWidget *parent)
       tree_(new ViewFilesTree(this)), list_(new ViewFilesList(this))
 {
   model_->setNameFilterDisables(true); // false?
-  model_->setNameFilters(FrameStructure::listExtensionsFor( IsFormatToLoad() ));
+  model_->setNameFilters(FrameStructure::listExtensionsFor(IsFormatToLoad()));
   //
   model_->setIconProvider(&iconProvider_);
   model_->setOptions(ModelFiles::DontUseCustomDirectoryIcons);
@@ -19,12 +19,18 @@ ViewFileSystem::ViewFileSystem(QWidget *parent)
   //
   tree_->setAllColumnsShowFocus(true);
   tree_->setModel(model_);
+  // only tree to see
+  tree_->setColumnHidden(1, true);
+  tree_->setColumnHidden(2, true);
+  tree_->setColumnHidden(3, true);
+  // set it up
   tree_->setCurrentIndex(model_->index(QDir::currentPath()));
   //
   list_->setModel(model_);
   list_->setRootIndex(model_->index(QDir::currentPath()));
   //
   connect(tree_, &QTreeView::activated, this, &ViewFileSystem::listActiveDir);
+  connect(list_, &QListView::activated, this, &ViewFileSystem::dirFromList);
 }
 
 void ViewFileSystem::listActiveDir(const QModelIndex &idx)
@@ -32,9 +38,39 @@ void ViewFileSystem::listActiveDir(const QModelIndex &idx)
   if (!idx.isValid())
     return;
   if (model_->isDir(idx))
+  {
     list_->setRootIndex(idx);
+  }
   else
+  {
     list_->setRootIndex(idx.parent());
-  // QMessageBox::information(list_,model_->fileName(idx),model_->filePath(idx));
-  /// list_->setRootPath()
+    list_->scrollTo(idx);
+    list_->setCurrentIndex(idx);
+  }
+}
+
+void ViewFileSystem::dirFromList(const QModelIndex &idx)
+{
+  if (!idx.isValid())
+    return;
+  tree_->scrollTo(idx);
+  tree_->setCurrentIndex(idx);
+  if (model_->isDir(idx))
+    list_->setRootIndex(idx);
+}
+
+// void ViewFileSystem::showFilePath(const Path &a_path)
+// {
+//   this->ShowFilePath(QString(a_path.c_str()));
+// }
+void ViewFileSystem::showFilePath(const QString &q_path)
+{
+  QModelIndex idx = model_->index(q_path);
+  if (idx.isValid())
+  {
+    tree_->scrollTo(idx);
+    tree_->setCurrentIndex(idx);
+    list_->setRootIndex(idx.parent());
+    list_->setCurrentIndex(idx);
+  }
 }

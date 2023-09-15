@@ -23,8 +23,13 @@ public:
   explicit ViewFileSystem(QWidget * /*parent*/ = nullptr);
   ~ViewFileSystem() override = default;
 
+public:
+  // void showFilePath(const Path &a_path);
+  void showFilePath(const QString &a_path);
+
 protected slots:
   void listActiveDir(const QModelIndex & /*idx*/);
+  void dirFromList(const QModelIndex & /*idx*/);
 
 private:
   QPointer<ModelFiles> model_;

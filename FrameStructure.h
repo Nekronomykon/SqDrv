@@ -32,7 +32,23 @@ public:
 
   static QStringList listAllExtensions();
   template <class What>
-  static QStringList listExtensionsFor(What it_is);
+  static QStringList listExtensionsFor(What it_is)
+  {
+    QStringList res;
+    auto itFormatTag = suffixToFormat.cbegin();
+    do
+    {
+      QString extz("*");
+      if (!itFormatTag->first.empty() && it_is(itFormatTag->second))
+      {
+        extz += itFormatTag->first.c_str();
+        res << extz;
+      }
+      /* code */
+    } while (++itFormatTag != suffixToFormat.cend());
+
+    return res;
+  }
 
   bool isModified() const;
   void setModified(bool /*bSet*/ = true);

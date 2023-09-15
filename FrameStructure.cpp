@@ -321,22 +321,3 @@ bool FrameStructure::exportToPath(Path the_path)
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-template<class What>
-QStringList FrameStructure::listExtensionsFor(What it_is)
-{
-    QStringList res;
-    auto itFormatTag = suffixToFormat.cbegin();
-    do
-    {
-        QString extz("*");
-        if (!itFormatTag->first.empty() && it_is(itFormatTag->second))
-        {
-            extz += itFormatTag->first.c_str();
-            res << extz;
-        }
-        /* code */
-    } while (++itFormatTag != suffixToFormat.cend());
-
-    return res;
-}

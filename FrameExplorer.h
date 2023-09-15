@@ -50,7 +50,8 @@ public:
     ///
     ///
     Path path_prev = frameStr_->resetPath(path_to_open);
-    frameStr_->loadFile(); // frameStr_->exportFromPath(frameStr->getPath());
+    /* if */ frameStr_->loadFile(); // frameStr_->exportFromPath(frameStr->getPath());
+    
     this->adjustTitle();
   }
   //

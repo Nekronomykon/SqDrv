@@ -408,8 +408,8 @@ bool FrameExplorer::queryDataSaved()
 void FrameExplorer::loadSettings()
 {
   QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
-  this->restoreGeometry( settings.value(keyGeometry(), QByteArray()).toByteArray());
-  this->restoreState(settings.value(keyState(),QByteArray()).toByteArray());
+  this->restoreGeometry(settings.value(keyGeometry(), QByteArray()).toByteArray());
+  this->restoreState(settings.value(keyState(), QByteArray()).toByteArray());
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -457,6 +457,10 @@ void FrameExplorer::adjustTitle()
   if (!path_test.empty())
   {
     sTitle += path_test.c_str();
+    // reflect in a browser
+    files_->showFilePath(sTitle);
+    // and in workspace editor
+    // workspace_->showFilePath(sTitle);
   }
   else
     sTitle += nameNewFile();
