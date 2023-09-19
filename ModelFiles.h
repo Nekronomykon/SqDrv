@@ -7,6 +7,14 @@
 #endif //  _MSC_VER
 
 #include <QFileSystemModel>
-typedef QFileSystemModel ModelFiles;
+
+class ModelFiles : public QFileSystemModel
+{
+  Q_OBJECT
+public:
+  explicit ModelFiles();
+  ~ModelFiles() override = default;
+  private:
+};
 
 #endif // !Model_Files_h__

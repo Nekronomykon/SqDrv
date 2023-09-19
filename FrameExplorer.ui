@@ -45,17 +45,17 @@
      <addaction name="actionForgetAll_"/>
      <addaction name="separator"/>
     </widget>
-    <addaction name="actionNew_"/>
     <addaction name="actionNewWindow_"/>
+    <addaction name="actionNew_"/>
+    <addaction name="actionDetach_"/>
     <addaction name="separator"/>
-    <addaction name="menuRecentFiles_"/>
     <addaction name="actionOpen_"/>
     <addaction name="actionReload_"/>
     <addaction name="actionImport_"/>
+    <addaction name="menuRecentFiles_"/>
     <addaction name="separator"/>
     <addaction name="actionSave_"/>
     <addaction name="actionSaveAs_"/>
-    <addaction name="actionDetach_"/>
     <addaction name="actionExport_"/>
     <addaction name="separator"/>
     <addaction name="actionProperties_"/>
@@ -160,12 +160,12 @@
   </widget>
   <action name="actionNew_">
    <property name="text">
-    <string>&amp;New</string>
+    <string>&amp;New file..</string>
    </property>
   </action>
   <action name="actionOpen_">
    <property name="text">
-    <string>&amp;Open..</string>
+    <string>&amp;Open file..</string>
    </property>
   </action>
   <action name="actionNewWindow_">
@@ -195,7 +195,7 @@
   </action>
   <action name="actionSave_">
    <property name="text">
-    <string>&amp;Save</string>
+    <string>&amp;Save file</string>
    </property>
   </action>
   <action name="actionSaveAs_">
@@ -205,17 +205,17 @@
   </action>
   <action name="actionReload_">
    <property name="text">
-    <string>&amp;Reload</string>
+    <string>&amp;Reload file</string>
    </property>
   </action>
   <action name="actionImport_">
    <property name="text">
-    <string>&amp;Import..</string>
+    <string>&amp;Import from..</string>
    </property>
   </action>
   <action name="actionExport_">
    <property name="text">
-    <string>&amp;Export..</string>
+    <string>&amp;Export to..</string>
    </property>
   </action>
   <action name="actionProperties_">
@@ -265,7 +265,7 @@
   </action>
   <action name="actionDetach_">
    <property name="text">
-    <string>&amp;Detach</string>
+    <string>&amp;Detach file path</string>
    </property>
   </action>
   <action name="actionOptions_">

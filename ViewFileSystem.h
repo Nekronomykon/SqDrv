@@ -12,8 +12,10 @@
 #include <QPointer>
 
 #include "ModelFiles.h"
+
 #include "ViewFilesTree.h"
 #include "ViewFilesList.h"
+#include "ImplPathName.h"
 
 class ViewFileSystem
     : public QSplitter
@@ -32,6 +34,7 @@ protected slots:
   void dirFromList(const QModelIndex & /*idx*/);
 
 private:
+  Path file_path;
   QPointer<ModelFiles> model_;
   QPointer<ViewFilesTree> tree_;
   QPointer<ViewFilesList> list_;

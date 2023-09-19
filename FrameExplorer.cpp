@@ -6,6 +6,7 @@
 
 #include <QCoreApplication>
 #include <QKeySequence>
+#include <QToolButton>
 #include <QDockWidget>
 #include <QFontDialog>
 #include <QFileDialog>
@@ -230,9 +231,35 @@ FrameExplorer *FrameExplorer::setupActions(void)
 //
 FrameExplorer *FrameExplorer::setupToolBars(void)
 {
-  barTools_->addAction(actionNew_);
-  barTools_->addAction(actionOpen_);
-  barTools_->addAction(actionSave_);
+  QMenu *menuNew = new QMenu("New");
+  menuNew->addAction(actionNewWindow_);
+  menuNew->addAction(actionNew_);
+  menuNew->addAction(actionDetach_);
+  menuNew->addSeparator();
+  menuNew->addAction(actionClose_);
+  menuNew->addAction(actionExit_);
+  menuNew->setIcon(actionNew_->icon());
+  menuNew->setDefaultAction(actionNew_);
+  barTools_->addAction(menuNew->menuAction());
+  //
+  QMenu *menuOpen = new QMenu("Open..");
+  menuOpen->addAction(actionOpen_);
+  menuOpen->addAction(actionImport_);
+  menuOpen->addAction(actionReload_);
+  menuOpen->setDefaultAction(actionOpen_);
+  menuOpen->setIcon(actionImport_->icon());
+  barTools_->addAction(menuOpen->menuAction());
+  //
+  menuRecentFiles_->setIcon(actionReload_->icon());
+  barTools_->addAction(menuRecentFiles_->menuAction());
+  //
+  QMenu* menuSave = new QMenu;
+  menuSave->addAction(actionSave_);
+  menuSave->addAction(actionSaveAs_);
+  menuSave->addAction(actionExport_);
+  menuSave->setDefaultAction(actionSave_);
+  menuSave->setIcon(actionExport_->icon());
+  barTools_->addAction(menuSave->menuAction());
 
   QToolBar *tbEdit = this->addToolBar(tr("Edit"));
   tbEdit->setObjectName("ToolsEdit");

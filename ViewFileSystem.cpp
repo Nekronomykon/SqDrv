@@ -1,7 +1,5 @@
 #include "ViewFileSystem.h"
 
-#include "FrameStructure.h"
-
 #include <QDir>
 #include <QMessageBox>
 
@@ -9,9 +7,6 @@ ViewFileSystem::ViewFileSystem(QWidget *parent)
     : QSplitter(Qt::Vertical, parent), model_(new ModelFiles),
       tree_(new ViewFilesTree(this)), list_(new ViewFilesList(this))
 {
-  model_->setNameFilterDisables(true); // false?
-  model_->setNameFilters(FrameStructure::listExtensionsFor(IsFormatToLoad()));
-  //
   model_->setIconProvider(&iconProvider_);
   model_->setOptions(ModelFiles::DontUseCustomDirectoryIcons);
   //
@@ -39,10 +34,12 @@ void ViewFileSystem::listActiveDir(const QModelIndex &idx)
     return;
   if (model_->isDir(idx))
   {
+    QDir::setCurrent(idx.data().toString());
     list_->setRootIndex(idx);
   }
   else
   {
+    QDir::setCurrent(idx.parent().data().toString());
     list_->setRootIndex(idx.parent());
     list_->scrollTo(idx);
     list_->setCurrentIndex(idx);
@@ -56,7 +53,15 @@ void ViewFileSystem::dirFromList(const QModelIndex &idx)
   tree_->scrollTo(idx);
   tree_->setCurrentIndex(idx);
   if (model_->isDir(idx))
+  {
+    QDir::setCurrent(idx.data().toString());
     list_->setRootIndex(idx);
+  }
+  else
+  {
+    QDir::setCurrent(idx.parent().data().toString());
+    list_->setRootIndex(idx.parent());
+  }
 }
 
 // void ViewFileSystem::showFilePath(const Path &a_path)
