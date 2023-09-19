@@ -34,7 +34,7 @@ protected slots:
   void dirFromList(const QModelIndex & /*idx*/);
 
 private:
-  Path file_path;
+  QString strFilePath_ = QString();
   QPointer<ModelFiles> model_;
   QPointer<ViewFilesTree> tree_;
   QPointer<ViewFilesList> list_;

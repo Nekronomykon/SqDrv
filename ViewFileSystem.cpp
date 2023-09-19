@@ -32,6 +32,8 @@ void ViewFileSystem::listActiveDir(const QModelIndex &idx)
 {
   if (!idx.isValid())
     return;
+
+    strFilePath_ = idx.data().toString();
   if (model_->isDir(idx))
   {
     QDir::setCurrent(idx.data().toString());
@@ -50,16 +52,16 @@ void ViewFileSystem::dirFromList(const QModelIndex &idx)
 {
   if (!idx.isValid())
     return;
+
+    strFilePath_ = idx.data().toString();
   tree_->scrollTo(idx);
   tree_->setCurrentIndex(idx);
   if (model_->isDir(idx))
   {
-    QDir::setCurrent(idx.data().toString());
     list_->setRootIndex(idx);
   }
   else
   {
-    QDir::setCurrent(idx.parent().data().toString());
     list_->setRootIndex(idx.parent());
   }
 }
@@ -77,5 +79,6 @@ void ViewFileSystem::showFilePath(const QString &q_path)
     tree_->setCurrentIndex(idx);
     list_->setRootIndex(idx.parent());
     list_->setCurrentIndex(idx);
+    strFilePath_ = q_path;
   }
 }
