@@ -51,7 +51,7 @@ public:
     ///
     Path path_prev = frameStr_->resetPath(path_to_open);
     /* if */ frameStr_->loadFile(); // frameStr_->exportFromPath(frameStr->getPath());
-    
+
     this->adjustTitle();
   }
   //
@@ -119,6 +119,7 @@ private:
   QPointer<ViewWorkspace> workspace_;
   QPointer<ViewFileSystem> files_;
 private slots:
+  void browserChangeActive(const QModelIndex &);
   void on_nameBackgroundColor(const QString & /* name */);
   void on_changedBackgroundRed(void);
   void on_changedBackgroundGreen(void);

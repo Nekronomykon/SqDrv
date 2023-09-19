@@ -28,6 +28,10 @@ public:
 public:
   // void showFilePath(const Path &a_path);
   void showFilePath(const QString &a_path);
+  //
+  ModelFiles* getModelFiles()const;
+  ViewFilesTree* getFileTree() const;
+  ViewFilesList* getFileList() const;
 
 protected slots:
   void listActiveDir(const QModelIndex & /*idx*/);

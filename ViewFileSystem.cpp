@@ -24,6 +24,8 @@ ViewFileSystem::ViewFileSystem(QWidget *parent)
   list_->setModel(model_);
   list_->setRootIndex(model_->index(QDir::currentPath()));
   //
+  // list_->setSelectionModel(tree_->selectionModel());
+  //
   connect(tree_, &QTreeView::activated, this, &ViewFileSystem::listActiveDir);
   connect(list_, &QListView::activated, this, &ViewFileSystem::dirFromList);
 }
@@ -33,7 +35,7 @@ void ViewFileSystem::listActiveDir(const QModelIndex &idx)
   if (!idx.isValid())
     return;
 
-    strFilePath_ = idx.data().toString();
+  strFilePath_ = idx.data().toString();
   if (model_->isDir(idx))
   {
     QDir::setCurrent(idx.data().toString());
@@ -53,7 +55,7 @@ void ViewFileSystem::dirFromList(const QModelIndex &idx)
   if (!idx.isValid())
     return;
 
-    strFilePath_ = idx.data().toString();
+  strFilePath_ = idx.data().toString();
   tree_->scrollTo(idx);
   tree_->setCurrentIndex(idx);
   if (model_->isDir(idx))
@@ -81,4 +83,19 @@ void ViewFileSystem::showFilePath(const QString &q_path)
     list_->setCurrentIndex(idx);
     strFilePath_ = q_path;
   }
+}
+
+ModelFiles *ViewFileSystem::getModelFiles() const
+{
+  return model_;
+}
+
+ViewFilesTree *ViewFileSystem::getFileTree() const
+{
+  return tree_;
+}
+
+ViewFilesList *ViewFileSystem::getFileList() const
+{
+  return list_;
 }

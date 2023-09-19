@@ -253,7 +253,7 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   menuRecentFiles_->setIcon(actionReload_->icon());
   barTools_->addAction(menuRecentFiles_->menuAction());
   //
-  QMenu* menuSave = new QMenu;
+  QMenu *menuSave = new QMenu;
   menuSave->addAction(actionSave_);
   menuSave->addAction(actionSaveAs_);
   menuSave->addAction(actionExport_);
@@ -336,6 +336,11 @@ FrameExplorer *FrameExplorer::setupDockViews(void)
   pLeft->setObjectName("DockWorkspace");
   //
   this->tabifyDockWidget(pTab, pLeft);
+  //
+  connect(files_->getFileTree(), &ViewFilesList::activated,
+          this, &FrameExplorer::browserChangeActive);
+  connect(files_->getFileList(), &ViewFilesList::activated,
+          this, &FrameExplorer::browserChangeActive);
   //
   return this;
 }
@@ -1009,6 +1014,24 @@ void FrameExplorer::on_actionSetFont__triggered()
   QFont fnt = QFontDialog::getFont(&bOk, pSrc->getEditAtoms()->font(), this, tr("Fonf choose"), opts);
   if (bOk)
     pSrc->updateFont(fnt);
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
+void FrameExplorer::browserChangeActive(const QModelIndex &idx)
+{
+  auto *pModel = files_->getModelFiles();
+  if (pModel->isDir(idx))
+    return;
+  Path path_new(pModel->filePath(idx).toLocal8Bit().data());
+  QString strMessage("Reopen browsing to:\n");
+  strMessage += path_new.c_str();
+  // QMessageBox::information(this, "Browse", strMessage);
+  frameStr_->importFromPath(path_new);
+  barState_->setWindowTitle(strMessage);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
