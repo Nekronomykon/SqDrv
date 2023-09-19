@@ -30,7 +30,51 @@ public:
   explicit FrameStructure(QWidget * /*parent*/ = nullptr);
   ~FrameStructure() override = default;
 
+  template <class What>
+  static String listFornatsToFilter(What if_it, bool bPreformat = true)
+  {
+    String sTypes;
+    if (bPreformat)
+      sTypes.assign("All known files (");
+    String sAll("All files (*.*)");
+    auto itFormat = suffixToFormat.cbegin();
+    String sKnown;
+    do
+    {
+      if (!if_it(itFormat->second))
+        continue;
+      // by format
+      String sFormat(itFormat->second.getName());
+      sFormat += " files (";
+
+      String sMask("*");
+      sMask += itFormat->first; // <-- *.ext
+
+      sFormat += sMask;
+      sFormat += ");;";
+
+      // all known
+      sKnown += sFormat;
+      if (!sTypes.empty())
+      {
+        sTypes += sMask;
+        sTypes += " ";
+      }
+  } while (++itFormat != suffixToFormat.cend());
+
+  if (!sTypes.empty())
+  {
+      // *sTypes.rbegin() = 0;
+      sTypes += ");;"; // all-known mask is closed
+  }
+  sTypes += sKnown;
+  sTypes += sAll;
+
+  return sTypes;
+  }
+  //
   static QStringList listAllExtensions();
+  //
   template <class What>
   static QStringList listExtensionsFor(What it_is)
   {
@@ -63,17 +107,16 @@ public:
   void resetTitle(String /*title*/ = String());
   //
   void clearContent(void);
-  void loadFile(void);
-  bool importFromPath(Path /*the_path*/ = Path());
-  bool exportToPath(Path /*the_path*/);
+  void loadPath(Path /* a_path */);
+  void reloadCurrentFile(void);
+  bool importFromPath(Path /* a_path */);
+  bool exportToPath(Path /* a_path */);
   //
 
-  static const FileFormat *AllFormats() { return &formatFile[0]; }
   static size_t countFormatsByExt(String sext);
 
 protected:
-  static const FileFormat formatFile[]; // equivalent to map, convert to multimap?
-  static const MolFormatMap suffixToFormat;
+  static const MolFormatMap suffixToFormat; // convert to multimap?
 
 private:
   bool bChanged_ = false;

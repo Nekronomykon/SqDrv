@@ -694,7 +694,7 @@ void FrameExplorer::on_actionOpen__triggered(void)
                    : QDir::currentPath());
 
   // collect filter string using the "all-known" mechanism:
-  QString sFilter(tr(BuildFileDialogFilter(*frameStr_, IsFormatToLoad()).c_str()));
+  QString sFilter(tr(FrameStructure::listFornatsToFilter(IsFormatToLoad()).c_str()));
   QString sSelFmt;
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
   QStringList all_open = QFileDialog::getOpenFileNames(this, sCaption, sDir, sFilter, &sSelFmt, options);
@@ -711,7 +711,7 @@ void FrameExplorer::on_actionReload__triggered(void)
 {
   if (frameStr_->getPath().empty())
     return;
-  frameStr_->loadFile();
+  frameStr_->reloadCurrentFile();
   this->adjustTitle();
 }
 //
@@ -753,7 +753,7 @@ void FrameExplorer::on_actionImport__triggered()
                    ? tr(frameStr_->getPath().c_str())
                    : QDir::currentPath());
 
-  QString sFilter(tr(BuildFileDialogFilter(*frameStr_, IsFormatToLoad()).c_str()));
+  QString sFilter(tr(FrameStructure::listFornatsToFilter(IsFormatToLoad()).c_str()));
 
   QString sSelFilter;
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
@@ -785,7 +785,7 @@ void FrameExplorer::on_actionExport__triggered()
                    ? tr(frameStr_->getPath().c_str())
                    : QDir::currentPath());
 
-  QString sFilter(tr(BuildFileDialogFilter(*frameStr_, IsFormatToSave()).c_str()));
+  QString sFilter(tr(FrameStructure::listFornatsToFilter(IsFormatToSave()).c_str()));
 
   QString sSelFilter;
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
@@ -810,7 +810,7 @@ void FrameExplorer::on_actionSaveAs__triggered()
                    ? tr(frameStr_->getPath().c_str())
                    : QDir::currentPath());
 
-  QString sFilter(tr(BuildFileDialogFilter(*frameStr_, IsFormatToSave()).c_str()));
+  QString sFilter(tr(FrameStructure::listFornatsToFilter(IsFormatToSave()).c_str()));
 
   QString sSelFilter;
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
@@ -1027,11 +1027,8 @@ void FrameExplorer::browserChangeActive(const QModelIndex &idx)
   if (pModel->isDir(idx))
     return;
   Path path_new(pModel->filePath(idx).toLocal8Bit().data());
-  QString strMessage("Reopen browsing to:\n");
-  strMessage += path_new.c_str();
-  // QMessageBox::information(this, "Browse", strMessage);
-  frameStr_->importFromPath(path_new);
-  barState_->setWindowTitle(strMessage);
+  frameStr_->loadPath(path_new);
+  this->adjustTitle();
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

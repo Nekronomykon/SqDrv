@@ -80,31 +80,6 @@ const FrameStructure::MolFormatMap FrameStructure::suffixToFormat = {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @name  //
 /// @brief //
-//
-const FrameStructure::FileFormat FrameStructure::formatFile[] = {
-    FileFormat(".xyz", "XMol atomic data", ReadDataFormatXYZ, nullptr),
-    FileFormat(".cml", "Chemical Markup Language", ReadDataFormatCML, nullptr), // to rewrite / optimize / extract more data
-    FileFormat(".hin", "HyperChem input", ReadDataFormatHIN, nullptr),
-    FileFormat(".mgp", "AIMAll molecular graph", ReadDataFormatMGP, nullptr),
-    FileFormat(".sum", "AIMAll analysis summary", ReadDataFormatSUM, nullptr),
-    FileFormat(".pdb", "Brookhaven data bank", ReadDataFormatPDB, nullptr), // to rewrite / optimize / extract more data
-    FileFormat(".wfn", "Wavefunction data", ReadDataFormatWFN, nullptr),
-    FileFormat(".wfx", "Wavefunction eXtended data", ReadDataFormatWFX, nullptr),
-    FileFormat(".cube", "Gaussian Cube field", ReadDataFormatCUBE, nullptr), // to rewrite / optimize / extract more data
-    FileFormat(".mol2", "Tripos Mol2 structure", ReadDataFormatMOL2, nullptr),
-    FileFormat(".extout", "AIMAll extended output", ReadDataFormatEXTOUT, nullptr),
-    //
-    FileFormat(".bmp", "Bitmap image", nullptr, WriteImageFormatBMP),
-    FileFormat(".ps", "PostScript", nullptr, WriteImageFormatPS),
-    FileFormat(".jpeg", "Joint Photo Expert Graphics", nullptr, WriteImageFormatJPEG),
-    FileFormat(".png", "Portable Network Graphics", nullptr, WriteImageFormatPNG),
-    FileFormat(".tiff", "Tagged Image Format", nullptr, WriteImageFormatTIFF),
-    FileFormat("") // invalid format to complete
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @name  //
-/// @brief //
 /// @param //
 //
 FrameStructure::FrameStructure(QWidget *parent) : QTabWidget(parent), viewMol_(new ViewMolecule(this)), editSrc_(new EditSource(this))
@@ -226,15 +201,11 @@ void FrameStructure::resetTitle(String title)
 /// @brief //
 /// @param //
 //
-void FrameStructure::loadFile()
+void FrameStructure::reloadCurrentFile()
 {
   //
-  // Path to_read = this->resetPath();
-  // this->clearAll(); // set to override any attempts to write?
-  // if (this->importFromPath(to_read))
-  //   this->resetPath(to_read);
-  // ^^^ is this the better formulation of reloading
-  this->importFromPath();
+  Path to_read = this->resetPath();
+  this->loadPath(to_read);
 }
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,35 +227,18 @@ size_t FrameStructure::countFormatsByExt(String sext)
 //
 bool FrameStructure::importFromPath(Path the_path)
 {
-  bool bToModify(false);
-  if (the_path.empty())
-  {
-    if (!this->hasPath())
-      return false;
-    the_path = this->getPath();
-  }
-  else
-  {
-    bToModify = bool(the_path.compare(this->getPath()));
-    // if paths are equal, this is reload, with substitution otherwise
-  }
-
   bool bRes = false;
-  //
-  const FileFormat *ff = AllFormats();
-  do
-  {
-    bRes = ff->checkReadTo(*this, the_path);
-    if (bRes)
-      break;
-  } while ((++ff)->isValid());
-  //
-  if (bRes)
-  {
 
-    viewMol_->showMolecule(nullptr, true);
-    editSrc_->showMolecule();
-    this->setModified(bToModify);
+  const auto ffmt = suffixToFormat.find(the_path.extension());
+  if (ffmt != suffixToFormat.cend() && ffmt->second.hasRead())
+  {
+    bRes = ffmt->second.applyReadTo(*this, the_path);
+
+    if (bRes)
+    {
+      viewMol_->showMolecule(nullptr, true);
+      editSrc_->showMolecule();
+    }
   }
   return bRes;
 }
@@ -305,18 +259,26 @@ void FrameStructure::clearContent(void)
 /// @brief //
 /// @param //
 //
+void FrameStructure::loadPath(Path a_path)
+{
+    if(this->importFromPath(a_path))
+        this->resetPath(a_path);
+}
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name  //
+/// @brief //
+/// @param //
+//
 bool FrameStructure::exportToPath(Path the_path)
 {
   bool bRes = false;
-  //
-  const FileFormat *ff = AllFormats();
-  do
+
+  const auto ffmt = suffixToFormat.find(the_path.extension());
+  if (ffmt != suffixToFormat.cend() && ffmt->second.hasSave())
   {
-    bRes = ff->checkSaveTo(*this, the_path);
-    if (bRes)
-      break;
-  } while ((++ff)->isValid());
-  //
+    bRes = ffmt->second.applySaveTo(*this, the_path);
+  }
   return bRes;
 }
 //

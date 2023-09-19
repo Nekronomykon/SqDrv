@@ -49,9 +49,7 @@ public:
     } while (++from != to);
     ///
     ///
-    Path path_prev = frameStr_->resetPath(path_to_open);
-    /* if */ frameStr_->loadFile(); // frameStr_->exportFromPath(frameStr->getPath());
-
+    frameStr_->loadPath(path_to_open);
     this->adjustTitle();
   }
   //
