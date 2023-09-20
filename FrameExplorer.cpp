@@ -231,22 +231,17 @@ FrameExplorer *FrameExplorer::setupActions(void)
 //
 FrameExplorer *FrameExplorer::setupToolBars(void)
 {
-  QMenu *menuNew = new QMenu("New");
-  menuNew->addAction(actionNewWindow_);
-  menuNew->addAction(actionNew_);
-  menuNew->addAction(actionDetach_);
-  menuNew->addSeparator();
-  menuNew->addAction(actionClose_);
-  menuNew->addAction(actionExit_);
-  menuNew->setIcon(actionNew_->icon());
-  menuNew->setDefaultAction(actionNew_);
-  barTools_->addAction(menuNew->menuAction());
-  //
-  QMenu *menuOpen = new QMenu("Open..");
-  menuOpen->addAction(actionOpen_);
+  barTools_->addAction(actionNew_);
+  barTools_->addAction(actionNewWindow_);
+  barTools_->addSeparator();
+  barTools_->addAction(actionClose_);
+  barTools_->addAction(actionExit_);
+  barTools_->addSeparator();
+  barTools_->addAction(actionOpen_);
+  QMenu *menuOpen = new QMenu("Load from..");
   menuOpen->addAction(actionImport_);
   menuOpen->addAction(actionReload_);
-  menuOpen->setDefaultAction(actionOpen_);
+  menuOpen->setDefaultAction(actionImport_);
   menuOpen->setIcon(actionImport_->icon());
   barTools_->addAction(menuOpen->menuAction());
   //
@@ -256,10 +251,12 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   QMenu *menuSave = new QMenu;
   menuSave->addAction(actionSave_);
   menuSave->addAction(actionSaveAs_);
-  menuSave->addAction(actionExport_);
+  menuSave->addSeparator();
+  menuSave->addAction(actionDetach_);
   menuSave->setDefaultAction(actionSave_);
-  menuSave->setIcon(actionExport_->icon());
+  menuSave->setIcon(actionSaveAs_->icon());
   barTools_->addAction(menuSave->menuAction());
+  barTools_->addAction(actionExport_);
 
   QToolBar *tbEdit = this->addToolBar(tr("Edit"));
   tbEdit->setObjectName("ToolsEdit");
