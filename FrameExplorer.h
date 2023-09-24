@@ -16,6 +16,7 @@
 
 #include "QVTKNamedColors.h"
 
+#include "ViewHistory.h"
 #include "ViewWorkspace.h"
 #include "ViewFileSystem.h"
 #include "ResetCursor.h"
@@ -114,6 +115,7 @@ private:
   QPointer<QLineEdit> editBgGreen_;
   QPointer<QLineEdit> editBgBlue_;
   //
+  QPointer<ViewHistory> history_;
   QPointer<ViewWorkspace> workspace_;
   QPointer<ViewFileSystem> files_;
 private slots:

@@ -79,108 +79,108 @@ FrameExplorer *FrameExplorer::createNewFrame(QWidget *put)
 //
 FrameExplorer *FrameExplorer::setupActions(void)
 {
-  const QIcon iconAbout = QIcon::fromTheme("help-about", QIcon(":/images/About.png"));
+  const QIcon iconAbout(QIcon::fromTheme("help-about", QIcon(":/images/About.png")));
   actionAbout_->setIcon(iconAbout);
   actionAbout_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F1));
   actionAbout_->setStatusTip(tr("Show the concise information about the application"));
 
-  const QIcon iconAboutQt = QIcon::fromTheme("system-help", QIcon(":/images/AboutKit.png"));
+  const QIcon iconAboutQt(QIcon::fromTheme("system-help", QIcon(":/images/AboutKit.png")));
   actionAboutQt_->setIcon(iconAboutQt);
   actionAboutQt_->setShortcut(QKeySequence(Qt::SHIFT | Qt::CTRL | Qt::Key_F1));
   actionAboutQt_->setStatusTip(tr("Show the concise information on the Qt kit used for the application"));
 
-  const QIcon iconNewWindow = QIcon::fromTheme("window-new", QIcon(":/images/NewWindow.png"));
+  const QIcon iconNewWindow(QIcon::fromTheme("window-new", QIcon(":/images/NewWindow.png")));
   actionNewWindow_->setIcon(iconNewWindow);
   actionNewWindow_->setShortcut(QKeySequence(Qt::SHIFT | Qt::CTRL | Qt::Key_N));
-  actionNewWindow_->setStatusTip(tr("Start a new explorer application window"));
+  actionNewWindow_->setStatusTip(tr("Start a new top-level application window"));
 
-  const QIcon iconClose = QIcon::fromTheme("window-close", QIcon(":/images/CloseFrame.png"));
+  const QIcon iconClose(QIcon::fromTheme("window-close", QIcon(":/images/CloseFrame.png")));
   actionClose_->setIcon(iconClose);
   actionClose_->setShortcut(QKeySequence::Close);
-  actionClose_->setStatusTip(tr("Close this explorer application window"));
+  actionClose_->setStatusTip(tr("Close this top-level application window"));
 
-  const QIcon iconExit = QIcon::fromTheme("application-exit", QIcon(":/images/Exit.png"));
+  const QIcon iconExit(QIcon::fromTheme("application-exit", QIcon(":/images/Exit.png")));
   actionExit_->setIcon(iconExit);
   actionExit_->setShortcuts(QKeySequence::Quit);
   actionExit_->setStatusTip(tr("Close all windows and exit the application"));
 
-  const QIcon iconFullScreen = QIcon::fromTheme("view-fullscreen", QIcon(":/images/FullScreen.png"));
+  const QIcon iconFullScreen(QIcon::fromTheme("view-fullscreen", QIcon(":/images/FullScreen.png")));
   actionFullScreen_->setIcon(iconFullScreen);
   actionFullScreen_->setShortcuts(QKeySequence::FullScreen);
   actionFullScreen_->setStatusTip(tr("Toggle the full-screen view of the window"));
 
-  const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/NewDocument.png"));
+  const QIcon iconNew(QIcon::fromTheme("document-new", QIcon(":/images/NewDocument.png")));
   actionNew_->setIcon(iconNew);
   actionNew_->setShortcuts(QKeySequence::New);
   actionNew_->setStatusTip(tr("Recreate an empty data file"));
 
-  const QIcon iconOpen = QIcon::fromTheme("document-open", QIcon(":/images/Open.png"));
+  const QIcon iconOpen(QIcon::fromTheme("document-open", QIcon(":/images/Open.png")));
   actionOpen_->setIcon(iconOpen);
   actionOpen_->setShortcuts(QKeySequence::Open);
   actionOpen_->setStatusTip(tr("Open a file from disk"));
 
-  const QIcon iconReload = QIcon::fromTheme("document-revert", QIcon(":/images/Reload.png"));
+  const QIcon iconReload(QIcon::fromTheme("document-revert", QIcon(":/images/Reload.png")));
   actionReload_->setIcon(iconReload);
   actionReload_->setShortcuts(QKeySequence::Refresh);
   actionReload_->setStatusTip(tr("Reload content from the currently loaded file"));
 
-  const QIcon iconDetach = QIcon(":/images/Detach.png");
+  const QIcon iconDetach(":/images/Detach.png");
   // QIcon::fromTheme("document-detach", QIcon(":/images/Detach.png"));
   actionDetach_->setIcon(iconDetach);
   actionReload_->setStatusTip(tr("Reload content from the currently loaded file"));
 
-  const QIcon iconSave = QIcon::fromTheme("document-save", QIcon(":/images/Save.png"));
+  const QIcon iconSave(QIcon::fromTheme("document-save", QIcon(":/images/Save.png")));
   actionSave_->setIcon(iconSave);
   actionSave_->setShortcuts(QKeySequence::Save);
   actionSave_->setStatusTip(tr("Save the document to disk"));
 
-  const QIcon iconExport = QIcon::fromTheme("document-export", QIcon(":/images/Export.png"));
+  const QIcon iconExport(QIcon::fromTheme("document-export", QIcon(":/images/Export.png")));
   actionExport_->setIcon(iconExport);
   // actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
   actionSaveAs_->setStatusTip(tr("Export a file to disk based on the current data"));
 
-  const QIcon iconImport = QIcon::fromTheme("document-import", QIcon(":/images/Import.png"));
+  const QIcon iconImport(QIcon::fromTheme("document-import", QIcon(":/images/Import.png")));
   actionImport_->setIcon(iconImport);
   // actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
   actionSaveAs_->setStatusTip(tr("Load data from a disk file"));
 
-  const QIcon iconSaveAs = QIcon::fromTheme("document-save-as", QIcon(":/images/SaveAs.png"));
+  const QIcon iconSaveAs(QIcon::fromTheme("document-save-as", QIcon(":/images/SaveAs.png")));
   actionSaveAs_->setIcon(iconSaveAs);
   actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
   actionSaveAs_->setStatusTip(tr("Save the document under a newly set path"));
 
-  const QIcon iconUndo = QIcon::fromTheme("edit-undo", QIcon(":/images/Undo.png"));
+  const QIcon iconUndo(QIcon::fromTheme("edit-undo", QIcon(":/images/Undo.png")));
   actionUndo_->setIcon(iconUndo);
   actionUndo_->setShortcut(QKeySequence::Undo);
 
-  const QIcon iconRedo = QIcon::fromTheme("edit-redo", QIcon(":/images/Redo.png"));
+  const QIcon iconRedo(QIcon::fromTheme("edit-redo", QIcon(":/images/Redo.png")));
   actionRedo_->setIcon(iconRedo);
   actionRedo_->setShortcut(QKeySequence::Redo);
 
-  const QIcon iconCut = QIcon::fromTheme("edit-cut", QIcon(":/images/Cut.png"));
+  const QIcon iconCut(QIcon::fromTheme("edit-cut", QIcon(":/images/Cut.png")));
   actionCut_->setIcon(iconCut);
   actionCut_->setShortcuts(QKeySequence::Cut);
 
-  const QIcon iconCopy = QIcon::fromTheme("edit-copy", QIcon(":/images/Copy.png"));
+  const QIcon iconCopy(QIcon::fromTheme("edit-copy", QIcon(":/images/Copy.png")));
   actionCopy_->setIcon(iconCopy);
   actionCopy_->setShortcuts(QKeySequence::Copy);
 
-  const QIcon iconPaste = QIcon::fromTheme("edit-paste", QIcon(":/images/Paste.png"));
+  const QIcon iconPaste(QIcon::fromTheme("edit-paste", QIcon(":/images/Paste.png")));
   actionPaste_->setIcon(iconPaste);
   actionPaste_->setShortcuts(QKeySequence::Paste);
 
-  const QIcon iconClear = QIcon::fromTheme("edit-clear", QIcon(":/images/Clear.png"));
+  const QIcon iconClear(QIcon::fromTheme("edit-clear", QIcon(":/images/Clear.png")));
   actionClear_->setIcon(iconClear);
   actionClear_->setShortcut(QKeySequence::Delete);
 
-  const QIcon iconClearAll = QIcon::fromTheme("edit-clear-all", QIcon(":/images/ClearAll.png"));
+  const QIcon iconClearAll(QIcon::fromTheme("edit-clear-all", QIcon(":/images/ClearAll.png")));
   actionClearAll_->setIcon(iconClearAll);
   // actionClear_->setShortcut(QKeySequence::ClearAll);
 
-  const QIcon iconProps = QIcon::fromTheme("document-properties", QIcon(":/images/Properties.png"));
+  const QIcon iconProps(QIcon::fromTheme("document-properties", QIcon(":/images/Properties.png")));
   actionProperties_->setIcon(iconProps);
 
-  const QIcon iconOptions = QIcon::fromTheme("preferences-system", QIcon(":/images/Options.png"));
+  const QIcon iconOptions(QIcon::fromTheme("preferences-system", QIcon(":/images/Options.png")));
   actionOptions_->setIcon(iconOptions);
 
   const QIcon iconCameraReset(":/images/ProjectReset.png");
@@ -238,23 +238,23 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   barTools_->addAction(actionExit_);
   barTools_->addSeparator();
   barTools_->addAction(actionOpen_);
-  QMenu *menuOpen = new QMenu("Load from..");
-  menuOpen->addAction(actionImport_);
-  menuOpen->addAction(actionReload_);
-  menuOpen->setDefaultAction(actionImport_);
-  menuOpen->setIcon(actionImport_->icon());
-  barTools_->addAction(menuOpen->menuAction());
+  QMenu *menuLoad = new QMenu("Load");
+  menuLoad->addAction(actionImport_);
+  menuLoad->addAction(actionReload_);
+  menuLoad->setDefaultAction(actionImport_);
+  menuLoad->setIcon(actionImport_->icon());
+  barTools_->addAction(menuLoad->menuAction());
   //
   menuRecentFiles_->setIcon(actionReload_->icon());
   barTools_->addAction(menuRecentFiles_->menuAction());
   //
-  QMenu *menuSave = new QMenu;
+  QMenu *menuSave = new QMenu("Save");
   menuSave->addAction(actionSave_);
   menuSave->addAction(actionSaveAs_);
   menuSave->addSeparator();
   menuSave->addAction(actionDetach_);
   menuSave->setDefaultAction(actionSave_);
-  menuSave->setIcon(actionSaveAs_->icon());
+  menuSave->setIcon(actionSave_->icon());
   barTools_->addAction(menuSave->menuAction());
   barTools_->addAction(actionExport_);
 
@@ -323,16 +323,19 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
 FrameExplorer *FrameExplorer::setupDockViews(void)
 {
   QDockWidget *pTab = new QDockWidget(tr("Files"), this);
-  pTab->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-  pTab->setObjectName("DockFilesystem");
+  pTab->setObjectName("Dock::FileSystem");
   pTab->setWidget(files_);
   this->addDockWidget(Qt::LeftDockWidgetArea, pTab);
   //
   QDockWidget *pLeft = new QDockWidget(tr("Workspace"), this);
+  pLeft->setObjectName("Dock::WorkSpace");
   pLeft->setWidget(workspace_);
-  pLeft->setObjectName("DockWorkspace");
-  //
   this->tabifyDockWidget(pTab, pLeft);
+  //
+  QDockWidget *pThird = new QDockWidget(tr("History"), this);
+  pThird->setObjectName("Dock::FileHistory");
+  pThird->setWidget(history_);
+  this->tabifyDockWidget(pTab,pThird);
   //
   connect(files_->getFileTree(), &ViewFilesList::activated,
           this, &FrameExplorer::browserChangeActive);
@@ -351,6 +354,7 @@ FrameExplorer::FrameExplorer(QWidget *parent)
       editBgRed_(new QLineEdit(this)),
       editBgGreen_(new QLineEdit(this)),
       editBgBlue_(new QLineEdit(this)),
+      history_(new ViewHistory(this)),
       workspace_(new ViewWorkspace(this)),
       files_(new ViewFileSystem(this))
 {
