@@ -17,4 +17,3 @@ typedef vtkNew<MakeBonds>           NewMakeBonds;
 typedef vtkSmartPointer<MakeBonds>   ToMakeBonds;
 
 #endif // !Make_Bonds_h__
-
