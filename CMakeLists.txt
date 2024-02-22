@@ -26,6 +26,7 @@ find_package(VTK 9 COMPONENTS
   RenderingLOD
   RenderingOpenGL2
   GUISupportQt
+  RenderingQt
   REQUIRED QUIET)
 add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
 
