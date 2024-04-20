@@ -149,6 +149,12 @@ FrameExplorer *FrameExplorer::setupActions(void)
   actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
   actionSaveAs_->setStatusTip(tr("Save the document under a newly set path"));
 
+  // is it required, or [Export] could be good enough?
+  const QIcon iconSaveCopyAs(QIcon::fromTheme("document-save-copy-as", QIcon(":/images/SaveCopyAs.png")));
+  actionSaveCopyAs_->setIcon(iconSaveAs);
+  // actionSaveCopyAs_->setShortcuts(QKeySequence::SaveAs);
+  actionSaveAs_->setStatusTip(tr("Save the document copy under a new path"));
+
   const QIcon iconUndo(QIcon::fromTheme("edit-undo", QIcon(":/images/Undo.png")));
   actionUndo_->setIcon(iconUndo);
   actionUndo_->setShortcut(QKeySequence::Undo);
@@ -175,6 +181,10 @@ FrameExplorer *FrameExplorer::setupActions(void)
 
   const QIcon iconClearAll(QIcon::fromTheme("edit-clear-all", QIcon(":/images/ClearAll.png")));
   actionClearAll_->setIcon(iconClearAll);
+  // actionClear_->setShortcut(QKeySequence::ClearAll);
+
+  const QIcon iconClearOthers(QIcon::fromTheme("edit-clear-others", QIcon(":/images/ClearOthers.png")));
+  actionClearOthers_->setIcon(iconClearOthers);
   // actionClear_->setShortcut(QKeySequence::ClearAll);
 
   const QIcon iconProps(QIcon::fromTheme("document-properties", QIcon(":/images/Properties.png")));

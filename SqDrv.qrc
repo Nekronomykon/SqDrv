@@ -8,11 +8,22 @@
         <file>images/NewDocument.png</file>
         <file>images/CloseWindow.png</file>
         <file>images/FullScreen.png</file>
+        <file>images/Open.png</file>
+        <file>images/Reload.png</file>
         <file>images/Save.png</file>
         <file>images/SaveAs.png</file>
+        <file>images/SaveCopyAs.png</file>
         <file>images/Import.png</file>
         <file>images/Export.png</file>
         <file>images/Detach.png</file>
+        <file>images/Undo.png</file>
+        <file>images/Redo.png</file>
+        <file>images/Cut.png</file>
+        <file>images/Copy.png</file>
+        <file>images/Paste.png</file>
+        <file>images/Clear.png</file>
+        <file>images/ClearAll.png</file>
+        <file>images/ClearOthers.png</file>
         <file>images/Options.png</file>
         <file>images/About.png</file>
         <file>images/AboutKit.png</file>
