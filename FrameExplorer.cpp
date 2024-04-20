@@ -255,7 +255,8 @@ FrameExplorer *FrameExplorer::setupToolBars(void)
   menuLoad->setIcon(actionImport_->icon());
   barTools_->addAction(menuLoad->menuAction());
   //
-  menuRecentFiles_->setIcon(actionReload_->icon());
+  const QIcon iconRecent(QIcon::fromTheme("document-recent", QIcon(":/images/Recent.png")));
+  menuRecentFiles_->setIcon(iconRecent);
   barTools_->addAction(menuRecentFiles_->menuAction());
   //
   QMenu *menuSave = new QMenu("Save");
